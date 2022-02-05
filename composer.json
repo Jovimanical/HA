@@ -1,0 +1,18 @@
+{
+    "name": "house-africa-api/marketplace",
+    "description": "House Africa MarketPlace API",
+    "require": {
+        "ext-pdo": "^7.2",
+        "ext-json": "*",
+        "vlucas/phpdotenv": "^5.4",
+        "phpmailer/phpmailer": "^6.5",
+        "firebase/php-jwt": "^6.0",
+        "giggsey/libphonenumber-for-php": "^8.12"
+    },
+    "authors": [
+        {
+            "name": "S.A.V.I.O.U.R",
+            "email": "S.A.V.I.O.U.R@SIMILLUSTRA.COM"
+        }
+    ]
+}

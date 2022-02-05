@@ -1,0 +1,310 @@
+
+RewriteRule ^api/v1/admin-notification/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_admin_notifications/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/admin-notification/([0-9a-zA-Z_-]*)$ api/ha_admin_notifications/read_one.php?id=$1
+RewriteRule ^api/v1/add/admin-notification/?$ api/ha_admin_notifications/create.php
+RewriteRule ^api/v1/update/admin-notification/?$ api/ha_admin_notifications/update.php
+RewriteRule ^api/v1/remove/admin-notification/?$ api/ha_admin_notifications/delete.php
+
+#Ha_Admin_Password_Resets
+RewriteRule ^api/v1/admin-password-reset/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_admin_password_resets/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/admin-password-reset/([0-9a-zA-Z_-]*)$ api/ha_admin_password_resets/read_one.php?id=$1
+RewriteRule ^api/v1/add/admin-password-reset/?$ api/ha_admin_password_resets/create.php
+RewriteRule ^api/v1/update/admin-password-reset/?$ api/ha_admin_password_resets/update.php
+RewriteRule ^api/v1/remove/admin-password-reset/?$ api/ha_admin_password_resets/delete.php
+
+#Ha_Admins 
+RewriteRule ^api/v1/ha-admins/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_admins/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/ha-admins/([0-9a-zA-Z_-]*)$ api/ha_admins/read_one.php?id=$1
+RewriteRule ^api/v1/add/ha-admins/?$ api/ha_admins/create.php
+RewriteRule ^api/v1/update/ha-admins/?$ api/ha_admins/update.php
+RewriteRule ^api/v1/remove/ha-admins/?$ api/ha_admins/delete.php
+
+#Ha_Agent_Logins 
+RewriteRule ^api/v1/agent-login/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_agent_logins/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/agent-login/([0-9a-zA-Z_-]*)$ api/ha_agent_logins/read_one.php?id=$1
+RewriteRule ^api/v1/add/agent-login/?$ api/ha_agent_logins/create.php
+RewriteRule ^api/v1/update/agent-login/?$ api/ha_agent_logins/update.php
+RewriteRule ^api/v1/remove/agent-login/?$ api/ha_agent_logins/delete.php
+
+#Ha_Agents 
+RewriteRule ^api/v1/agents/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_agents/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/agents/([0-9a-zA-Z_-]*)$ api/ha_agents/read_one.php?id=$1
+RewriteRule ^api/v1/add/agents/?$ api/ha_agents/create.php
+RewriteRule ^api/v1/update/agents/?$ api/ha_agents/update.php
+RewriteRule ^api/v1/remove/agents/?$ api/ha_agents/delete.php
+
+#Ha_Agents_Password_Resets 
+RewriteRule ^api/v1/agents-password-reset/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_agents_password_resets/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/agents-password-reset/([0-9a-zA-Z_-]*)$ api/ha_agents_password_resets/read_one.php?id=$1
+RewriteRule ^api/v1/add/agents-password-reset/?$ api/ha_agents_password_resets/create.php
+RewriteRule ^api/v1/update/agents-password-reset/?$ api/ha_agents_password_resets/update.php
+RewriteRule ^api/v1/remove/agents-password-reset/?$ api/ha_agents_password_resets/delete.php
+ 
+#Ha_Applied_Coupons 
+RewriteRule ^api/v1/applied-coupons/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_applied_coupons/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/applied-coupons/([0-9a-zA-Z_-]*)$ api/ha_applied_coupons/read_one.php?id=$1
+RewriteRule ^api/v1/add/applied-coupons/?$ api/ha_applied_coupons/create.php
+RewriteRule ^api/v1/update/applied-coupons/?$ api/ha_applied_coupons/update.php
+RewriteRule ^api/v1/remove/applied-coupons/?$ api/ha_applied_coupons/delete.php
+
+#Ha_Brands 
+RewriteRule ^api/v1/brands/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_brands/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/brands/([0-9a-zA-Z_-]*)$ api/ha_brands/read_one.php?id=$1
+RewriteRule ^api/v1/add/brands/?$ api/ha_brands/create.php
+RewriteRule ^api/v1/update/brands/?$ api/ha_brands/update.php
+RewriteRule ^api/v1/remove/brands/?$ api/ha_brands/delete.php
+
+#Ha_Carts 
+RewriteRule ^api/v1/carts/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_carts/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/carts/([0-9a-zA-Z_-]*)$ api/ha_carts/read_one.php?id=$1
+RewriteRule ^api/v1/add/carts/?$ api/ha_carts/create.php
+RewriteRule ^api/v1/update/carts/?$ api/ha_carts/update.php
+RewriteRule ^api/v1/remove/carts/?$ api/ha_carts/delete.php
+
+#Ha_Categories 
+RewriteRule ^api/v1/categories/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_categories/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/categories/([0-9a-zA-Z_-]*)$ api/ha_categories/read_one.php?id=$1
+RewriteRule ^api/v1/add/categories/?$ api/ha_categories/create.php
+RewriteRule ^api/v1/update/categories/?$ api/ha_categories/update.php
+RewriteRule ^api/v1/remove/categories/?$ api/ha_categories/delete.php
+
+#Ha_Coupons 
+RewriteRule ^api/v1/coupons/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_coupons/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/coupons/([0-9a-zA-Z_-]*)$ api/ha_coupons/read_one.php?id=$1
+RewriteRule ^api/v1/add/coupons/?$ api/ha_coupons/create.php
+RewriteRule ^api/v1/update/coupons/?$ api/ha_coupons/update.php
+RewriteRule ^api/v1/remove/coupons/?$ api/ha_coupons/delete.php
+ 
+#Ha_Coupons_Categories 
+RewriteRule ^api/v1/coupons-categories/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_coupons_categories/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/coupons-categories/([0-9a-zA-Z_-]*)$ api/ha_coupons_categories/read_one.php?id=$1
+RewriteRule ^api/v1/add/coupons-categories/?$ api/ha_coupons_categories/create.php
+RewriteRule ^api/v1/update/coupons-categories/?$ api/ha_coupons_categories/update.php
+RewriteRule ^api/v1/remove/coupons-categories/?$ api/ha_coupons_categories/delete.php
+
+#Ha_Coupons_Products 
+RewriteRule ^api/v1/coupons-products/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_coupons_products/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/coupons-products/([0-9a-zA-Z_-]*)$ api/ha_coupons_products/read_one.php?id=$1
+RewriteRule ^api/v1/add/coupons-products/?$ api/ha_coupons_products/create.php
+RewriteRule ^api/v1/update/coupons-products/?$ api/ha_coupons_products/update.php
+RewriteRule ^api/v1/remove/coupons-products/?$ api/ha_coupons_products/delete.php
+
+#Ha_Email_Logs 
+RewriteRule ^api/v1/email-logs/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_email_logs/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/email-logs/([0-9a-zA-Z_-]*)$ api/ha_email_logs/read_one.php?id=$1
+RewriteRule ^api/v1/add/email-logs/?$ api/ha_email_logs/create.php
+RewriteRule ^api/v1/update/email-logs/?$ api/ha_email_logs/update.php
+RewriteRule ^api/v1/remove/email-logs/?$ api/ha_email_logs/delete.php
+
+#Ha_Email_Sms_Templates 
+RewriteRule ^api/v1/sms-templates/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_email_sms_templates/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/sms-templates/([0-9a-zA-Z_-]*)$ api/ha_email_sms_templates/read_one.php?id=$1
+RewriteRule ^api/v1/add/sms-templates/?$ api/ha_email_sms_templates/create.php
+RewriteRule ^api/v1/update/sms-templates/?$ api/ha_email_sms_templates/update.php
+RewriteRule ^api/v1/remove/sms-templates/?$ api/ha_email_sms_templates/delete.php
+
+#Ha_Gateway_Currencies 
+RewriteRule ^api/v1/currencies/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_gateway_currencies/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/currencies/([0-9a-zA-Z_-]*)$ api/ha_gateway_currencies/read_one.php?id=$1
+RewriteRule ^api/v1/add/currencies/?$ api/ha_gateway_currencies/create.php
+RewriteRule ^api/v1/update/currencies/?$ api/ha_gateway_currencies/update.php
+RewriteRule ^api/v1/remove/currencies/?$ api/ha_gateway_currencies/delete.php
+
+#Ha_Gateways 
+RewriteRule ^api/v1/gateways/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_gateways/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/gateways/([0-9a-zA-Z_-]*)$ api/ha_gateways/read_one.php?id=$1
+RewriteRule ^api/v1/add/gateways/?$ api/ha_gateways/create.php
+RewriteRule ^api/v1/update/gateways/?$ api/ha_gateways/update.php
+RewriteRule ^api/v1/remove/gateways/?$ api/ha_gateways/delete.php
+
+#Ha_General_Settings 
+RewriteRule ^api/v1/general-settings/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_general_settings/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/general-settings/([0-9a-zA-Z_-]*)$ api/ha_general_settings/read_one.php?id=$1
+RewriteRule ^api/v1/add/withdrawal/?$ api/ha_general_settings/create.php
+RewriteRule ^api/v1/add/withdrawal/?$ api/ha_general_settings/update.php
+RewriteRule ^api/v1/add/withdrawal/?$ api/ha_general_settings/delete.php
+
+#Ha_Kyc_Documents 
+RewriteRule ^api/v1/kyc-documents/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_kyc_documents/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/kyc-documents/([0-9a-zA-Z_-]*)$ api/ha_kyc_documents/read_one.php?id=$1
+RewriteRule ^api/v1/add/kyc-documents/?$ api/ha_kyc_documents/create.php
+RewriteRule ^api/v1/update/kyc-documents/?$ api/ha_kyc_documents/update.php
+RewriteRule ^api/v1/remove/kyc-documents/?$ api/ha_kyc_documents/delete.php
+
+#Ha_Kycs 
+RewriteRule ^api/v1/kycs/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_kycs/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/kycs/([0-9a-zA-Z_-]*)$ api/ha_kycs/read_one.php?id=$1
+RewriteRule ^api/v1/add/kycs/?$ api/ha_kycs/create.php
+RewriteRule ^api/v1/update/kycs/?$ api/ha_kycs/update.php
+RewriteRule ^api/v1/remove/kycs/?$ api/ha_kycs/delete.php
+
+#Ha_Languages 
+RewriteRule ^api/v1/languages/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_languages/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/languages/([0-9a-zA-Z_-]*)$ api/ha_languages/read_one.php?id=$1
+RewriteRule ^api/v1/add/languages/?$ api/ha_languages/create.php
+RewriteRule ^api/v1/update/languages/?$ api/ha_languages/update.php
+RewriteRule ^api/v1/remove/languages/?$ api/ha_languages/delete.php
+
+#Ha_Messages 
+RewriteRule ^api/v1/messages/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_messages/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/messages/([0-9a-zA-Z_-]*)$ api/ha_messages/read_one.php?id=$1
+RewriteRule ^api/v1/add/messages/?$ api/ha_messages/create.php
+RewriteRule ^api/v1/update/messages/?$ api/ha_messages/update.php
+RewriteRule ^api/v1/remove/messages/?$ api/ha_messages/delete.php
+
+#Ha_Offers 
+RewriteRule ^api/v1/offers/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_offers/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/offers/([0-9a-zA-Z_-]*)$ api/ha_offers/read_one.php?id=$1
+RewriteRule ^api/v1/add/offers/?$ api/ha_offers/create.php
+RewriteRule ^api/v1/update/offers/?$ api/ha_offers/update.php
+RewriteRule ^api/v1/remove/offers/?$ api/ha_offers/delete.php
+
+#Ha_Offers_Products 
+RewriteRule ^api/v1/offers-products/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_offers_products/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/offers-products/([0-9a-zA-Z_-]*)$ api/ha_offers_products/read_one.php?id=$1
+RewriteRule ^api/v1/add/offers-products/?$ api/ha_offers_products/create.php
+RewriteRule ^api/v1/update/offers-products/?$ api/ha_offers_products/update.php
+RewriteRule ^api/v1/remove/offers-products/?$ api/ha_offers_products/delete.php
+
+#Ha_Order_Details 
+RewriteRule ^api/v1/order-details/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_order_details/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/order-details/([0-9a-zA-Z_-]*)$ api/ha_order_details/read_one.php?id=$1
+RewriteRule ^api/v1/add/order-details/?$ api/ha_order_details/create.php
+RewriteRule ^api/v1/remove/order-details/?$ api/ha_order_details/update.php
+RewriteRule ^api/v1/update/order-details/?$ api/ha_order_details/delete.php
+
+#Ha_Orders 
+RewriteRule ^api/v1/orders/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_orders/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/orders/([0-9a-zA-Z_-]*)$ api/ha_orders/read_one.php?id=$1
+RewriteRule ^api/v1/add/orders/?$ api/ha_orders/create.php
+RewriteRule ^api/v1/update/orders/?$ api/ha_orders/update.php
+RewriteRule ^api/v1/remove/orders/?$ api/ha_orders/delete.php
+
+#Ha_Password_Resets 
+RewriteRule ^api/v1/password-resets/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_password_resets/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/password-resets/([0-9a-zA-Z_-]*)$ api/ha_password_resets/read_one.php?id=$1
+RewriteRule ^api/v1/add/password-resets/?$ api/ha_password_resets/create.php
+RewriteRule ^api/v1/update/password-resets/?$ api/ha_password_resets/update.php
+RewriteRule ^api/v1/remove/password-resets/?$ api/ha_password_resets/delete.php
+
+#Ha_Product_Reviews 
+RewriteRule ^api/v1/product-reviews/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_product_reviews/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/product-reviews/([0-9a-zA-Z_-]*)$ api/ha_product_reviews/read_one.php?id=$1
+RewriteRule ^api/v1/add/product-reviews/?$ api/ha_product_reviews/create.php
+RewriteRule ^api/v1/update/product-reviews/?$ api/ha_product_reviews/update.php
+RewriteRule ^api/v1/remove/product-reviews/?$ api/ha_product_reviews/delete.php
+
+#Ha_Properties 
+RewriteRule ^api/v1/properties/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_properties/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/properties/([0-9a-zA-Z_-]*)$ api/ha_properties/read_one.php?id=$1
+RewriteRule ^api/v1/add/properties/?$ api/ha_properties/create.php
+RewriteRule ^api/v1/update/properties/?$ api/ha_properties/update.php
+RewriteRule ^api/v1/remove/properties/?$ api/ha_properties/delete.php
+
+#Ha_Sell_Logs 
+RewriteRule ^api/v1/sell-logs/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_sell_logs/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/sell-logs/([0-9a-zA-Z_-]*)$ api/ha_sell_logs/read_one.php?id=$1
+RewriteRule ^api/v1/add/sell-logs/?$ api/ha_sell_logs/create.php
+RewriteRule ^api/v1/update/sell-logs/?$ api/ha_sell_logs/update.php
+RewriteRule ^api/v1/remove/sell-logs/?$ api/ha_sell_logs/delete.php
+
+#Ha_Shops 
+
+RewriteRule ^api/v1/shops/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_shops/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/shops/([0-9a-zA-Z_-]*)$ api/ha_shops/read_one.php?id=$1
+RewriteRule ^api/v1/add/shops/?$ api/ha_shops/create.php
+RewriteRule ^api/v1/update/shops/?$ api/ha_shops/update.php
+RewriteRule ^api/v1/remove/shops/?$ api/ha_shops/delete.php
+
+#Ha_Stock_Logs
+ RewriteRule ^api/v1/stock-logs/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_stock_logs/read.php?pageno=$1&pagesize=$2 [QSA]
+ RewriteRule ^api/v1/stock-logs/([0-9a-zA-Z_-]*)$ api/ha_stock_logs/read_one.php?id=$1
+ RewriteRule ^api/v1/add/stock-logs/?$ api/ha_stock_logs/create.php
+ RewriteRule ^api/v1/update/stock-logs/?$ api/ha_stock_logs/update.php
+ RewriteRule ^api/v1/remove/stock-logs/?$ api/ha_stock_logs/delete.php
+ 
+#Ha_Subscribers 
+RewriteRule ^api/v1/subscribers/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_subscribers/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/subscribers/([0-9a-zA-Z_-]*)$ api/ha_subscribers/read_one.php?id=$1
+RewriteRule ^api/v1/add/subscribers/?$ api/ha_subscribers/create.php
+RewriteRule ^api/v1/update/subscribers/?$ api/ha_subscribers/update.php
+RewriteRule ^api/v1/remove/subscribers/?$ api/ha_subscribers/delete.php
+
+#Ha_Support_Attachments 
+RewriteRule ^api/v1/support-attachments/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_support_attachments/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/support-attachments/([0-9a-zA-Z_-]*)$ api/ha_support_attachments/read_one.php?id=$1
+RewriteRule ^api/v1/add/support-attachments/?$ api/ha_support_attachments/create.php
+RewriteRule ^api/v1/update/support-attachments/?$ api/ha_support_attachments/update.php
+RewriteRule ^api/v1/remove/support-attachments/?$ api/ha_support_attachments/delete.php
+
+#Ha_Support_Messages 
+RewriteRule ^api/v1/support-messages/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_support_messages/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/support-messages/([0-9a-zA-Z_-]*)$ api/ha_support_messages/read_one.php?id=$1
+RewriteRule ^api/v1/add/support-messages/?$ api/ha_support_messages/create.php
+RewriteRule ^api/v1/update/support-messages/?$ api/ha_support_messages/update.php
+RewriteRule ^api/v1/remove/support-messages/?$ api/ha_support_messages/delete.php
+
+#Ha_Support_Tickets 
+RewriteRule ^api/v1/support-tickets/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_support_tickets/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/support-tickets/([0-9a-zA-Z_-]*)$ api/ha_support_tickets/read_one.php?id=$1
+RewriteRule ^api/v1/add/support-tickets/?$ api/ha_support_tickets/create.php
+RewriteRule ^api/v1/update/support-tickets/?$ api/ha_support_tickets/update.php
+RewriteRule ^api/v1/remove/support-tickets/?$ api/ha_support_tickets/delete.php
+
+#Ha_Transactions 
+RewriteRule ^api/v1/transactions/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_transactions/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/transactions/([0-9a-zA-Z_-]*)$ api/ha_transactions/read_one.php?id=$1
+RewriteRule ^api/v1/add/transactions/?$ api/ha_transactions/create.php
+RewriteRule ^api/v1/update/transactions/?$ api/ha_transactions/update.php
+RewriteRule ^api/v1/remove/transactions/?$ api/ha_transactions/delete.php
+
+#Ha_User_Logins 
+RewriteRule ^api/v1/users/logins/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_user_logins/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/users/logins/([0-9a-zA-Z_-]*)$ api/ha_user_logins/read_one.php?id=$1
+RewriteRule ^api/v1/add/users/logins/?$ api/ha_user_logins/create.php
+RewriteRule ^api/v1/update/users/logins/?$ api/ha_user_logins/update.php
+RewriteRule ^api/v1/remove/users/logins/?$ api/ha_user_logins/delete.php
+
+#Ha_Users 
+RewriteRule ^api/v1/users/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/users/([0-9a-zA-Z_-]*)$ api/ha_users/read_one.php?id=$1
+RewriteRule ^api/v1/add/users/?$ api/ha_users/create.php
+RewriteRule ^api/v1/update/users/?$ api/ha_users/update.php
+RewriteRule ^api/v1/remove/users/?$ api/ha_users/delete.php
+
+#Ha_Wallet 
+RewriteRule ^api/v1/wallets/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_wallet/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/wallets/([0-9a-zA-Z_-]*)$ api/ha_wallet/read_one.php?id=$1
+RewriteRule ^api/v1/add/wallets/?$ api/ha_wallet/create.php
+RewriteRule ^api/v1/update/wallets/?$ api/ha_wallet/update.php
+RewriteRule ^api/v1/remove/wallets/?$ api/ha_wallet/delete.php
+ 
+#Ha_Wallet_Deposits 
+RewriteRule ^api/v1/wallet-deposits/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_wallet_deposits/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/wallet-deposits/([0-9a-zA-Z_-]*)$ api/ha_wallet_deposits/read_one.php?id=$1
+RewriteRule ^api/v1/add/wallet-deposits/?$ api/ha_wallet_deposits/create.php
+RewriteRule ^api/v1/update/wallet-deposits/?$ api/ha_wallet_deposits/update.php
+RewriteRule ^api/v1/remove/wallet-deposits/?$ api/ha_wallet_deposits/delete.php
+
+#Ha_Wishlists 
+RewriteRule ^api/v1/wishlists/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_wishlists/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/wishlists/([0-9a-zA-Z_-]*)$ api/ha_wishlists/read_one.php?id=$1
+RewriteRule ^api/v1/add/wishlists/?$ api/ha_wishlists/create.php
+RewriteRule ^api/v1/update/wishlists/?$ api/ha_wishlists/update.php
+RewriteRule ^api/v1/remove/wishlists/?$ api/ha_wishlists/delete.php
+
+#Ha_Withdraw_Methods 
+RewriteRule ^api/v1/withdraw-methods/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_withdraw_methods/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/withdraw-methods/([0-9a-zA-Z_-]*)$ api/ha_withdraw_methods/read_one.php?id=$1
+RewriteRule ^api/v1/add/withdraw-methods/?$ api/ha_withdraw_methods/create.php
+RewriteRule ^api/v1/update/withdraw-methods/?$ api/ha_withdraw_methods/update.php
+RewriteRule ^api/v1/remove/withdraw-methods/?$ api/ha_withdraw_methods/delete.php
+
+#Ha_Withdrawals Endpoint rules
+RewriteRule ^api/v1/withdrawals/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_withdrawals/read.php?pageno=$1&pagesize=$2 [QSA]
+RewriteRule ^api/v1/withdrawal/([0-9a-zA-Z_-]*)$ api/ha_withdrawals/read_one.php?id=$1 [NC,L]
+RewriteRule ^api/v1/add/withdrawal/?$ api/ha_withdrawals/create.php
+RewriteRule ^api/v1/update/withdrawal/?$ api/ha_withdrawals/update.php
+RewriteRule ^api/v1/remove/withdrawal/?$ api/ha_withdrawals/delete.php
+
+
