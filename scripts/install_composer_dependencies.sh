@@ -4,7 +4,7 @@ curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
 sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 cd /var/www/html
-sudo cp siteConfig/000-default.conf /etc/apache2/sites-available/
+sudo \cp siteConfig/000-default.conf /etc/apache2/sites-available/
 curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 
