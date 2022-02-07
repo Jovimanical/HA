@@ -35,14 +35,18 @@ if ! [ -x "$(command -v apache2)" ]; then
   # previous deployments. The servers auto scale so the directory may or may not
   # exist.
   echo "Directories and permission"
-  sudo rm -rf /var/www/html/*
+  echo "System Checking Directories Exits"
+  if [ -d /var/www/html ]; then
+      sudo rm -rf /var/www/html/*
+      echo "System Directory Cleared"
+  fi
 
   # Allow Read/Write for Owner and App to write
   sudo chown www-data:www-data /var/www/html
   sudo chmod -R 0777 /var/www/html/
   sudo usermod -a -G www-data ubuntu
   echo "System script Exiting"
-  exit 1
+  exit 0
 else
   # I want to make sure that the directory is clean and has nothing left over from
   # previous deployments. The servers auto scale so the directory may or may not
