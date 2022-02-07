@@ -18,9 +18,10 @@ if ! [ -x "$(command -v apache2)" ]; then
   sudo a2dismod mpm_worker
   sudo a2dismod mpm_prefork
 
+  sudo apt-get install wget unzip -y
   # Install PHP
-  sudo apt-get install php8.0 libapache2-mod-php8.0 php8.0-mysql php8.0-gd php8.0-xml php8.0-soap php8.0-mbstring php8.0-mysql php8.0-redis php8.0-curl -y
-  sudo apt-get install wget php8.0-cli php8.0-zip php8.0-yaml unzip -y
+  sudo apt-get install php8.0 libapache2-mod-php8.0 php8.0-mysql php8.0-gd php8.0-xml php8.0-soap php8.0-mbstring php8.0-mysql php8.0-redis php8.0-curl php8.0-cli php8.0-zip php8.0-yaml -y
+
   #sudo a2enmod php8.0
 
   # Restart Apache Web Server
