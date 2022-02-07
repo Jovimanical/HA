@@ -9,7 +9,7 @@ if ! [ -x "$(command -v apache2)" ]; then
   sudo apt-get update -y
 
   # Install Apache2
-  sudo apt-get install -y apache2
+  sudo apt install -y apache2
   # Allow to run Apache on boot up
   sudo systemctl enable apache2
   # Adjust Firewall
@@ -18,11 +18,11 @@ if ! [ -x "$(command -v apache2)" ]; then
   #sudo a2dismod mpm_worker
   #sudo a2dismod mpm_prefork
 
-  sudo apt-get install wget unzip -y
+  sudo apt -y install wget unzip
   # Install PHP
-  sudo apt-get install php8.0 libapache2-mod-php8.0 php8.0-mysql php8.0-gd php8.0-xml php8.0-soap php8.0-mbstring php8.0-mysql php8.0-redis php8.0-curl php8.0-cli php8.0-zip php8.0-yaml -y
+  sudo apt install -y php7.4 libapache2-mod-php7.4 php7.4-mysql php7.4-gd php7.4-xml php7.4-soap php7.4-mbstring php7.4-mysql php7.4-redis php7.4-curl php7.4-cli php7.4-zip php7.4-yaml
 
-  #sudo a2enmod php8.0
+  sudo a2enmod php7.4
 
   # Restart Apache Web Server
   sudo systemctl restart apache2
