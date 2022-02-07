@@ -1,8 +1,8 @@
 #!/bin/bash
 cd ~
-sudo apt-get install wget php8.0-cli php8.0-zip php8.0-yaml unzip -y
 curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
 sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
 cd /var/www/html
 sudo cp siteConfig/000-default.conf /etc/apache2/sites-available/
 curl -sS https://getcomposer.org/installer | php
