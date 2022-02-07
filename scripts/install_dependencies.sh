@@ -14,6 +14,8 @@ if ! [ -x "$(command -v apache2)" ]; then
   sudo systemctl enable apache2
   # Adjust Firewall
   sudo ufw allow in "Apache Full"
+  sudo a2dismod mpm_worker
+  sudo a2dismod mpm_prefork
 
   # Install PHP
   sudo apt-get install php8.0 libapache2-mod-php8.0 php8.0-mysql php8.0-gd php8.0-xml php8.0-soap php8.0-mbstring php8.0-mysql php8.0-redis php8.0-curl -y
