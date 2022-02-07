@@ -5,6 +5,11 @@ files:
     destination: /var/www/html
     file_exists_behavior: OVERWRITE
     overwrite: true
+permissions:
+  - object: /
+      pattern: "**"
+      owner: ubuntu
+      group: ubuntu
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies.sh
