@@ -27,7 +27,7 @@ $db = $database->getConnection();
 $ha_users = new Ha_Users($db);
 
 // get posted data
-$data = (object)$_POST; //json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input")); //(object)$_POST; //
 
 // make sure data is not empty
 if (!isEmpty($data->firstname)
@@ -145,8 +145,10 @@ if (!isEmpty($data->firstname)
     $ha_users->created_at = date('Y-m-d H:m:s');
     $ha_users->updated_at = date('Y-m-d H:m:s');
     $lastInsertedId = $ha_users->create();
+
     // create the ha_users
     if ($lastInsertedId != 0) {
+        $sign_up_message = array("status" => "success", "code" => 1, "message" => "Account Created Successfully! A verification link has been sent to your email $ha_users->email", "data" => $lastInsertedId);
 
         //Send Account Activation Email
         //Create an instance; passing `true` enables exceptions
@@ -156,12 +158,14 @@ if (!isEmpty($data->firstname)
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = gethostbyname(trim($_ENV['HA_SMTP_SERVER'])) || gethostbyname('smtp.mail.us-west-2.awsapps.com');                     //Set the SMTP server to send through
+            $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "email-smtp.us-west-2.amazonaws.com";                     //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-            $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || 'no_reply@houseafrica.io';                     //SMTP username
-            $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']);                               //SMTP password
-            $mail->SMTPSecure = 'ssl'; //PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "AKIAYT2QLRHTMNSXAIZP";                     //SMTP username
+            $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "BGUFZ7Zr1zcZjJAC6JaBZYGz+9DL2sWNF7HYOW9sJy2M";                               //SMTP password
+            $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+            $mail->CharSet = "utf-8";// set charset to utf8
+            $mail->SMTPKeepAlive = true;
+            $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
             //Recipients
             $mail->setFrom('no_reply@houseafrica.io', 'HA SUPPORT-TEAM');
@@ -185,15 +189,15 @@ if (!isEmpty($data->firstname)
             $mail->send();
             //echo 'Message has been sent';
         } catch (phpmailerException $e) {
-            echo "An error occurred. {$e->errorMessage()}", PHP_EOL; //Catch errors from PHPMailer.
+            $sign_up_message["email_message"] = "An error occurred. {$e->errorMessage()}"; //Catch errors from PHPMailer.
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"; //Catch errors from Amazon SES.
+            $sign_up_message["email_message"] =  "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"; //Catch errors from Amazon SES.
         }
 
         // set response code - 201 created
         http_response_code(201);
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Account Created Successfully! A verification link has been sent to your email $ha_users->email", "data" => $lastInsertedId));
+        echo json_encode($sign_up_message);
     } // if unable to create the ha_users, tell the user
     else {
         // set response code - 503 service unavailable

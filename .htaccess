@@ -1,4 +1,5 @@
 <IfModule mod_rewrite.c>
+    SetEnvIf Authorization '(.*)' HTTP_AUTHORIZATION=$1
 	Options +FollowSymLinks
 	RewriteEngine On
 	RewriteBase /
@@ -7,16 +8,18 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-s
 
+
+
     #HA Users Login Endpoint
 	RewriteRule ^api/v1/auth/login/?$ api/ha_user_login/index.php
 
 
 	#Ha_Users Endpoint
+	RewriteRule ^api/v1/users/register/?$ api/ha_users/create.php
     RewriteRule ^api/v1/users/list-all/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/users/search/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/users/([0-9a-zA-Z_-]*)$ api/ha_users/read_one.php?id=$1
     RewriteRule ^api/v1/users/profiles/me/?$ api/ha_users/profile.php
-    RewriteRule ^api/v1/users/register/?$ api/ha_users/create.php
     RewriteRule ^api/v1/add/users/?$ api/ha_users/create.php
     RewriteRule ^api/v1/update/users/?$ api/ha_users/update.php
     RewriteRule ^api/v1/remove/users/?$ api/ha_users/delete.php
@@ -24,9 +27,9 @@
     #Ha_Properties MarketPlace
     RewriteRule ^api/v1/marketplace/properties/([0-9a-zA-Z_-]*)/([0-9a-zA-Z_-]*)/?$ api/ha_properties/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/marketplace/properties/([0-9a-zA-Z_-]*)$ api/ha_properties/read_one.php?id=$1
-    RewriteRule ^api/v1/add/properties/?$ api/ha_properties/create.php
-    RewriteRule ^api/v1/update/properties/?$ api/ha_properties/update.php
-    RewriteRule ^api/v1/remove/properties/?$ api/ha_properties/delete.php
+    RewriteRule ^api/v1/properties/add?$ api/ha_properties/create.php
+    RewriteRule ^api/v1/properties/update/?$ api/ha_properties/update.php
+    RewriteRule ^api/v1/properties/remove/?$ api/ha_properties/delete.php
 
 	#HA Admin Notification Endpoints
 	RewriteRule ^api/v1/admin-notification/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_admin_notifications/read.php?pageno=$1&pagesize=$2 [QSA]
