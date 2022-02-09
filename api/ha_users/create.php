@@ -150,8 +150,8 @@ if (!isEmpty($data->firstname)
     $ha_users->two_factor_verified = 1;
 
 
-    $ha_users->roles = '';
-    $ha_users->remember_token = '';
+    $ha_users->roles = 'user';
+    $ha_users->remember_token = 'false';
     $ha_users->created_at = date('Y-m-d H:m:s');
     $ha_users->updated_at = date('Y-m-d H:m:s');
     $lastInsertedId = $ha_users->create();

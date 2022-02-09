@@ -218,6 +218,7 @@ class Ha_Users
             $this->profileImage = $row['profileImage'];
             $this->address = $row['address'];
             $this->status = $row['status'];
+            $this->roles = $row['roles'];
             $this->email_verified = $row['email_verified'];
             $this->sms_verified = $row['sms_verified'];
             $this->two_factor_status = $row['two_factor_status'];

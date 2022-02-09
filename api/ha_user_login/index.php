@@ -100,7 +100,6 @@ try {
                 unset($users->verification_code);
                 unset($users->verification_code_send_at);
                 unset($users->two_factor_verified);
-                unset($users->roles);
                 unset($users->updated_at);
                 unset($users->no_of_records_per_page);
                 unset($users->pageNo);
