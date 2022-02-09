@@ -42,9 +42,11 @@ if ! [ -x "$(command -v apache2)" ]; then
   fi
 
   # Allow Read/Write for Owner and App to write
-  sudo chown www-data:www-data /var/www/html
+  sudo usermod -aG www-data ubuntu
+  sudo addgroup www-data
+  sudo chown -R www-data:www-data /var/www/html
   sudo chmod -R 0777 /var/www/html/
-  sudo usermod -a -G www-data ubuntu
+
   echo "System script Exiting"
   exit 0
 else
