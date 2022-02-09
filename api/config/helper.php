@@ -73,7 +73,7 @@ function getBrowser()
             $version = $matches['version'][0];
         } else if (strripos($u_agent, "Version") > strripos($u_agent, $ub)) {
             $version = $matches['version'][1];
-        }else{
+        } else {
             $version = 'Unknown';
         }
     } else {
@@ -130,19 +130,18 @@ function getIpAddress()
 }
 
 //generate a username from Full name
-function generate_username($string_name="Marketplace user", $rand_no = 200): string
+function generate_username($string_name = "Marketplace user", $rand_no = 200): string
 {
     $username_parts = array_filter(explode(" ", strtolower($string_name))); //explode and lowercase name
     $username_parts = array_slice($username_parts, 0, 2); //return only first two array part
 
-    $part1 = (!empty($username_parts[0]))?substr($username_parts[0], 0,8):""; //cut first name to 8 letters
-    $part2 = (!empty($username_parts[1]))?substr($username_parts[1], 0,5):""; //cut second name to 5 letters
-    $part3 = ($rand_no)?rand(0, $rand_no):"";
+    $part1 = (!empty($username_parts[0])) ? substr($username_parts[0], 0, 8) : ""; //cut first name to 8 letters
+    $part2 = (!empty($username_parts[1])) ? substr($username_parts[1], 0, 5) : ""; //cut second name to 5 letters
+    $part3 = ($rand_no) ? rand(0, $rand_no) : "";
 
     //str_shuffle to randomly shuffle all characters
-    return $part1. str_shuffle($part2). $part3;
+    return $part1 . str_shuffle($part2) . $part3;
 }
-
 
 
 ?>
