@@ -19,9 +19,9 @@
     RewriteRule ^api/v1/users/search/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/users/([0-9a-zA-Z_-]*)$ api/ha_users/read_one.php?id=$1
     RewriteRule ^api/v1/users/profiles/me/?$ api/ha_users/profile.php
-    RewriteRule ^api/v1/add/users/?$ api/ha_users/create.php
-    RewriteRule ^api/v1/update/users/?$ api/ha_users/update.php
-    RewriteRule ^api/v1/remove/users/?$ api/ha_users/delete.php
+    RewriteRule ^api/v1/users/add/?$ api/ha_users/create.php
+    RewriteRule ^api/v1/users/update/?$ api/ha_users/update.php
+    RewriteRule ^api/v1/users/remove/?$ api/ha_users/delete.php
 
     #Ha_Properties MarketPlace
     RewriteRule ^api/v1/marketplace/properties/([0-9a-zA-Z_-]*)/([0-9a-zA-Z_-]*)/?$ api/ha_properties/read.php?pageno=$1&pagesize=$2 [QSA]
