@@ -167,50 +167,51 @@ if (!isEmpty($data->firstname)
     if ($lastInsertedId != 0) {
         $sign_up_message = array("status" => "success", "code" => 1, "message" => "Account Created Successfully! A verification link has been sent to your email $ha_users->email", "data" => $lastInsertedId);
 
-        //Send Account Activation Email
-        //Create an instance; passing `true` enables exceptions
-        $mail = new PHPMailer(true);
+        if (trim($_ENV["HA_APP_ENV"]) === "DEV") {
+            //Send Account Activation Email
+            //Create an instance; passing `true` enables exceptions
+            $mail = new PHPMailer(true);
 
-        try {
-            //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "email-smtp.us-west-2.amazonaws.com";                     //Set the SMTP server to send through
-            $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-            $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "AKIAYT2QLRHTMNSXAIZP";                     //SMTP username
-            $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "BGUFZ7Zr1zcZjJAC6JaBZYGz+9DL2sWNF7HYOW9sJy2M";                               //SMTP password
-            $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-            $mail->CharSet = "utf-8";// set charset to utf8
-            $mail->SMTPKeepAlive = true;
-            $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            try {
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "email-smtp.us-west-2.amazonaws.com";                     //Set the SMTP server to send through
+                $mail->SMTPAuth = true;                                   //Enable SMTP authentication
+                $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "AKIAYT2QLRHTMNSXAIZP";                     //SMTP username
+                $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "BGUFZ7Zr1zcZjJAC6JaBZYGz+9DL2sWNF7HYOW9sJy2M";                               //SMTP password
+                $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+                $mail->CharSet = "utf-8";// set charset to utf8
+                $mail->SMTPKeepAlive = true;
+                $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-            //Recipients
-            $mail->setFrom('no_reply@houseafrica.io', 'HA SUPPORT-TEAM');
-            $mail->addAddress($data->email, $data->firstname . ' ' . $data->lastname);     //Add a recipient
-
-
-            //Attachments
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add HouseAfrica Logo
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-            //Content
-            $activate_link = 'http://houseafrica.com/marketplace/activate.php?email=' . $data->email . '&code=' . $token;
-            $message = '<p>Please click the following link to activate your account: <a href="' . $activate_link . '">' . $activate_link . '</a></p>';
+                //Recipients
+                $mail->setFrom('no_reply@houseafrica.io', 'HA SUPPORT-TEAM');
+                $mail->addAddress($data->email, $data->firstname . ' ' . $data->lastname);     //Add a recipient
 
 
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Account Activation Required';
-            $mail->Body = $message;
-            $mail->AltBody = 'Please copy and past link below on a browser,' . $activate_link;
+                //Attachments
+                //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add HouseAfrica Logo
+                //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
-            $mail->send();
-            //echo 'Message has been sent';
-        } catch (phpmailerException $e) {
-            $sign_up_message["email_message"] = "An error occurred. {$e->errorMessage()}"; //Catch errors from PHPMailer.
-        } catch (Exception $e) {
-            $sign_up_message["email_message"] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"; //Catch errors from Amazon SES.
+                //Content
+                $activate_link = 'http://houseafrica.com/marketplace/activate.php?email=' . $data->email . '&code=' . $token;
+                $message = '<p>Please click the following link to activate your account: <a href="' . $activate_link . '">' . $activate_link . '</a></p>';
+
+
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = 'Account Activation Required';
+                $mail->Body = $message;
+                $mail->AltBody = 'Please copy and past link below on a browser,' . $activate_link;
+
+                $mail->send();
+                //echo 'Message has been sent';
+            } catch (phpmailerException $e) {
+                $sign_up_message["email_message"] = "An error occurred. {$e->errorMessage()}"; //Catch errors from PHPMailer.
+            } catch (Exception $e) {
+                $sign_up_message["email_message"] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"; //Catch errors from Amazon SES.
+            }
         }
-
         // set response code - 201 created
         http_response_code(201);
         // tell the user
