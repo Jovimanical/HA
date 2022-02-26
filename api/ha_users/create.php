@@ -44,9 +44,11 @@ $db = $database->getConnection();
 $ha_users = new Ha_Users($db);
 
 // get posted data
-$data = json_decode(file_get_contents("php://input")); //(object)$_POST; //
+//$data = file_get_contents("php://input") !== false ? json_decode(file_get_contents("php://input")) : (object)$_REQUEST; //
+$data =  (json_decode(file_get_contents("php://input"), true ) === NULL ) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 // make sure data is not empty
+
 if (!isEmpty($data->firstname)
     && !isEmpty($data->email)
     && !isEmpty($data->password)
@@ -176,10 +178,10 @@ if (!isEmpty($data->firstname)
                 //Server settings
                 $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
                 $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "email-smtp.us-west-2.amazonaws.com";                     //Set the SMTP server to send through
+                $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "in-v3.mailjet.com";                     //Set the SMTP server to send through
                 $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-                $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "AKIAYT2QLRHTMNSXAIZP";                     //SMTP username
-                $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "BGUFZ7Zr1zcZjJAC6JaBZYGz+9DL2sWNF7HYOW9sJy2M";                               //SMTP password
+                $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "92dd3f94e09c5819cc47ee1f59b90824";                     //SMTP username
+                $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "925dbe0e175350b9c349ebe2c2489241";                               //SMTP password
                 $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
                 $mail->CharSet = "utf-8";// set charset to utf8
                 $mail->SMTPKeepAlive = true;

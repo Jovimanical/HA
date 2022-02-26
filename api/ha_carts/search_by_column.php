@@ -4,13 +4,10 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST,GET");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
-$dotenv->load();
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_carts.php';
- include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
+include_once '../config/helper.php';
+include_once '../config/database.php';
+include_once '../objects/ha_carts.php';
+ include_once '../token/validatetoken.php';
 // instantiate database and ha_carts object
 $database = new Database();
 $db = $database->getConnection();
@@ -47,13 +44,18 @@ if($num>0){
         $ha_carts_item=array(
             
 "id" => $id,
+"EntityParent" => $EntityParent,
+"LinkedEntity" => $LinkedEntity,
+"PropertyFloor" => $PropertyFloor,
+"PropertyId" => $PropertyId,
+"PropertyName" => html_entity_decode($PropertyName),
+"PropertyAmount" => $PropertyAmount,
+"PaymentMethod" => $PaymentMethod,
+"PropertyJson" => $PropertyJson,
+"PropertyType" => $PropertyType,
+"PropertyStatus" => $PropertyStatus,
 "user_id" => $user_id,
-"session_id" => html_entity_decode($session_id),
-"product_id" => $product_id,
-"attributes" => $attributes,
-"quantity" => $quantity,
-"created_at" => $created_at,
-"updated_at" => $updated_at
+"createdAt" => $createdAt
         );
  
         array_push($ha_carts_arr["records"], $ha_carts_item);
@@ -63,7 +65,7 @@ if($num>0){
     http_response_code(200);
  
     // show ha_carts data in json format
-	echo json_encode(array("status" => "success", "code" => 1,"message"=> "ha_carts found","data"=> $ha_carts_arr));
+	echo json_encode(array("status" => "success", "code" => 1,"message"=> "ha_carts found","document"=> $ha_carts_arr));
     
 }else{
  // no ha_carts found will be here
@@ -72,7 +74,7 @@ if($num>0){
     http_response_code(404);
  
     // tell the user no ha_carts found
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "No ha_carts found.","data"=> ""));
+	echo json_encode(array("status" => "error", "code" => 0,"message"=> "No ha_carts found.","document"=> ""));
     
 }
  

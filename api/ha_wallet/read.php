@@ -72,6 +72,15 @@ if ($num > 0) {
     // show ha_wallet data in json format
     echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_wallet found", "data" => $ha_wallet_arr));
 
+} elseif ($num == 0) {
+    // no ha_wallet found will be here
+
+    // set response code - 404 Not found
+    http_response_code(201);
+
+    // tell the user no ha_wallet found
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "No ha-wallet found.", "data" => []));
+
 } else {
     // no ha_wallet found will be here
 

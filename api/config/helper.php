@@ -143,5 +143,127 @@ function generate_username($string_name = "Marketplace user", $rand_no = 200): s
     return $part1 . str_shuffle($part2) . $part3;
 }
 
+/**
+ * @param $string
+ * @return mixed|void
+ */
+function json_validate($string)
+{
+    // decode the JSON data
+    $result = json_decode($string);
+
+    // switch and check possible JSON errors
+    switch (json_last_error()) {
+        case JSON_ERROR_NONE:
+            $error = ''; // JSON is valid // No error has occurred
+            break;
+        case JSON_ERROR_DEPTH:
+            $error = 'The maximum stack depth has been exceeded.';
+            break;
+        case JSON_ERROR_STATE_MISMATCH:
+            $error = 'Invalid or malformed JSON.';
+            break;
+        case JSON_ERROR_CTRL_CHAR:
+            $error = 'Control character error, possibly incorrectly encoded.';
+            break;
+        case JSON_ERROR_SYNTAX:
+            $error = 'Syntax error, malformed JSON.';
+            break;
+        // PHP >= 5.3.3
+        case JSON_ERROR_UTF8:
+            $error = 'Malformed UTF-8 characters, possibly incorrectly encoded.';
+            break;
+        // PHP >= 5.5.0
+        case JSON_ERROR_RECURSION:
+            $error = 'One or more recursive references in the value to be encoded.';
+            break;
+        // PHP >= 5.5.0
+        case JSON_ERROR_INF_OR_NAN:
+            $error = 'One or more NAN or INF values in the value to be encoded.';
+            break;
+        case JSON_ERROR_UNSUPPORTED_TYPE:
+            $error = 'A value of a type that cannot be encoded was given.';
+            break;
+        default:
+            $error = 'Unknown JSON error occured.';
+            break;
+    }
+
+    if ($error !== '') {
+        // throw the Exception or exit // or whatever :)
+        exit($error);
+    }
+
+    // everything is OK
+    return $result;
+}
+
+function proper_parse_str($str) {
+    # result array
+    $arr = array();
+
+    # split on outer delimiter
+    $pairs = explode('&', $str);
+
+    # loop through each pair
+    foreach ($pairs as $i) {
+        # split into name and value
+        list($name,$value) = explode('=', $i, 2);
+
+        # if name already exists
+        if( isset($arr[$name]) ) {
+            # stick multiple values into an array
+            if( is_array($arr[$name]) ) {
+                $arr[$name][] = $value;
+            }
+            else {
+                $arr[$name] = array($arr[$name], $value);
+            }
+        }
+        # otherwise, simply stick it in a scalar
+        else {
+            $arr[$name] = $value;
+        }
+    }
+
+    # return result array
+    return $arr;
+}
+
+function generatePIN($digits = 4){
+    $i = 0; //counter
+    $pin = ""; //our default pin is blank.
+    while($i < $digits){
+        //generate a random number between 0 and 9.
+        $pin .= mt_rand(0, 9);
+        $i++;
+    }
+    return $pin;
+}
+
+/**
+ * @param $param
+ * @return string
+ */
+function generateFileName($param): string
+{
+
+    switch ($param){
+        case 0:
+            $filename = 'Staff/Company ID';
+            break;
+        case 1:
+            $filename = 'Government issues ID';
+            break;
+        case 2:
+            $filename = 'Utility Bill';
+            break;
+        default:
+            $filename = 'Bank Statement';
+            break;
+
+    }
+    return $filename;
+}
 
 ?>
