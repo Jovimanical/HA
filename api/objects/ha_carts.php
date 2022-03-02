@@ -398,6 +398,35 @@ class Ha_Carts
 
     }
 
+    // delete the all ha_carts
+
+    /**
+     * @return bool
+     */
+    function deleteAll(): bool
+    {
+
+        // delete query
+        $query = "DELETE FROM " . $this->table_name . " WHERE  `user_id` = ? ";
+
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->user_id = htmlspecialchars(strip_tags($this->id));
+
+        // bind id of record to delete
+        $stmt->bindParam(1, $this->user_id);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 
     //extra function will be generated for one to many relations
 }

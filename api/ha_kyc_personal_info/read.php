@@ -39,75 +39,90 @@ include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/valida
 $database = new Database();
 $db = $database->getConnection();
 
-// initialize object
-$ha_kyc_personal_info = new Ha_Kyc_Personal_Info($db);
+try {
 
-$ha_kyc_personal_info->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
-$ha_kyc_personal_info->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
+
+// initialize object
+    $ha_kyc_personal_info = new Ha_Kyc_Personal_Info($db);
+
+    $ha_kyc_personal_info->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
+    $ha_kyc_personal_info->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 // read ha_kyc_personal_info will be here
+// set ID property of record to read
+    $ha_kyc_personal_info->user_id = $profileData->id;
 
 // query ha_kyc_personal_info
-$stmt = $ha_kyc_personal_info->read();
-$num = $stmt->rowCount();
+    $stmt = $ha_kyc_personal_info->read();
+    $num = $stmt->rowCount();
 
 // check if more than 0 record found
-if ($num > 0) {
+    if ($num > 0) {
 
-    //ha_kyc_personal_info array
-    $ha_kyc_personal_info_arr = array();
-    $ha_kyc_personal_info_arr["pageno"] = $ha_kyc_personal_info->pageNo;
-    $ha_kyc_personal_info_arr["pagesize"] = $ha_kyc_personal_info->no_of_records_per_page;
-    $ha_kyc_personal_info_arr["total_count"] = $ha_kyc_personal_info->total_record_count();
-    $ha_kyc_personal_info_arr["records"] = array();
+        //ha_kyc_personal_info array
+        $ha_kyc_personal_info_arr = array();
+        $ha_kyc_personal_info_arr["pageno"] = $ha_kyc_personal_info->pageNo;
+        $ha_kyc_personal_info_arr["pagesize"] = $ha_kyc_personal_info->no_of_records_per_page;
+        $ha_kyc_personal_info_arr["total_count"] = $ha_kyc_personal_info->total_record_count();
+        $ha_kyc_personal_info_arr["records"] = array();
 
-    // retrieve our table contents
+        // retrieve our table contents
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
 
-        $ha_kyc_personal_info_item = array(
+            $ha_kyc_personal_info_item = array(
 
-            "id" => $id,
-            "customer_firstname" => html_entity_decode($customer_firstname),
-            "customer_lastname" => html_entity_decode($customer_lastname),
-            "customer_dob" => html_entity_decode($customer_dob),
-            "customer_gender" => $customer_gender,
-            "customer_phone_no" => $customer_phone_no,
-            "customer_email" => $customer_email,
-            "customer_residence_type" => $customer_residence_type,
-            "customer_house_number" => $customer_house_number,
-            "customer_house_address" => html_entity_decode($customer_house_address),
-            "customer_state" => $customer_state,
-            "customer_city" => $customer_city,
-            "customer_lga" => $customer_lga,
-            "customer_country" => $customer_country,
-            "customer_stay_duration" => $customer_stay_duration,
-            "user_id" => $user_id,
-            "follow_up" => $follow_up,
-            "comment" => $comment,
-            "created_at" => $created_at,
-            "updated_at" => $updated_at
-        );
+                "id" => $id,
+                "customer_firstname" => html_entity_decode($customer_firstname),
+                "customer_lastname" => html_entity_decode($customer_lastname),
+                "customer_dob" => html_entity_decode($customer_dob),
+                "customer_gender" => $customer_gender,
+                "customer_phone_no" => $customer_phone_no,
+                "customer_email" => $customer_email,
+                "customer_residence_type" => $customer_residence_type,
+                "customer_house_number" => $customer_house_number,
+                "customer_house_address" => html_entity_decode($customer_house_address),
+                "customer_state" => $customer_state,
+                "customer_city" => $customer_city,
+                "customer_lga" => $customer_lga,
+                "customer_country" => $customer_country,
+                "customer_stay_duration" => $customer_stay_duration,
+                "user_id" => $user_id,
+                "follow_up" => $follow_up,
+                "comment" => $comment,
+                "created_at" => $created_at,
+                "updated_at" => $updated_at
+            );
 
-        array_push($ha_kyc_personal_info_arr["records"], $ha_kyc_personal_info_item);
+            array_push($ha_kyc_personal_info_arr["records"], $ha_kyc_personal_info_item);
+        }
+
+        // set response code - 200 OK
+        http_response_code(200);
+
+        // show ha_kyc_personal_info data in json format
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_kyc_personal_info found", "data" => $ha_kyc_personal_info_arr));
+
+    } else {
+        // no ha_kyc_personal_info found will be here
+
+        // set response code - 404 Not found
+        http_response_code(201);
+
+        // tell the user no ha_kyc_personal_info found
+        echo json_encode(array("status" => "success", "code" => 2, "message" => "No ha_kyc_personal_info found.", "data" => null));
+
     }
 
-    // set response code - 200 OK
-    http_response_code(200);
+} catch (Exception $exception) {
 
-    // show ha_kyc_personal_info data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_kyc_personal_info found", "data" => $ha_kyc_personal_info_arr));
-
-} else {
-    // no ha_kyc_personal_info found will be here
 
     // set response code - 404 Not found
     http_response_code(404);
 
     // tell the user no ha_kyc_personal_info found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_kyc_personal_info found.", "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" =>  $exception->getMessage(), "data" => ""));
 
 }
- 
 
 

@@ -35,74 +35,84 @@ include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/valida
 // instantiate database and ha_kyc_employment_status object
 $database = new Database();
 $db = $database->getConnection();
-
+try {
 // initialize object
-$ha_kyc_employment_status = new Ha_Kyc_Employment_Status($db);
+    $ha_kyc_employment_status = new Ha_Kyc_Employment_Status($db);
 
-$ha_kyc_employment_status->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
-$ha_kyc_employment_status->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
+    $ha_kyc_employment_status->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
+    $ha_kyc_employment_status->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 // read ha_kyc_employment_status will be here
-
+    $ha_kyc_employment_status->user_id = $profileData->id;
 // query ha_kyc_employment_status
-$stmt = $ha_kyc_employment_status->read();
-$num = $stmt->rowCount();
+    $stmt = $ha_kyc_employment_status->read();
+    $num = $stmt->rowCount();
 
 // check if more than 0 record found
-if ($num > 0) {
+    if ($num > 0) {
 
-    //ha_kyc_employment_status array
-    $ha_kyc_employment_status_arr = array();
-    $ha_kyc_employment_status_arr["pageno"] = $ha_kyc_employment_status->pageNo;
-    $ha_kyc_employment_status_arr["pagesize"] = $ha_kyc_employment_status->no_of_records_per_page;
-    $ha_kyc_employment_status_arr["total_count"] = $ha_kyc_employment_status->total_record_count();
-    $ha_kyc_employment_status_arr["records"] = array();
+        //ha_kyc_employment_status array
+        $ha_kyc_employment_status_arr = array();
+        $ha_kyc_employment_status_arr["pageno"] = $ha_kyc_employment_status->pageNo;
+        $ha_kyc_employment_status_arr["pagesize"] = $ha_kyc_employment_status->no_of_records_per_page;
+        $ha_kyc_employment_status_arr["total_count"] = $ha_kyc_employment_status->total_record_count();
+        $ha_kyc_employment_status_arr["records"] = array();
 
-    // retrieve our table contents
+        // retrieve our table contents
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
 
-        $ha_kyc_employment_status_item = array(
+            $ha_kyc_employment_status_item = array(
 
-            "id" => $id,
-            "customer_employment_status" => html_entity_decode($customer_employment_status),
-            "customer_employer_name" => html_entity_decode($customer_employer_name),
-            "customer_employer_office_number" => html_entity_decode($customer_employer_office_number),
-            "customer_employer_address" => html_entity_decode($customer_employer_address),
-            "customer_employer_nearest_bustop" => html_entity_decode($customer_employer_nearest_bustop),
-            "customer_employer_state" => html_entity_decode($customer_employer_state),
-            "customer_employer_city" => html_entity_decode($customer_employer_city),
-            "customer_employer_lga" => html_entity_decode($customer_employer_lga),
-            "customer_employer_country" => html_entity_decode($customer_employer_country),
-            "customer_employer_doe" => html_entity_decode($customer_employer_doe),
-            "customer_account_bvn" => html_entity_decode($customer_account_bvn),
-            "customer_account_monthly_salary" => html_entity_decode($customer_account_monthly_salary),
-            "customer_account_primary_bank" => html_entity_decode($customer_account_primary_bank),
-            "customer_account_primary_bank_account" => html_entity_decode($customer_account_primary_bank_account),
-            "user_id" => $user_id,
-            "follow_up" => $follow_up,
-            "comment" => $comment,
-            "created_at" => $created_at,
-            "updated_at" => $updated_at
-        );
+                "id" => $id,
+                "customer_employment_status" => html_entity_decode($customer_employment_status),
+                "customer_employer_name" => html_entity_decode($customer_employer_name),
+                "customer_employer_office_number" => html_entity_decode($customer_employer_office_number),
+                "customer_employer_address" => html_entity_decode($customer_employer_address),
+                "customer_employer_nearest_bustop" => html_entity_decode($customer_employer_nearest_bustop),
+                "customer_employer_state" => html_entity_decode($customer_employer_state),
+                "customer_employer_city" => html_entity_decode($customer_employer_city),
+                "customer_employer_lga" => html_entity_decode($customer_employer_lga),
+                "customer_employer_country" => html_entity_decode($customer_employer_country),
+                "customer_employer_doe" => html_entity_decode($customer_employer_doe),
+                "customer_account_bvn" => html_entity_decode($customer_account_bvn),
+                "customer_account_monthly_salary" => html_entity_decode($customer_account_monthly_salary),
+                "customer_account_primary_bank" => html_entity_decode($customer_account_primary_bank),
+                "customer_account_primary_bank_account" => html_entity_decode($customer_account_primary_bank_account),
+                "user_id" => $user_id,
+                "follow_up" => $follow_up,
+                "comment" => $comment,
+                "created_at" => $created_at,
+                "updated_at" => $updated_at
+            );
 
-        array_push($ha_kyc_employment_status_arr["records"], $ha_kyc_employment_status_item);
+            array_push($ha_kyc_employment_status_arr["records"], $ha_kyc_employment_status_item);
+        }
+
+        // set response code - 200 OK
+        http_response_code(200);
+
+        // show ha_kyc_employment_status data in json format
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_kyc_employment_status found", "data" => $ha_kyc_employment_status_arr));
+
+    } else {
+        // no ha_kyc_employment_status found will be here
+
+        // set response code - 404 Not found
+        http_response_code(201);
+
+        // tell the user no ha_kyc_employment_status found
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "No ha_kyc_employment_status found.", "data" => null));
+
     }
 
-    // set response code - 200 OK
-    http_response_code(200);
-
-    // show ha_kyc_employment_status data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_kyc_employment_status found", "data" => $ha_kyc_employment_status_arr));
-
-} else {
-    // no ha_kyc_employment_status found will be here
+} catch (Exception $exception) {
 
     // set response code - 404 Not found
     http_response_code(404);
 
     // tell the user no ha_kyc_employment_status found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_kyc_employment_status found.", "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => $exception->getMessage(), "data" => ""));
 
 }
  

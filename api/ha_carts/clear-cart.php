@@ -40,15 +40,11 @@ $db = $database->getConnection();
 // prepare ha_carts object
 $ha_carts = new Ha_Carts($db);
 
-// get ha_carts id
-$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
-
-
 // set ha_carts id to be deleted
-$ha_carts->id = $data->id;
+$ha_carts->id = $profileData->id;
 
 // delete the ha_carts
-if ($ha_carts->delete()) {
+if ($ha_carts->deleteAll()) {
 
     // set response code - 200 ok
     http_response_code(200);

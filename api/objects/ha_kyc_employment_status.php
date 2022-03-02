@@ -101,11 +101,11 @@ class Ha_Kyc_Employment_Status
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
-
+        $stmt->bindParam(1, $this->user_id, PDO::PARAM_INT);
         // execute query
         $stmt->execute();
 
@@ -244,63 +244,108 @@ class Ha_Kyc_Employment_Status
     // create ha_kyc_employment_status
     function create()
     {
+        try {
+            //$this->conn->beginTransaction();
+            // query to insert record
+            $query = "INSERT INTO " . $this->table_name . " 
+            SET 
+                customer_employment_status=:customer_employment_status,
+                customer_employer_name=:customer_employer_name,
+                customer_employer_office_number=:customer_employer_office_number,
+                customer_employer_address=:customer_employer_address,
+                customer_employer_nearest_bustop=:customer_employer_nearest_bustop,
+                customer_employer_state=:customer_employer_state,
+                customer_employer_city=:customer_employer_city,
+                customer_employer_lga=:customer_employer_lga,
+                customer_employer_country=:customer_employer_country,
+                customer_employer_doe=:customer_employer_doe,
+                customer_account_bvn=:customer_account_bvn,
+                customer_account_monthly_salary=:customer_account_monthly_salary,
+                customer_account_primary_bank=:customer_account_primary_bank,
+                customer_account_primary_bank_account=:customer_account_primary_bank_account,
+                user_id=:user_id,
+                follow_up=:follow_up,
+                comment=:comment,
+                created_at=:created_at,
+                updated_at=:updated_at
+             ON DUPLICATE KEY UPDATE
+                customer_employment_status=:customer_employment_status,
+                customer_employer_name=:customer_employer_name,
+                customer_employer_office_number=:customer_employer_office_number,
+                customer_employer_address=:customer_employer_address,
+                customer_employer_nearest_bustop=:customer_employer_nearest_bustop,
+                customer_employer_state=:customer_employer_state,
+                customer_employer_city=:customer_employer_city,
+                customer_employer_lga=:customer_employer_lga,
+                customer_employer_country=:customer_employer_country,
+                customer_employer_doe=:customer_employer_doe,
+                customer_account_bvn=:customer_account_bvn,
+                customer_account_monthly_salary=:customer_account_monthly_salary,
+                customer_account_primary_bank=:customer_account_primary_bank,
+                customer_account_primary_bank_account=:customer_account_primary_bank_account,                
+                updated_at=:updated_at
+            ";
 
-        // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET customer_employment_status=:customer_employment_status,customer_employer_name=:customer_employer_name,customer_employer_office_number=:customer_employer_office_number,customer_employer_address=:customer_employer_address,customer_employer_nearest_bustop=:customer_employer_nearest_bustop,customer_employer_state=:customer_employer_state,customer_employer_city=:customer_employer_city,customer_employer_lga=:customer_employer_lga,customer_employer_country=:customer_employer_country,customer_employer_doe=:customer_employer_doe,customer_account_bvn=:customer_account_bvn,customer_account_monthly_salary=:customer_account_monthly_salary,customer_account_primary_bank=:customer_account_primary_bank,customer_account_primary_bank_account=:customer_account_primary_bank_account,user_id=:user_id,follow_up=:follow_up,comment=:comment,created_at=:created_at,updated_at=:updated_at";
+            // prepare query
+            $stmt = $this->conn->prepare($query);
 
-        // prepare query
-        $stmt = $this->conn->prepare($query);
+            // sanitize
 
-        // sanitize
+            $this->customer_employment_status = htmlspecialchars(strip_tags($this->customer_employment_status));
+            $this->customer_employer_name = htmlspecialchars(strip_tags($this->customer_employer_name));
+            $this->customer_employer_office_number = htmlspecialchars(strip_tags($this->customer_employer_office_number));
+            $this->customer_employer_address = htmlspecialchars(strip_tags($this->customer_employer_address));
+            $this->customer_employer_nearest_bustop = htmlspecialchars(strip_tags($this->customer_employer_nearest_bustop));
+            $this->customer_employer_state = htmlspecialchars(strip_tags($this->customer_employer_state));
+            $this->customer_employer_city = htmlspecialchars(strip_tags($this->customer_employer_city));
+            $this->customer_employer_lga = htmlspecialchars(strip_tags($this->customer_employer_lga));
+            $this->customer_employer_country = htmlspecialchars(strip_tags($this->customer_employer_country));
+            $this->customer_employer_doe = htmlspecialchars(strip_tags($this->customer_employer_doe));
+            $this->customer_account_bvn = htmlspecialchars(strip_tags($this->customer_account_bvn));
+            $this->customer_account_monthly_salary = htmlspecialchars(strip_tags($this->customer_account_monthly_salary));
+            $this->customer_account_primary_bank = htmlspecialchars(strip_tags($this->customer_account_primary_bank));
+            $this->customer_account_primary_bank_account = htmlspecialchars(strip_tags($this->customer_account_primary_bank_account));
+            $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+            $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
+            $this->comment = htmlspecialchars(strip_tags($this->comment));
+            $this->created_at = htmlspecialchars(strip_tags($this->created_at));
+            $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
 
-        $this->customer_employment_status = htmlspecialchars(strip_tags($this->customer_employment_status));
-        $this->customer_employer_name = htmlspecialchars(strip_tags($this->customer_employer_name));
-        $this->customer_employer_office_number = htmlspecialchars(strip_tags($this->customer_employer_office_number));
-        $this->customer_employer_address = htmlspecialchars(strip_tags($this->customer_employer_address));
-        $this->customer_employer_nearest_bustop = htmlspecialchars(strip_tags($this->customer_employer_nearest_bustop));
-        $this->customer_employer_state = htmlspecialchars(strip_tags($this->customer_employer_state));
-        $this->customer_employer_city = htmlspecialchars(strip_tags($this->customer_employer_city));
-        $this->customer_employer_lga = htmlspecialchars(strip_tags($this->customer_employer_lga));
-        $this->customer_employer_country = htmlspecialchars(strip_tags($this->customer_employer_country));
-        $this->customer_employer_doe = htmlspecialchars(strip_tags($this->customer_employer_doe));
-        $this->customer_account_bvn = htmlspecialchars(strip_tags($this->customer_account_bvn));
-        $this->customer_account_monthly_salary = htmlspecialchars(strip_tags($this->customer_account_monthly_salary));
-        $this->customer_account_primary_bank = htmlspecialchars(strip_tags($this->customer_account_primary_bank));
-        $this->customer_account_primary_bank_account = htmlspecialchars(strip_tags($this->customer_account_primary_bank_account));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
-        $this->comment = htmlspecialchars(strip_tags($this->comment));
-        $this->created_at = htmlspecialchars(strip_tags($this->created_at));
-        $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
+            // bind values
 
-        // bind values
+            $stmt->bindParam(":customer_employment_status", $this->customer_employment_status);
+            $stmt->bindParam(":customer_employer_name", $this->customer_employer_name);
+            $stmt->bindParam(":customer_employer_office_number", $this->customer_employer_office_number);
+            $stmt->bindParam(":customer_employer_address", $this->customer_employer_address);
+            $stmt->bindParam(":customer_employer_nearest_bustop", $this->customer_employer_nearest_bustop);
+            $stmt->bindParam(":customer_employer_state", $this->customer_employer_state);
+            $stmt->bindParam(":customer_employer_city", $this->customer_employer_city);
+            $stmt->bindParam(":customer_employer_lga", $this->customer_employer_lga);
+            $stmt->bindParam(":customer_employer_country", $this->customer_employer_country);
+            $stmt->bindParam(":customer_employer_doe", $this->customer_employer_doe);
+            $stmt->bindParam(":customer_account_bvn", $this->customer_account_bvn);
+            $stmt->bindParam(":customer_account_monthly_salary", $this->customer_account_monthly_salary);
+            $stmt->bindParam(":customer_account_primary_bank", $this->customer_account_primary_bank);
+            $stmt->bindParam(":customer_account_primary_bank_account", $this->customer_account_primary_bank_account);
+            $stmt->bindParam(":user_id", $this->user_id);
+            $stmt->bindParam(":follow_up", $this->follow_up);
+            $stmt->bindParam(":comment", $this->comment);
+            $stmt->bindParam(":created_at", $this->created_at);
+            $stmt->bindParam(":updated_at", $this->updated_at);
 
-        $stmt->bindParam(":customer_employment_status", $this->customer_employment_status);
-        $stmt->bindParam(":customer_employer_name", $this->customer_employer_name);
-        $stmt->bindParam(":customer_employer_office_number", $this->customer_employer_office_number);
-        $stmt->bindParam(":customer_employer_address", $this->customer_employer_address);
-        $stmt->bindParam(":customer_employer_nearest_bustop", $this->customer_employer_nearest_bustop);
-        $stmt->bindParam(":customer_employer_state", $this->customer_employer_state);
-        $stmt->bindParam(":customer_employer_city", $this->customer_employer_city);
-        $stmt->bindParam(":customer_employer_lga", $this->customer_employer_lga);
-        $stmt->bindParam(":customer_employer_country", $this->customer_employer_country);
-        $stmt->bindParam(":customer_employer_doe", $this->customer_employer_doe);
-        $stmt->bindParam(":customer_account_bvn", $this->customer_account_bvn);
-        $stmt->bindParam(":customer_account_monthly_salary", $this->customer_account_monthly_salary);
-        $stmt->bindParam(":customer_account_primary_bank", $this->customer_account_primary_bank);
-        $stmt->bindParam(":customer_account_primary_bank_account", $this->customer_account_primary_bank_account);
-        $stmt->bindParam(":user_id", $this->user_id);
-        $stmt->bindParam(":follow_up", $this->follow_up);
-        $stmt->bindParam(":comment", $this->comment);
-        $stmt->bindParam(":created_at", $this->created_at);
-        $stmt->bindParam(":updated_at", $this->updated_at);
+            // execute query
+            if ($stmt->execute()) {
+                return $this->conn->lastInsertId();
+            }
 
-        // execute query
-        if ($stmt->execute()) {
-            return $this->conn->lastInsertId();
+            return 0;
+            // $this->conn->commit();
+        } catch (PDOException $e) {
+            //optional as above:
+            //$this->conn->rollback();
+            return 0;
+            //handle your exception here $e->getMessage() or something
         }
-
-        return 0;
 
     }
 

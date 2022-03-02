@@ -101,10 +101,12 @@ class Ha_Kyc_Personal_Info
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
+        // bind id
+        $stmt->bindParam(1, $this->user_id, PDO::PARAM_INT);
 
         // execute query
         $stmt->execute();
@@ -242,63 +244,107 @@ class Ha_Kyc_Personal_Info
 
 
     // create ha_kyc_personal_info
-    function create()
+    function create(): int
     {
+        try {
+            //$this->conn->beginTransaction();
+            // query to insert record
+            $query = "INSERT INTO " . $this->table_name .
+                " SET 
+                customer_firstname=:customer_firstname,
+                customer_lastname=:customer_lastname,
+                customer_dob=:customer_dob,
+                customer_gender=:customer_gender,
+                customer_phone_no=:customer_phone_no,
+                customer_email=:customer_email,
+                customer_residence_type=:customer_residence_type,
+                customer_house_number=:customer_house_number,
+                customer_house_address=:customer_house_address,
+                customer_state=:customer_state,
+                customer_city=:customer_city,
+                customer_lga=:customer_lga,
+                customer_country=:customer_country,
+                customer_stay_duration=:customer_stay_duration,
+                user_id=:user_id,
+                follow_up=:follow_up,
+                comment=:comment,
+                updated_at=:updated_at        
+        ON DUPLICATE KEY UPDATE
+            customer_firstname=:customer_firstname,
+            customer_lastname=:customer_lastname,
+            customer_dob=:customer_dob,
+            customer_gender=:customer_gender,
+            customer_phone_no=:customer_phone_no,
+            customer_email=:customer_email,
+            customer_residence_type=:customer_residence_type,
+            customer_house_number=:customer_house_number,
+            customer_house_address=:customer_house_address,
+            customer_state=:customer_state,
+            customer_city=:customer_city,
+            customer_lga=:customer_lga,
+            customer_country=:customer_country,
+            customer_stay_duration=:customer_stay_duration,          
+            updated_at=:updated_at";
 
-        // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET customer_firstname=:customer_firstname,customer_lastname=:customer_lastname,customer_dob=:customer_dob,customer_gender=:customer_gender,customer_phone_no=:customer_phone_no,customer_email=:customer_email,customer_residence_type=:customer_residence_type,customer_house_number=:customer_house_number,customer_house_address=:customer_house_address,customer_state=:customer_state,customer_city=:customer_city,customer_lga=:customer_lga,customer_country=:customer_country,customer_stay_duration=:customer_stay_duration,user_id=:user_id,follow_up=:follow_up,comment=:comment,updated_at=:updated_at";
+            // prepare query
+            $stmt = $this->conn->prepare($query);
 
-        // prepare query
-        $stmt = $this->conn->prepare($query);
+            // sanitize
 
-        // sanitize
+            $this->customer_firstname = htmlspecialchars(strip_tags($this->customer_firstname));
+            $this->customer_lastname = htmlspecialchars(strip_tags($this->customer_lastname));
+            $this->customer_dob = htmlspecialchars(strip_tags($this->customer_dob));
+            $this->customer_gender = htmlspecialchars(strip_tags($this->customer_gender));
+            $this->customer_phone_no = htmlspecialchars(strip_tags($this->customer_phone_no));
+            $this->customer_email = htmlspecialchars(strip_tags($this->customer_email));
+            $this->customer_residence_type = htmlspecialchars(strip_tags($this->customer_residence_type));
+            $this->customer_house_number = htmlspecialchars(strip_tags($this->customer_house_number));
+            $this->customer_house_address = htmlspecialchars(strip_tags($this->customer_house_address));
+            $this->customer_state = htmlspecialchars(strip_tags($this->customer_state));
+            $this->customer_city = htmlspecialchars(strip_tags($this->customer_city));
+            $this->customer_lga = htmlspecialchars(strip_tags($this->customer_lga));
+            $this->customer_country = htmlspecialchars(strip_tags($this->customer_country));
+            $this->customer_stay_duration = htmlspecialchars(strip_tags($this->customer_stay_duration));
+            $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+            $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
+            $this->comment = htmlspecialchars(strip_tags($this->comment));
+            $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
 
-        $this->customer_firstname = htmlspecialchars(strip_tags($this->customer_firstname));
-        $this->customer_lastname = htmlspecialchars(strip_tags($this->customer_lastname));
-        $this->customer_dob = htmlspecialchars(strip_tags($this->customer_dob));
-        $this->customer_gender = htmlspecialchars(strip_tags($this->customer_gender));
-        $this->customer_phone_no = htmlspecialchars(strip_tags($this->customer_phone_no));
-        $this->customer_email = htmlspecialchars(strip_tags($this->customer_email));
-        $this->customer_residence_type = htmlspecialchars(strip_tags($this->customer_residence_type));
-        $this->customer_house_number = htmlspecialchars(strip_tags($this->customer_house_number));
-        $this->customer_house_address = htmlspecialchars(strip_tags($this->customer_house_address));
-        $this->customer_state = htmlspecialchars(strip_tags($this->customer_state));
-        $this->customer_city = htmlspecialchars(strip_tags($this->customer_city));
-        $this->customer_lga = htmlspecialchars(strip_tags($this->customer_lga));
-        $this->customer_country = htmlspecialchars(strip_tags($this->customer_country));
-        $this->customer_stay_duration = htmlspecialchars(strip_tags($this->customer_stay_duration));
-        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
-        $this->comment = htmlspecialchars(strip_tags($this->comment));
-        $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
+            // bind values
 
-        // bind values
+            $stmt->bindParam(":customer_firstname", $this->customer_firstname);
+            $stmt->bindParam(":customer_lastname", $this->customer_lastname);
+            $stmt->bindParam(":customer_dob", $this->customer_dob);
+            $stmt->bindParam(":customer_gender", $this->customer_gender);
+            $stmt->bindParam(":customer_phone_no", $this->customer_phone_no);
+            $stmt->bindParam(":customer_email", $this->customer_email);
+            $stmt->bindParam(":customer_residence_type", $this->customer_residence_type);
+            $stmt->bindParam(":customer_house_number", $this->customer_house_number);
+            $stmt->bindParam(":customer_house_address", $this->customer_house_address);
+            $stmt->bindParam(":customer_state", $this->customer_state);
+            $stmt->bindParam(":customer_city", $this->customer_city);
+            $stmt->bindParam(":customer_lga", $this->customer_lga);
+            $stmt->bindParam(":customer_country", $this->customer_country);
+            $stmt->bindParam(":customer_stay_duration", $this->customer_stay_duration);
+            $stmt->bindParam(":user_id", $this->user_id);
+            $stmt->bindParam(":follow_up", $this->follow_up);
+            $stmt->bindParam(":comment", $this->comment);
+            $stmt->bindParam(":updated_at", $this->updated_at);
 
-        $stmt->bindParam(":customer_firstname", $this->customer_firstname);
-        $stmt->bindParam(":customer_lastname", $this->customer_lastname);
-        $stmt->bindParam(":customer_dob", $this->customer_dob);
-        $stmt->bindParam(":customer_gender", $this->customer_gender);
-        $stmt->bindParam(":customer_phone_no", $this->customer_phone_no);
-        $stmt->bindParam(":customer_email", $this->customer_email);
-        $stmt->bindParam(":customer_residence_type", $this->customer_residence_type);
-        $stmt->bindParam(":customer_house_number", $this->customer_house_number);
-        $stmt->bindParam(":customer_house_address", $this->customer_house_address);
-        $stmt->bindParam(":customer_state", $this->customer_state);
-        $stmt->bindParam(":customer_city", $this->customer_city);
-        $stmt->bindParam(":customer_lga", $this->customer_lga);
-        $stmt->bindParam(":customer_country", $this->customer_country);
-        $stmt->bindParam(":customer_stay_duration", $this->customer_stay_duration);
-        $stmt->bindParam(":user_id", $this->user_id);
-        $stmt->bindParam(":follow_up", $this->follow_up);
-        $stmt->bindParam(":comment", $this->comment);
-        $stmt->bindParam(":updated_at", $this->updated_at);
+            // execute query
+            if ($stmt->execute()) {
+                return $this->conn->lastInsertId();
+            }
 
-        // execute query
-        if ($stmt->execute()) {
-            return $this->conn->lastInsertId();
+            return 0;
+            //again optional if on MyIASM or DB that doesn't support transactions
+           // $this->conn->commit();
+        } catch (PDOException $e) {
+            //optional as above:
+            //$this->conn->rollback();
+            return 0;
+            //handle your exception here $e->getMessage() or something
         }
-
-        return 0;
 
     }
 

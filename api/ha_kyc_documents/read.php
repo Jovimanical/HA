@@ -36,64 +36,76 @@ include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/valida
 // instantiate database and ha_kyc_documents object
 $database = new Database();
 $db = $database->getConnection();
- 
+try {
 // initialize object
-$ha_kyc_documents = new Ha_Kyc_Documents($db);
+    $ha_kyc_documents = new Ha_Kyc_Documents($db);
 
-$ha_kyc_documents->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
-$ha_kyc_documents->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
+    $ha_kyc_documents->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
+    $ha_kyc_documents->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 // read ha_kyc_documents will be here
 
+    $ha_kyc_documents->user_id = $profileData->id;
+
 // query ha_kyc_documents
-$stmt = $ha_kyc_documents->read();
-$num = $stmt->rowCount();
- 
+    $stmt = $ha_kyc_documents->read();
+    $num = $stmt->rowCount();
+
 // check if more than 0 record found
-if($num>0){
- 
-    //ha_kyc_documents array
-    $ha_kyc_documents_arr=array();
-	$ha_kyc_documents_arr["pageno"]=$ha_kyc_documents->pageNo;
-	$ha_kyc_documents_arr["pagesize"]=$ha_kyc_documents->no_of_records_per_page;
-    $ha_kyc_documents_arr["total_count"]=$ha_kyc_documents->total_record_count();
-    $ha_kyc_documents_arr["records"]=array();
- 
-    // retrieve our table contents
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        extract($row);
- 
-        $ha_kyc_documents_item=array(
-            
-"id" => $id,
-"user_id" => $user_id,
-"file_name" => html_entity_decode($file_name),
-"file_url" => $file_url,
-"file_status" => $file_status,
-"follow_up" => $follow_up,
-"provider" => $provider,
-"created_at" => $created_at,
-"updated_at" => $updated_at
-        );
- 
-        array_push($ha_kyc_documents_arr["records"], $ha_kyc_documents_item);
+    if ($num > 0) {
+
+        //ha_kyc_documents array
+        $ha_kyc_documents_arr = array();
+        $ha_kyc_documents_arr["pageno"] = $ha_kyc_documents->pageNo;
+        $ha_kyc_documents_arr["pagesize"] = $ha_kyc_documents->no_of_records_per_page;
+        $ha_kyc_documents_arr["total_count"] = $ha_kyc_documents->total_record_count();
+        $ha_kyc_documents_arr["records"] = array();
+
+        // retrieve our table contents
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+
+            $ha_kyc_documents_item = array(
+
+                "id" => $id,
+                "user_id" => $user_id,
+                "file_name" => html_entity_decode($file_name),
+                "file_url" => $file_url,
+                "file_status" => $file_status,
+                "follow_up" => $follow_up,
+                "provider" => $provider,
+                "created_at" => $created_at,
+                "updated_at" => $updated_at
+            );
+
+            array_push($ha_kyc_documents_arr["records"], $ha_kyc_documents_item);
+        }
+
+        // set response code - 200 OK
+        http_response_code(200);
+
+        // show ha_kyc_documents data in json format
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_kyc_documents found", "data" => $ha_kyc_documents_arr));
+
+    } else {
+        // no ha_kyc_documents found will be here
+
+        // set response code - 404 Not found
+        http_response_code(201);
+
+        // tell the user no ha_kyc_documents found
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "No ha_kyc_documents found.", "data" => null));
+
     }
- 
-    // set response code - 200 OK
-    http_response_code(200);
- 
-    // show ha_kyc_documents data in json format
-	echo json_encode(array("status" => "success", "code" => 1,"message"=> "ha_kyc_documents found","document"=> $ha_kyc_documents_arr));
-    
-}else{
- // no ha_kyc_documents found will be here
+} catch (Exception $exception) {
+    // no ha_kyc_documents found will be here
 
     // set response code - 404 Not found
     http_response_code(404);
- 
+
     // tell the user no ha_kyc_documents found
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "No ha_kyc_documents found.","document"=> ""));
-    
+    echo json_encode(array("status" => "error", "code" => 0, "message" => $exception->getMessage(), "data" => ""));
+
 }
  
 

@@ -67,7 +67,6 @@ if (isset($_REQUEST) && $_SERVER['REQUEST_METHOD'] == "POST") {
 
         if (!is_dir($file_upload_directory) && !file_exists($file_upload_directory)) {
             mkdir($file_upload_directory, 0777, true);
-
         }
 
         /**
@@ -172,14 +171,14 @@ if (isset($_REQUEST) && $_SERVER['REQUEST_METHOD'] == "POST") {
                 foreach ($results as $key => $fileUploaded) {
                     array_push($aws_object, $AWS_CLOUD_FRONT_URL . basename($fileUploaded['@metadata']['effectiveUri']));
 
-                    $ha_kyc_documents->file_name = generateFileName($key);
+                    $ha_kyc_documents->file_name = generateFileName(4);
                     $ha_kyc_documents->file_url = $AWS_CLOUD_FRONT_URL . basename($fileUploaded['@metadata']['effectiveUri']);
                     $ha_kyc_documents->user_id = $profileData->id;
                     $ha_kyc_documents->file_status = 'pending';
                     $ha_kyc_documents->follow_up = 0;
                     $ha_kyc_documents->provider = 'locally uploaded';
                     $ha_kyc_documents->updated_at = date('Y-m-d H:m:s');
-                    $ha_kyc_documents->file_password = '';
+                    $ha_kyc_documents->file_password = $data->file_password ? $data->file_password : 'unknown';
                     $ha_kyc_documents->create();
                 }
 
@@ -197,8 +196,7 @@ if (isset($_REQUEST) && $_SERVER['REQUEST_METHOD'] == "POST") {
                  */
                 foreach ($image_array_holder as $key => $file) {
                     if (file_exists($file)) {
-                        chmod(realpath($file), 0777);
-                        @unlink(realpath($file));
+                        unlink($file);
                     }
                 }
 
