@@ -44,6 +44,54 @@ class Ha_Wishlists
         }
     }
 
+    /**
+     * @return int|mixed
+     */
+    function user_total_record_count()
+    {
+        $query = "SELECT COUNT(1) AS total FROM " . $this->table_name . " t  WHERE t.user_id=?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        // bind id
+        $stmt->bindParam(1, $this->user_id);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            return $row['total'];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    function deleteAll(): bool
+    {
+
+        // delete query
+        $query = "DELETE FROM " . $this->table_name . " t WHERE  t.user_id = ? ";
+
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->user_id = htmlspecialchars(strip_tags($this->id));
+
+        // bind id of record to delete
+        $stmt->bindParam(1, $this->user_id);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
     function search_record_count($columnArray, $orAnd)
     {
 

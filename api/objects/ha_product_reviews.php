@@ -29,7 +29,7 @@ class Ha_Product_Reviews
 
     function total_record_count()
     {
-        $query = "select count(1) as total from " . $this->table_name . "";
+        $query = "SELECT COUNT(1) AS total FROM " . $this->table_name . "";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -40,6 +40,27 @@ class Ha_Product_Reviews
             return 0;
         }
     }
+
+    /**
+     * @return int|mixed
+     */
+    function user_total_record_count()
+    {
+        $query = "SELECT COUNT(1) AS total FROM " . $this->table_name . " t  WHERE t.user_id=?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        // bind id
+        $stmt->bindParam(1, $this->user_id);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            return $row['total'];
+        } else {
+            return 0;
+        }
+    }
+
 
     function search_record_count($columnArray, $orAnd)
     {
@@ -55,7 +76,7 @@ class Ha_Product_Reviews
                 $where = $where . " " . $orAnd . " LOWER(t." . $columnName . ") " . $columnLogic . " :" . $columnName;
             }
         }
-        $query = "SELECT count(1) as total FROM " . $this->table_name . " t  WHERE " . $where . "";
+        $query = "SELECT COUNT(1) as total FROM " . $this->table_name . " t  WHERE " . $where . "";
 
         $stmt = $this->conn->prepare($query);
         $paramCount = 1;

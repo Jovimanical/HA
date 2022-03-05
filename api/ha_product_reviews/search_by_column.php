@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         }
     }
 }
+
+
 require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();

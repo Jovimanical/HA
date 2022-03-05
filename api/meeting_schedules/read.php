@@ -27,17 +27,14 @@ require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-// get database connection
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-
-// instantiate meeting_schedules object
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/meeting_schedules.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 
 // instantiate database and meeting_schedules object
 $database = new Database();
 $db = $database->getConnection();
- 
+
 // initialize object
 $meeting_schedules = new Meeting_Schedules($db);
 
@@ -48,56 +45,56 @@ $meeting_schedules->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['p
 // query meeting_schedules
 $stmt = $meeting_schedules->read();
 $num = $stmt->rowCount();
- 
+
 // check if more than 0 record found
-if($num>0){
- 
+if ($num > 0) {
+
     //meeting_schedules array
-    $meeting_schedules_arr=array();
-	$meeting_schedules_arr["pageno"]=$meeting_schedules->pageNo;
-	$meeting_schedules_arr["pagesize"]=$meeting_schedules->no_of_records_per_page;
-    $meeting_schedules_arr["total_count"]=$meeting_schedules->total_record_count();
-    $meeting_schedules_arr["records"]=array();
- 
+    $meeting_schedules_arr = array();
+    $meeting_schedules_arr["pageno"] = $meeting_schedules->pageNo;
+    $meeting_schedules_arr["pagesize"] = $meeting_schedules->no_of_records_per_page;
+    $meeting_schedules_arr["total_count"] = $meeting_schedules->total_record_count();
+    $meeting_schedules_arr["records"] = array();
+
     // retrieve our table contents
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
- 
-        $meeting_schedules_item=array(
-            
-"id" => $id,
-"meeting_topic" => html_entity_decode($meeting_topic),
-"meeting_fullname" => html_entity_decode($meeting_fullname),
-"meeting_email" => $meeting_email,
-"meeting_phone" => $meeting_phone,
-"meeting_date" => $meeting_date,
-"meeting_time" => $meeting_time,
-"meeting_duration_hours" => $meeting_duration_hours,
-"meeting_duration_minutes" => $meeting_duration_minutes,
-"meeting_status" => $meeting_status,
-"created_at" => $created_at,
-"updated_at" => $updated_at
+
+        $meeting_schedules_item = array(
+
+            "id" => $id,
+            "meeting_topic" => html_entity_decode($meeting_topic),
+            "meeting_fullname" => html_entity_decode($meeting_fullname),
+            "meeting_email" => $meeting_email,
+            "meeting_phone" => $meeting_phone,
+            "meeting_date" => $meeting_date,
+            "meeting_time" => $meeting_time,
+            "meeting_duration_hours" => $meeting_duration_hours,
+            "meeting_duration_minutes" => $meeting_duration_minutes,
+            "meeting_status" => $meeting_status,
+            "created_at" => $created_at,
+            "updated_at" => $updated_at
         );
- 
+
         array_push($meeting_schedules_arr["records"], $meeting_schedules_item);
     }
- 
+
     // set response code - 200 OK
     http_response_code(200);
- 
+
     // show meeting_schedules data in json format
-	echo json_encode(array("status" => "success", "code" => 1,"message"=> "meeting_schedules found","document"=> $meeting_schedules_arr));
-    
-}else{
- // no meeting_schedules found will be here
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "meeting_schedules found", "document" => $meeting_schedules_arr));
+
+} else {
+    // no meeting_schedules found will be here
 
     // set response code - 404 Not found
     http_response_code(404);
- 
+
     // tell the user no meeting_schedules found
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "No meeting_schedules found.","document"=> ""));
-    
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No meeting_schedules found.", "document" => ""));
+
 }
  
 

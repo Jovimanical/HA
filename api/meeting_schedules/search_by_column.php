@@ -27,8 +27,6 @@ $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 // get database connection
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-
-// instantiate meeting_schedules object
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/meeting_schedules.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 // instantiate database and meeting_schedules object
@@ -38,7 +36,8 @@ $db = $database->getConnection();
 // initialize object
 $meeting_schedules = new Meeting_Schedules($db);
 
-$data = json_decode(file_get_contents("php://input"));
+$data =  (json_decode(file_get_contents("php://input"), true ) === NULL ) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
+
 $orAnd = isset($_GET['orAnd']) ? $_GET['orAnd'] : "OR";
 
 $meeting_schedules->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;

@@ -27,110 +27,103 @@ require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-// get database connection
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-
-// instantiate meeting_schedules object
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/meeting_schedules.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 
 $database = new Database();
 $db = $database->getConnection();
- 
-$meeting_schedules = new Meeting_Schedules($db);
- 
-// get posted data
-$data =  (json_decode(file_get_contents("php://input"), true ) === NULL ) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
- 
+$meeting_schedules = new Meeting_Schedules($db);
+
+// get posted data
+$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
+
+
 // make sure data is not empty
-if(!isEmpty($data->meeting_topic)
-&&!isEmpty($data->meeting_fullname)
-&&!isEmpty($data->meeting_email)
-&&!isEmpty($data->meeting_phone)
-&&!isEmpty($data->meeting_date)
-&&!isEmpty($data->meeting_time)
-&&!isEmpty($data->meeting_duration_hours)
-&&!isEmpty($data->meeting_duration_minutes)
-&&!isEmpty($data->meeting_status)){
- 
+if (!isEmpty($data->meeting_topic)
+    && !isEmpty($data->meeting_fullname)
+    && !isEmpty($data->meeting_email)
+    && !isEmpty($data->meeting_phone)
+    && !isEmpty($data->meeting_date)
+    && !isEmpty($data->meeting_time)
+    && !isEmpty($data->meeting_duration_hours)
+    && !isEmpty($data->meeting_duration_minutes)
+    && !isEmpty($data->meeting_status)) {
+
     // set meeting_schedules property values
-	 
-if(!isEmpty($data->meeting_topic)) { 
-$meeting_schedules->meeting_topic = $data->meeting_topic;
-} else { 
-$meeting_schedules->meeting_topic = '';
-}
-if(!isEmpty($data->meeting_fullname)) { 
-$meeting_schedules->meeting_fullname = $data->meeting_fullname;
-} else { 
-$meeting_schedules->meeting_fullname = '';
-}
-if(!isEmpty($data->meeting_email)) { 
-$meeting_schedules->meeting_email = $data->meeting_email;
-} else { 
-$meeting_schedules->meeting_email = '';
-}
-if(!isEmpty($data->meeting_phone)) { 
-$meeting_schedules->meeting_phone = $data->meeting_phone;
-} else { 
-$meeting_schedules->meeting_phone = '';
-}
-if(!isEmpty($data->meeting_date)) { 
-$meeting_schedules->meeting_date = $data->meeting_date;
-} else { 
-$meeting_schedules->meeting_date = '';
-}
-if(!isEmpty($data->meeting_time)) { 
-$meeting_schedules->meeting_time = $data->meeting_time;
-} else { 
-$meeting_schedules->meeting_time = '';
-}
-if(!isEmpty($data->meeting_duration_hours)) { 
-$meeting_schedules->meeting_duration_hours = $data->meeting_duration_hours;
-} else { 
-$meeting_schedules->meeting_duration_hours = '';
-}
-if(!isEmpty($data->meeting_duration_minutes)) { 
-$meeting_schedules->meeting_duration_minutes = $data->meeting_duration_minutes;
-} else { 
-$meeting_schedules->meeting_duration_minutes = '';
-}
-if(!isEmpty($data->meeting_status)) { 
-$meeting_schedules->meeting_status = $data->meeting_status;
-} else { 
-$meeting_schedules->meeting_status = 'active';
-}
-$meeting_schedules->updated_at = $data->updated_at;
- 	$lastInsertedId=$meeting_schedules->create();
+
+    if (!isEmpty($data->meeting_topic)) {
+        $meeting_schedules->meeting_topic = $data->meeting_topic;
+    } else {
+        $meeting_schedules->meeting_topic = '';
+    }
+    if (!isEmpty($data->meeting_fullname)) {
+        $meeting_schedules->meeting_fullname = $data->meeting_fullname;
+    } else {
+        $meeting_schedules->meeting_fullname = '';
+    }
+    if (!isEmpty($data->meeting_email)) {
+        $meeting_schedules->meeting_email = $data->meeting_email;
+    } else {
+        $meeting_schedules->meeting_email = '';
+    }
+    if (!isEmpty($data->meeting_phone)) {
+        $meeting_schedules->meeting_phone = $data->meeting_phone;
+    } else {
+        $meeting_schedules->meeting_phone = '';
+    }
+    if (!isEmpty($data->meeting_date)) {
+        $meeting_schedules->meeting_date = $data->meeting_date;
+    } else {
+        $meeting_schedules->meeting_date = '';
+    }
+    if (!isEmpty($data->meeting_time)) {
+        $meeting_schedules->meeting_time = $data->meeting_time;
+    } else {
+        $meeting_schedules->meeting_time = '';
+    }
+    if (!isEmpty($data->meeting_duration_hours)) {
+        $meeting_schedules->meeting_duration_hours = $data->meeting_duration_hours;
+    } else {
+        $meeting_schedules->meeting_duration_hours = '';
+    }
+    if (!isEmpty($data->meeting_duration_minutes)) {
+        $meeting_schedules->meeting_duration_minutes = $data->meeting_duration_minutes;
+    } else {
+        $meeting_schedules->meeting_duration_minutes = '';
+    }
+    if (!isEmpty($data->meeting_status)) {
+        $meeting_schedules->meeting_status = $data->meeting_status;
+    } else {
+        $meeting_schedules->meeting_status = 'active';
+    }
+    $meeting_schedules->updated_at = $data->updated_at;
+    $lastInsertedId = $meeting_schedules->create();
     // create the meeting_schedules
-    if($lastInsertedId!=0){
- 
+    if ($lastInsertedId != 0) {
+
         // set response code - 201 created
         http_response_code(201);
- 
+
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1,"message"=> "Created Successfully","document"=> $lastInsertedId));
-    }
- 
-    // if unable to create the meeting_schedules, tell the user
-    else{
- 
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "document" => $lastInsertedId));
+    } // if unable to create the meeting_schedules, tell the user
+    else {
+
         // set response code - 503 service unavailable
         http_response_code(503);
- 
+
         // tell the user
-		echo json_encode(array("status" => "error", "code" => 0,"message"=> "Unable to create meeting_schedules","document"=> ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules", "document" => ""));
     }
-}
- 
-// tell the user data is incomplete
-else{
- 
+} // tell the user data is incomplete
+else {
+
     // set response code - 400 bad request
     http_response_code(400);
- 
+
     // tell the user
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "Unable to create meeting_schedules. Data is incomplete.","document"=> ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules. Data is incomplete.", "document" => ""));
 }
 ?>
