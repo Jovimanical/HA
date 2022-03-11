@@ -31,74 +31,79 @@ include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helpe
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_carts.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
+try {
 // instantiate database and ha_carts object
-$database = new Database();
-$db = $database->getConnection();
+    $database = new Database();
+    $db = $database->getConnection();
 
 // initialize object
-$ha_carts = new Ha_Carts($db);
+    $ha_carts = new Ha_Carts($db);
 
-$ha_carts->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
-$ha_carts->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
+    $ha_carts->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
+    $ha_carts->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 // read ha_carts will be here
 // set ID property of record to read
-$ha_carts->user_id = $profileData->id;
+    $ha_carts->user_id = $profileData->id;
 
 // query ha_carts
-$stmt = $ha_carts->read();
-$num = $stmt->rowCount();
+    $stmt = $ha_carts->read();
+    $num = $stmt->rowCount();
 
 // check if more than 0 record found
-if ($num > 0) {
+    if ($num > 0) {
 
-    //ha_carts array
-    $ha_carts_arr = array();
-    $ha_carts_arr["pageno"] = $ha_carts->pageNo;
-    $ha_carts_arr["pagesize"] = $ha_carts->no_of_records_per_page;
-    $ha_carts_arr["total_count"] = $ha_carts->total_record_count();
-    $ha_carts_arr["records"] = array();
+        //ha_carts array
+        $ha_carts_arr = array();
+        $ha_carts_arr["pageno"] = $ha_carts->pageNo;
+        $ha_carts_arr["pagesize"] = $ha_carts->no_of_records_per_page;
+        $ha_carts_arr["total_count"] = $ha_carts->total_record_count();
+        $ha_carts_arr["records"] = array();
 
-    // retrieve our table contents
+        // retrieve our table contents
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
 
-        $ha_carts_item = array(
+            $ha_carts_item = array(
+                "id" => $id,
+                "EntityParent" => $EntityParent,
+                "LinkedEntity" => $LinkedEntity,
+                "PropertyFloor" => $PropertyFloor,
+                "PropertyId" => $PropertyId,
+                "PropertyName" => html_entity_decode($PropertyName),
+                "PropertyAmount" => $PropertyAmount,
+                "PaymentMethod" => $PaymentMethod,
+                "PropertyJson" => $PropertyJson,
+                "PropertyType" => $PropertyType,
+                "PropertyStatus" => $PropertyStatus,
+                "user_id" => $user_id,
+                "createdAt" => $createdAt
+            );
 
-            "id" => $id,
-            "EntityParent" => $EntityParent,
-            "LinkedEntity" => $LinkedEntity,
-            "PropertyFloor" => $PropertyFloor,
-            "PropertyId" => $PropertyId,
-            "PropertyName" => html_entity_decode($PropertyName),
-            "PropertyAmount" => $PropertyAmount,
-            "PaymentMethod" => $PaymentMethod,
-            "PropertyJson" => $PropertyJson,
-            "PropertyType" => $PropertyType,
-            "PropertyStatus" => $PropertyStatus,
-            "user_id" => $user_id,
-            "createdAt" => $createdAt
-        );
+            array_push($ha_carts_arr["records"], $ha_carts_item);
+        }
 
-        array_push($ha_carts_arr["records"], $ha_carts_item);
+        // set response code - 200 OK
+        http_response_code(200);
+
+        // show ha_carts data in json format
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Cart Items found", "data" => $ha_carts_arr));
+
+    } else {
+        // no ha_carts found will be here
+
+        // set response code - 404 Not found
+        http_response_code(201);
+
+        // tell the user no ha_carts found
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "No Carts Item found.", "data" => ""));
+
     }
-
-    // set response code - 200 OK
-    http_response_code(200);
-
-    // show ha_carts data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "Cart Items found", "data" => $ha_carts_arr));
-
-} else {
-    // no ha_carts found will be here
-
-    // set response code - 404 Not found
+} catch (Exception $exception) {
     http_response_code(404);
-
     // tell the user no ha_carts found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No Carts Item found.", "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Error Caught in transactions. ".$exception->getMessage(), "data" => ""));
 
 }
- 
 
 

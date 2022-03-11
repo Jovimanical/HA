@@ -197,7 +197,7 @@ if (!isEmpty($data->firstname)
                 //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
                 //Content
-                $activate_link = 'http://houseafrica.com/marketplace/activate.php?email=' . $data->email . '&code=' . $token;
+                $activate_link = 'http://houseafrica.com/#/authentication/verification/' . $data->email . '/' . $token;
                 $message = '<p>Please click the following link to activate your account: <a href="' . $activate_link . '">' . $activate_link . '</a></p>';
 
 
