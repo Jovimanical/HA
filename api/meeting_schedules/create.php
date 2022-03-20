@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     }
 }
 
+use GuzzleHttp\Client;
+
 require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
@@ -35,6 +37,10 @@ $database = new Database();
 $db = $database->getConnection();
 
 $meeting_schedules = new Meeting_Schedules($db);
+
+$token = $_ENV['HA_ZOOM_TOKEN'];
+$zoom_email = $_ENV['HA_ZOOM_REG_EMAIL'];
+$zoom_is_active = $_ENV['HA_ACTIVATE_ZOOM_SCHEDULE'];
 
 // get posted data
 $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
@@ -99,24 +105,47 @@ if (!isEmpty($data->meeting_topic)
         $meeting_schedules->meeting_status = 'active';
     }
     $meeting_schedules->updated_at = $data->updated_at;
-    $lastInsertedId = $meeting_schedules->create();
-    // create the meeting_schedules
-    if ($lastInsertedId != 0) {
 
-        // set response code - 201 created
-        http_response_code(201);
 
-        // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "document" => $lastInsertedId));
-    } // if unable to create the meeting_schedules, tell the user
-    else {
+    $client = new Client(['base_uri' => 'https://api.zoom.us']);
+    $headers = ['Authorization' => 'Bearer ' . $token, 'Content-Type' => 'application/json', 'Accept' => 'application/json',];
 
-        // set response code - 503 service unavailable
-        http_response_code(503);
 
-        // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules", "document" => ""));
+    try {
+        $response = $client->request('POST', '/v2/users/' . $zoom_email . '/meetings', [
+            "headers" => $headers,
+            'form_params' => [
+                'start_time' => $data->meeting_date,
+                'duration' => $data->duration,
+                'topic' => $data->meeting_topic,
+                'type' => 2,
+
+            ]]);
+
+
+        $lastInsertedId = $meeting_schedules->create();
+        // create the meeting_schedules
+        if ($lastInsertedId != 0) {
+
+            // set response code - 201 created
+            http_response_code(201);
+
+            // tell the user
+            echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $response->getBody()));
+        } // if unable to create the meeting_schedules, tell the user
+        else {
+
+            // set response code - 503 service unavailable
+            http_response_code(503);
+
+            // tell the user
+            echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules", "data" => ""));
+        }
+    } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules", "data" =>$e->getMessage()));
     }
+
+
 } // tell the user data is incomplete
 else {
 
@@ -124,6 +153,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create meeting_schedules. Data is incomplete.", "data" => ""));
 }
 ?>

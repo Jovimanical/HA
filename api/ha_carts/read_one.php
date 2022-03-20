@@ -27,10 +27,7 @@ require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-// get database connection
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-
-// instantiate ha_carts object
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_carts.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 // get database connection
@@ -75,6 +72,6 @@ if ($ha_carts->id != null) {
     http_response_code(404);
 
     // tell the user ha_carts does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_carts does not exist.", "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_carts does not exist.", "data" => null));
 }
 ?>

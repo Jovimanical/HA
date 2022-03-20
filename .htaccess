@@ -96,7 +96,7 @@
     RewriteRule ^api/v1/shopping-cart/show/([0-9a-zA-Z_-]*)$ api/ha_carts/read_one.php?id=$1
     RewriteRule ^api/v1/shopping-cart/add/?$ api/ha_carts/create.php
     RewriteRule ^api/v1/shopping-cart/update?$ api/ha_carts/update.php
-    RewriteRule ^api/v1/shopping-cart/remove/?$ api/ha_carts/delete.php
+    RewriteRule ^api/v1/shopping-cart/remove/([0-9a-zA-Z_-]*)?$ api/ha_carts/delete.php?id=$1
     RewriteRule ^api/v1/shopping-cart/last-completed/?$ api/ha_carts/clear-cart.php
 
 
