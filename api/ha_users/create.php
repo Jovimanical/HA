@@ -147,7 +147,7 @@ if (!isEmpty($data->firstname)
 
     $ha_users->profileImage = "https://via.placeholder.com/640x640.png?text=$ha_users->firstname+$ha_users->lastname";
     $ha_users->address = '';
-    $ha_users->email_verified = 0;
+    $ha_users->email_verified = 1;
     $ha_users->sms_verified = 0;
 
     // Generate random activation token

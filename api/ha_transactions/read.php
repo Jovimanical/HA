@@ -40,7 +40,7 @@ $ha_transactions = new Ha_Transactions($db);
 $ha_transactions->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
 $ha_transactions->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 // read ha_transactions will be here
-
+$ha_transactions->sender_id = $profileData->id;
 // query ha_transactions
 $stmt = $ha_transactions->read();
 $num = $stmt->rowCount();
@@ -61,7 +61,6 @@ if ($num > 0) {
         extract($row);
 
         $ha_transactions_item = array(
-
             "id" => $id,
             "sender_id" => $sender_id,
             "receiver_id" => $receiver_id,
@@ -84,7 +83,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_transactions data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_transactions found", "document" => $ha_transactions_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_transactions found", "data" => $ha_transactions_arr));
 
 } else {
     // no ha_transactions found will be here
@@ -93,7 +92,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_transactions found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_transactions found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_transactions found.", "data" => ""));
 
 }
  

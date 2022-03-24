@@ -38,7 +38,7 @@ $db = $database->getConnection();
 $ha_estate_listing = new Ha_Estate_Listing($db);
 
 // get id of ha_estate_listing to be edited
-$data = json_decode(file_get_contents("php://input"));
+$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 // set ID property of ha_estate_listing to be edited
 $ha_estate_listing->id = $data->id;
@@ -96,6 +96,12 @@ if (
         $ha_estate_listing->PropertyStatus = $data->PropertyStatus;
     } else {
         $ha_estate_listing->PropertyStatus = '1';
+    }
+
+    if (!isEmpty($data->ApplicationStatus)) {
+        $ha_estate_listing->ApplicationStatus = $data->ApplicationStatus;
+    } else {
+        $ha_estate_listing->ApplicationStatus = 'PROCESSING';
     }
     if (!isEmpty($data->userid)) {
         $ha_estate_listing->userid = $data->userid;

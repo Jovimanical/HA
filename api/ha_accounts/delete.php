@@ -3,7 +3,7 @@
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Content-Type: application/json; charset=UTF-8");
-    header('Access-Control-Allow-Methods: GET, OPTIONS');
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
     header("Access-Control-Expose-Headers: Content-Length, X-JSON");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -26,53 +26,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
+
+
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_carts.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_accounts.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
-
-// prepare ha_carts object
-$ha_carts = new Ha_Carts($db);
-
-// set ID property of record to read
-$ha_carts->id = isset($_GET['id']) ? $_GET['id'] : die();
-
-// read the details of ha_carts to be edited
-$ha_carts->readOne();
-
-if ($ha_carts->id != null) {
-    // create array
-    $ha_carts_arr = array(
-
-        "id" => $ha_carts->id,
-        "EntityParent" => $ha_carts->EntityParent,
-        "LinkedEntity" => $ha_carts->LinkedEntity,
-        "PropertyFloor" => $ha_carts->PropertyFloor,
-        "PropertyId" => $ha_carts->PropertyId,
-        "PropertyName" => html_entity_decode($ha_carts->PropertyName),
-        "PropertyAmount" => $ha_carts->PropertyAmount,
-        "PaymentMethod" => $ha_carts->PaymentMethod,
-        "PropertyJson" => $ha_carts->PropertyJson,
-        "PropertyType" => $ha_carts->PropertyType,
-        "PropertyStatus" => $ha_carts->PropertyStatus,
-        "ApplicationStatus"=>$ha_carts->ApplicationStatus,
-        "user_id" => $ha_carts->user_id,
-        "createdAt" => $ha_carts->createdAt
-    );
-
-    // set response code - 200 OK
+ 
+// prepare ha_accounts object
+$ha_accounts = new Ha_Accounts($db);
+ 
+// get ha_accounts id
+$data = json_decode(file_get_contents("php://input"));
+ 
+// set ha_accounts id to be deleted
+$ha_accounts->id = $data->id;
+ 
+// delete the ha_accounts
+if($ha_accounts->delete()){
+ 
+    // set response code - 200 ok
     http_response_code(200);
-
-    // make it json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_carts found", "data" => $ha_carts_arr));
-} else {
-    // set response code - 404 Not found
-    http_response_code(404);
-
-    // tell the user ha_carts does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_carts does not exist.", "data" => null));
+ 
+    // tell the user
+	echo json_encode(array("status" => "success", "code" => 1,"message"=> "Ha_Accounts was deleted","document"=> ""));
+    
+}
+ 
+// if unable to delete the ha_accounts
+else{
+ 
+    // set response code - 400 bad request
+    http_response_code(400);
+ 
+    // tell the user
+	echo json_encode(array("status" => "error", "code" => 0,"message"=> "Unable to delete ha_accounts.","document"=> ""));
 }
 ?>

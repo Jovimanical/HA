@@ -94,10 +94,12 @@ class Ha_Transactions
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.receiver_id = ? OR t.sender_id = ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->sender_id);
+        $stmt->bindParam(2, $this->sender_id);
 
         // execute query
         $stmt->execute();

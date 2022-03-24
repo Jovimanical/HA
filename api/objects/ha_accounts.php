@@ -1,29 +1,26 @@
 <?php
 
-class Ha_Carts
+class Ha_Accounts
 {
 
     // database connection and table name
     private $conn;
-    private $table_name = "ha_carts";
+    private $table_name = "ha_accounts";
     public $pageNo = 1;
     public $no_of_records_per_page = 30;
     // object properties
 
     public $id;
-    public $EntityParent;
-    public $LinkedEntity;
-    public $PropertyFloor;
-    public $PropertyId;
-    public $PropertyName;
-    public $PropertyAmount;
-    public $PaymentMethod;
-    public $PropertyJson;
-    public $PropertyType;
-    public $PropertyStatus;
-    public $ApplicationStatus;
     public $user_id;
+    public $account_number;
+    public $account_status;
+    public $account_type;
+    public $account_balance;
+    public $account_point;
+    public $account_blockchain_address;
+    public $account_primary;
     public $createdAt;
+    public $updatedAt;
 
 
     // constructor with $db as database connection
@@ -34,7 +31,7 @@ class Ha_Carts
 
     function total_record_count()
     {
-        $query = "SELECT COUNT(1) as total FROM " . $this->table_name . "";
+        $query = "select count(1) as total from " . $this->table_name . "";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,7 +84,7 @@ class Ha_Carts
         }
     }
 
-    // read ha_carts
+    // read ha_accounts
     function read()
     {
         if (isset($_GET["pageNo"])) {
@@ -95,31 +92,12 @@ class Ha_Carts
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
-        // bind id
+
         $stmt->bindParam(1, $this->user_id);
-
-        // execute query
-        $stmt->execute();
-
-        return $stmt;
-    }
-
-    function readAll()
-    {
-        if (isset($_GET["pageNo"])) {
-            $this->pageNo = $_GET["pageNo"];
-        }
-        $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
-        // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
-
-        // prepare query statement
-        $stmt = $this->conn->prepare($query);
-
         // execute query
         $stmt->execute();
 
@@ -135,7 +113,7 @@ class Ha_Carts
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
 
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.EntityParent LIKE ?  OR t.LinkedEntity LIKE ?  OR t.PropertyFloor LIKE ?  OR t.PropertyId LIKE ?  OR t.PropertyName LIKE ?  OR t.PropertyAmount LIKE ?  OR t.PaymentMethod LIKE ?  OR t.PropertyJson LIKE ?  OR t.PropertyType LIKE ?  OR t.PropertyStatus LIKE ?  OR t.user_id LIKE ?  OR t.createdAt LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.user_id LIKE ?  OR t.account_number LIKE ?  OR t.account_status LIKE ?  OR t.account_type LIKE ?  OR t.account_balance LIKE ?  OR t.account_point LIKE ?  OR t.account_blockchain_address LIKE ?  OR t.account_primary LIKE ?  OR t.createdAt LIKE ?  OR t.updatedAt LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -153,8 +131,6 @@ class Ha_Carts
         $stmt->bindParam(9, $searchKey);
         $stmt->bindParam(10, $searchKey);
         $stmt->bindParam(11, $searchKey);
-        $stmt->bindParam(12, $searchKey);
-        $stmt->bindParam(13, $searchKey);
 
         // execute query
         $stmt->execute();
@@ -223,64 +199,55 @@ class Ha_Carts
             // set values to object properties
 
             $this->id = $row['id'];
-            $this->EntityParent = $row['EntityParent'];
-            $this->LinkedEntity = $row['LinkedEntity'];
-            $this->PropertyFloor = $row['PropertyFloor'];
-            $this->PropertyId = $row['PropertyId'];
-            $this->PropertyName = $row['PropertyName'];
-            $this->PropertyAmount = $row['PropertyAmount'];
-            $this->PaymentMethod = $row['PaymentMethod'];
-            $this->PropertyJson = $row['PropertyJson'];
-            $this->PropertyType = $row['PropertyType'];
-            $this->PropertyStatus = $row['PropertyStatus'];
-            $this->ApplicationStatus = $row['ApplicationStatus'];
             $this->user_id = $row['user_id'];
+            $this->account_number = $row['account_number'];
+            $this->account_status = $row['account_status'];
+            $this->account_type = $row['account_type'];
+            $this->account_balance = $row['account_balance'];
+            $this->account_point = $row['account_point'];
+            $this->account_blockchain_address = $row['account_blockchain_address'];
+            $this->account_primary = $row['account_primary'];
             $this->createdAt = $row['createdAt'];
+            $this->updatedAt = $row['updatedAt'];
         } else {
             $this->id = null;
         }
     }
 
 
-    // create ha_carts
+    // create ha_accounts
     function create()
     {
 
         // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PaymentMethod=:PaymentMethod,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus,user_id=:user_id";
+        $query = "INSERT INTO " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_primary=:account_primary,updatedAt=:updatedAt";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
 
-        $this->EntityParent = htmlspecialchars(strip_tags($this->EntityParent));
-        $this->LinkedEntity = htmlspecialchars(strip_tags($this->LinkedEntity));
-        $this->PropertyFloor = htmlspecialchars(strip_tags($this->PropertyFloor));
-        $this->PropertyId = htmlspecialchars(strip_tags($this->PropertyId));
-        $this->PropertyName = htmlspecialchars(strip_tags($this->PropertyName));
-        $this->PropertyAmount = htmlspecialchars(strip_tags($this->PropertyAmount));
-        $this->PaymentMethod = htmlspecialchars(strip_tags($this->PaymentMethod));
-        $this->PropertyJson = json_encode($this->PropertyJson);
-        $this->PropertyType = htmlspecialchars(strip_tags($this->PropertyType));
-        $this->PropertyStatus = htmlspecialchars(strip_tags($this->PropertyStatus));
-        $this->ApplicationStatus = htmlspecialchars(strip_tags($this->ApplicationStatus));
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->account_number = htmlspecialchars(strip_tags($this->account_number));
+        $this->account_status = htmlspecialchars(strip_tags($this->account_status));
+        $this->account_type = htmlspecialchars(strip_tags($this->account_type));
+        $this->account_balance = htmlspecialchars(strip_tags($this->account_balance));
+        $this->account_point = htmlspecialchars(strip_tags($this->account_point));
+        $this->account_blockchain_address = htmlspecialchars(strip_tags($this->account_blockchain_address));
+        $this->account_primary = htmlspecialchars(strip_tags($this->account_primary));
+        $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
         // bind values
 
-        $stmt->bindParam(":EntityParent", $this->EntityParent);
-        $stmt->bindParam(":LinkedEntity", $this->LinkedEntity);
-        $stmt->bindParam(":PropertyFloor", $this->PropertyFloor);
-        $stmt->bindParam(":PropertyId", $this->PropertyId);
-        $stmt->bindParam(":PropertyName", $this->PropertyName);
-        $stmt->bindParam(":PropertyAmount", $this->PropertyAmount);
-        $stmt->bindParam(":PaymentMethod", $this->PaymentMethod);
-        $stmt->bindParam(":PropertyJson", $this->PropertyJson);
-        $stmt->bindParam(":PropertyType", $this->PropertyType);
-        $stmt->bindParam(":PropertyStatus", $this->PropertyStatus);
-        $stmt->bindParam(":ApplicationStatus", $this->ApplicationStatus);
         $stmt->bindParam(":user_id", $this->user_id);
+        $stmt->bindParam(":account_number", $this->account_number);
+        $stmt->bindParam(":account_status", $this->account_status);
+        $stmt->bindParam(":account_type", $this->account_type);
+        $stmt->bindParam(":account_balance", $this->account_balance);
+        $stmt->bindParam(":account_point", $this->account_point);
+        $stmt->bindParam(":account_blockchain_address", $this->account_blockchain_address);
+        $stmt->bindParam(":account_primary", $this->account_primary);
+        $stmt->bindParam(":updatedAt", $this->updatedAt);
 
         // execute query
         if ($stmt->execute()) {
@@ -292,46 +259,40 @@ class Ha_Carts
     }
 
 
-    // update the ha_carts
+    // update the ha_accounts
     function update()
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PaymentMethod=:PaymentMethod,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus,user_id=:user_id WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_primary=:account_primary,updatedAt=:updatedAt WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // sanitize
 
-        $this->EntityParent = htmlspecialchars(strip_tags($this->EntityParent));
-        $this->LinkedEntity = htmlspecialchars(strip_tags($this->LinkedEntity));
-        $this->PropertyFloor = htmlspecialchars(strip_tags($this->PropertyFloor));
-        $this->PropertyId = htmlspecialchars(strip_tags($this->PropertyId));
-        $this->PropertyName = htmlspecialchars(strip_tags($this->PropertyName));
-        $this->PropertyAmount = htmlspecialchars(strip_tags($this->PropertyAmount));
-        $this->PaymentMethod = htmlspecialchars(strip_tags($this->PaymentMethod));
-        $this->PropertyJson = json_encode($this->PropertyJson);
-        $this->PropertyType = htmlspecialchars(strip_tags($this->PropertyType));
-        $this->PropertyStatus = htmlspecialchars(strip_tags($this->PropertyStatus));
-        $this->ApplicationStatus = htmlspecialchars(strip_tags($this->ApplicationStatus));
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->account_number = htmlspecialchars(strip_tags($this->account_number));
+        $this->account_status = htmlspecialchars(strip_tags($this->account_status));
+        $this->account_type = htmlspecialchars(strip_tags($this->account_type));
+        $this->account_balance = htmlspecialchars(strip_tags($this->account_balance));
+        $this->account_point = htmlspecialchars(strip_tags($this->account_point));
+        $this->account_blockchain_address = htmlspecialchars(strip_tags($this->account_blockchain_address));
+        $this->account_primary = htmlspecialchars(strip_tags($this->account_primary));
+        $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
         // bind new values
 
-        $stmt->bindParam(":EntityParent", $this->EntityParent);
-        $stmt->bindParam(":LinkedEntity", $this->LinkedEntity);
-        $stmt->bindParam(":PropertyFloor", $this->PropertyFloor);
-        $stmt->bindParam(":PropertyId", $this->PropertyId);
-        $stmt->bindParam(":PropertyName", $this->PropertyName);
-        $stmt->bindParam(":PropertyAmount", $this->PropertyAmount);
-        $stmt->bindParam(":PaymentMethod", $this->PaymentMethod);
-        $stmt->bindParam(":PropertyJson", $this->PropertyJson);
-        $stmt->bindParam(":PropertyType", $this->PropertyType);
-        $stmt->bindParam(":PropertyStatus", $this->PropertyStatus);
-        $stmt->bindParam(":ApplicationStatus", $this->ApplicationStatus);
         $stmt->bindParam(":user_id", $this->user_id);
+        $stmt->bindParam(":account_number", $this->account_number);
+        $stmt->bindParam(":account_status", $this->account_status);
+        $stmt->bindParam(":account_type", $this->account_type);
+        $stmt->bindParam(":account_balance", $this->account_balance);
+        $stmt->bindParam(":account_point", $this->account_point);
+        $stmt->bindParam(":account_blockchain_address", $this->account_blockchain_address);
+        $stmt->bindParam(":account_primary", $this->account_primary);
+        $stmt->bindParam(":updatedAt", $this->updatedAt);
         $stmt->bindParam(":id", $this->id);
 
         $stmt->execute();
@@ -379,7 +340,7 @@ class Ha_Carts
         }
     }
 
-    // delete the ha_carts
+    // delete the ha_accounts
     function delete()
     {
 
@@ -394,35 +355,6 @@ class Ha_Carts
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
-        $stmt->execute();
-
-        if ($stmt->rowCount()) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    // delete the all ha_carts
-
-    /**
-     * @return bool
-     */
-    function deleteAll(): bool
-    {
-
-        // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE  `user_id` = ? ";
-
-        // prepare query
-        $stmt = $this->conn->prepare($query);
-
-        // sanitize
-        $this->user_id = htmlspecialchars(strip_tags($this->id));
-
-        // bind id of record to delete
-        $stmt->bindParam(1, $this->user_id);
         $stmt->execute();
 
         if ($stmt->rowCount()) {

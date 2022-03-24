@@ -26,81 +26,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
+
+
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_carts.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_accounts.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$ha_carts = new Ha_Carts($db);
+$ha_accounts = new Ha_Accounts($db);
 
 // get posted data
 $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 
 // make sure data is not empty
-if (!isEmpty($data->EntityParent)
-    && !isEmpty($data->LinkedEntity)
-    && !isEmpty($data->PropertyFloor)
-    && !isEmpty($data->PropertyId)
-    && !isEmpty($data->PropertyName)
-    && !isEmpty($data->PropertyAmount)
-    && !isEmpty($data->PropertyType)
-    && !isEmpty($data->PropertyStatus)
-) {
+if (!isEmpty($data->user_id)
+    && !isEmpty($data->account_number)
+    && !isEmpty($data->account_status)) {
 
-    // set ha_carts property values
+    // set ha_accounts property values
 
-    if (!isEmpty($data->EntityParent)) {
-        $ha_carts->EntityParent = $data->EntityParent;
+    if (!isEmpty($data->user_id)) {
+        $ha_accounts->user_id = $data->user_id;
     } else {
-        $ha_carts->EntityParent = '';
+        $ha_accounts->user_id = '';
     }
-    if (!isEmpty($data->LinkedEntity)) {
-        $ha_carts->LinkedEntity = $data->LinkedEntity;
+    if (!isEmpty($data->account_number)) {
+        $ha_accounts->account_number = $data->account_number;
     } else {
-        $ha_carts->LinkedEntity = '';
+        $ha_accounts->account_number = '';
     }
-    if (!isEmpty($data->PropertyFloor)) {
-        $ha_carts->PropertyFloor = $data->PropertyFloor;
+    if (!isEmpty($data->account_status)) {
+        $ha_accounts->account_status = $data->account_status;
     } else {
-        $ha_carts->PropertyFloor = '';
+        $ha_accounts->account_status = 'active';
     }
-    if (!isEmpty($data->PropertyId)) {
-        $ha_carts->PropertyId = $data->PropertyId;
-    } else {
-        $ha_carts->PropertyId = '';
-    }
-    if (!isEmpty($data->PropertyName)) {
-        $ha_carts->PropertyName = $data->PropertyName;
-    } else {
-        $ha_carts->PropertyName = '';
-    }
-    if (!isEmpty($data->PropertyAmount)) {
-        $ha_carts->PropertyAmount = $data->PropertyAmount;
-    } else {
-        $ha_carts->PropertyAmount = '0.00';
-    }
-    $ha_carts->PaymentMethod = $data->PaymentMethod;
-    $ha_carts->PropertyJson = $data->PropertyJson;
-    if (!isEmpty($data->PropertyType)) {
-        $ha_carts->PropertyType = $data->PropertyType;
-    } else {
-        $ha_carts->PropertyType = '3';
-    }
-    if (!isEmpty($data->PropertyStatus)) {
-        $ha_carts->PropertyStatus = $data->PropertyStatus;
-    } else {
-        $ha_carts->PropertyStatus = 'available';
-    }
-
-    $ha_carts->ApplicationStatus = 'DRAFT';
-
-    $ha_carts->user_id = $profileData->id;
-    $lastInsertedId = $ha_carts->create();
-    // create the ha_carts
+    $ha_accounts->account_type = $data->account_type;
+    $ha_accounts->account_balance = $data->account_balance;
+    $ha_accounts->account_point = $data->account_point;
+    $ha_accounts->account_blockchain_address = $data->account_blockchain_address;
+    $ha_accounts->account_primary = $data->account_primary;
+    $ha_accounts->updatedAt = $data->updatedAt;
+    $lastInsertedId = $ha_accounts->create();
+    // create the ha_accounts
     if ($lastInsertedId != 0) {
 
         // set response code - 201 created
@@ -108,14 +79,14 @@ if (!isEmpty($data->EntityParent)
 
         // tell the user
         echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $lastInsertedId));
-    } // if unable to create the ha_carts, tell the user
+    } // if unable to create the ha_accounts, tell the user
     else {
 
         // set response code - 503 service unavailable
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_carts", "data" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_accounts", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
@@ -124,6 +95,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_carts. Data is incomplete.", "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_accounts. Data is incomplete.", "data" => ""));
 }
 ?>

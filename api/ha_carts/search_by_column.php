@@ -7,11 +7,11 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/helper.php';
 include_once '../config/database.php';
 include_once '../objects/ha_carts.php';
- include_once '../token/validatetoken.php';
+include_once '../token/validatetoken.php';
 // instantiate database and ha_carts object
 $database = new Database();
 $db = $database->getConnection();
- 
+
 // initialize object
 $ha_carts = new Ha_Carts($db);
 
@@ -22,60 +22,60 @@ $ha_carts->pageNo = isset($_GET['pageno']) ? $_GET['pageno'] : 1;
 $ha_carts->no_of_records_per_page = isset($_GET['pagesize']) ? $_GET['pagesize'] : 30;
 
 // query ha_carts
-$stmt = $ha_carts->searchByColumn($data,$orAnd);
+$stmt = $ha_carts->searchByColumn($data, $orAnd);
 
 $num = $stmt->rowCount();
- 
+
 // check if more than 0 record found
-if($num>0){
- 
+if ($num > 0) {
+
     //ha_carts array
-    $ha_carts_arr=array();
-	$ha_carts_arr["pageno"]=$ha_carts->pageNo;
-	$ha_carts_arr["pagesize"]=$ha_carts->no_of_records_per_page;
-    $ha_carts_arr["total_count"]=$ha_carts->search_record_count($data,$orAnd);
-    $ha_carts_arr["records"]=array();
- 
+    $ha_carts_arr = array();
+    $ha_carts_arr["pageno"] = $ha_carts->pageNo;
+    $ha_carts_arr["pagesize"] = $ha_carts->no_of_records_per_page;
+    $ha_carts_arr["total_count"] = $ha_carts->search_record_count($data, $orAnd);
+    $ha_carts_arr["records"] = array();
+
     // retrieve our table contents
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
- 
-        $ha_carts_item=array(
-            
-"id" => $id,
-"EntityParent" => $EntityParent,
-"LinkedEntity" => $LinkedEntity,
-"PropertyFloor" => $PropertyFloor,
-"PropertyId" => $PropertyId,
-"PropertyName" => html_entity_decode($PropertyName),
-"PropertyAmount" => $PropertyAmount,
-"PaymentMethod" => $PaymentMethod,
-"PropertyJson" => $PropertyJson,
-"PropertyType" => $PropertyType,
-"PropertyStatus" => $PropertyStatus,
-"user_id" => $user_id,
-"createdAt" => $createdAt
+
+        $ha_carts_item = array(
+
+            "id" => $id,
+            "EntityParent" => $EntityParent,
+            "LinkedEntity" => $LinkedEntity,
+            "PropertyFloor" => $PropertyFloor,
+            "PropertyId" => $PropertyId,
+            "PropertyName" => html_entity_decode($PropertyName),
+            "PropertyAmount" => $PropertyAmount,
+            "PaymentMethod" => $PaymentMethod,
+            "PropertyJson" => $PropertyJson,
+            "PropertyType" => $PropertyType,
+            "PropertyStatus" => $PropertyStatus,
+            "user_id" => $user_id,
+            "createdAt" => $createdAt
         );
- 
+
         array_push($ha_carts_arr["records"], $ha_carts_item);
     }
- 
+
     // set response code - 200 OK
     http_response_code(200);
- 
+
     // show ha_carts data in json format
-	echo json_encode(array("status" => "success", "code" => 1,"message"=> "ha_carts found","document"=> $ha_carts_arr));
-    
-}else{
- // no ha_carts found will be here
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_carts found", "document" => $ha_carts_arr));
+
+} else {
+    // no ha_carts found will be here
 
     // set response code - 404 Not found
     http_response_code(404);
- 
+
     // tell the user no ha_carts found
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "No ha_carts found.","document"=> ""));
-    
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_carts found.", "document" => ""));
+
 }
  
 

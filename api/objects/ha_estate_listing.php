@@ -20,6 +20,7 @@ class Ha_Estate_Listing
     public $PropertyJson;
     public $PropertyType;
     public $PropertyStatus;
+    public $ApplicationStatus;
     public $userid;
     public $createdAt;
 
@@ -113,10 +114,11 @@ class Ha_Estate_Listing
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.userid = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->userid);
 
         // execute query
         $stmt->execute();
@@ -229,6 +231,7 @@ class Ha_Estate_Listing
             $this->PropertyJson = $row['PropertyJson'];
             $this->PropertyType = $row['PropertyType'];
             $this->PropertyStatus = $row['PropertyStatus'];
+            $this->ApplicationStatus = $row['ApplicationStatus'];
             $this->userid = $row['userid'];
             $this->createdAt = $row['createdAt'];
         } else {
@@ -242,7 +245,7 @@ class Ha_Estate_Listing
     {
 
         // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,userid=:userid";
+        $query = "INSERT INTO " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus,userid=:userid";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -255,9 +258,10 @@ class Ha_Estate_Listing
         $this->PropertyId = htmlspecialchars(strip_tags($this->PropertyId));
         $this->PropertyName = htmlspecialchars(strip_tags($this->PropertyName));
         $this->PropertyAmount = htmlspecialchars(strip_tags($this->PropertyAmount));
-        $this->PropertyJson = htmlspecialchars(strip_tags($this->PropertyJson));
+        $this->PropertyJson = json_encode($this->PropertyJson);
         $this->PropertyType = htmlspecialchars(strip_tags($this->PropertyType));
         $this->PropertyStatus = htmlspecialchars(strip_tags($this->PropertyStatus));
+        $this->ApplicationStatus = htmlspecialchars(strip_tags($this->ApplicationStatus));
         $this->userid = htmlspecialchars(strip_tags($this->userid));
 
         // bind values
@@ -271,6 +275,7 @@ class Ha_Estate_Listing
         $stmt->bindParam(":PropertyJson", $this->PropertyJson);
         $stmt->bindParam(":PropertyType", $this->PropertyType);
         $stmt->bindParam(":PropertyStatus", $this->PropertyStatus);
+        $stmt->bindParam(":ApplicationStatus", $this->ApplicationStatus);
         $stmt->bindParam(":userid", $this->userid);
 
         // execute query
@@ -288,7 +293,7 @@ class Ha_Estate_Listing
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,userid=:userid WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus,userid=:userid WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -301,9 +306,10 @@ class Ha_Estate_Listing
         $this->PropertyId = htmlspecialchars(strip_tags($this->PropertyId));
         $this->PropertyName = htmlspecialchars(strip_tags($this->PropertyName));
         $this->PropertyAmount = htmlspecialchars(strip_tags($this->PropertyAmount));
-        $this->PropertyJson = htmlspecialchars(strip_tags($this->PropertyJson));
+        $this->PropertyJson = json_encode($this->PropertyJson);
         $this->PropertyType = htmlspecialchars(strip_tags($this->PropertyType));
         $this->PropertyStatus = htmlspecialchars(strip_tags($this->PropertyStatus));
+        $this->ApplicationStatus = htmlspecialchars(strip_tags($this->ApplicationStatus));
         $this->userid = htmlspecialchars(strip_tags($this->userid));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
@@ -318,6 +324,7 @@ class Ha_Estate_Listing
         $stmt->bindParam(":PropertyJson", $this->PropertyJson);
         $stmt->bindParam(":PropertyType", $this->PropertyType);
         $stmt->bindParam(":PropertyStatus", $this->PropertyStatus);
+        $stmt->bindParam(":ApplicationStatus", $this->ApplicationStatus);
         $stmt->bindParam(":userid", $this->userid);
         $stmt->bindParam(":id", $this->id);
 
