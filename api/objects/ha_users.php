@@ -541,6 +541,23 @@ class Ha_Users
             return false;
         }
     }
+
+    function CheckMobileExist($mobile): bool
+    {
+        $query = "SELECT *  FROM " . $this->table_name . " WHERE `mobile` = ? ";
+
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+        // bind id of record to delete
+        $stmt->bindParam(1, $mobile);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     //extra function will be generated for one to many relations
 }
 

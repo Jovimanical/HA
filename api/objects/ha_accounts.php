@@ -224,9 +224,7 @@ class Ha_Accounts
 
         // prepare query
         $stmt = $this->conn->prepare($query);
-
         // sanitize
-
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
         $this->account_number = htmlspecialchars(strip_tags($this->account_number));
         $this->account_status = htmlspecialchars(strip_tags($this->account_status));

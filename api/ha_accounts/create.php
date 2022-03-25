@@ -64,6 +64,7 @@ if (!isEmpty($data->user_id)
     } else {
         $ha_accounts->account_status = 'active';
     }
+
     $ha_accounts->account_type = $data->account_type;
     $ha_accounts->account_balance = $data->account_balance;
     $ha_accounts->account_point = $data->account_point;

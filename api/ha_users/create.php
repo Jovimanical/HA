@@ -32,20 +32,19 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-// get database connection
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-// instantiate ha_users object
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_users.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_accounts.php';
 
 
 $database = new Database();
 $db = $database->getConnection();
 
 $ha_users = new Ha_Users($db);
-
+$ha_accounts = new Ha_Accounts($db);
 // get posted data
 //$data = file_get_contents("php://input") !== false ? json_decode(file_get_contents("php://input")) : (object)$_REQUEST; //
-$data =  (json_decode(file_get_contents("php://input"), true ) === NULL ) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
+$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 // make sure data is not empty
 
@@ -56,20 +55,6 @@ if (!isEmpty($data->firstname)
     && !isEmpty($data->mobile)) {
 
     // set ha_users property values
-// check if Email Exist in the database
-    if ($ha_users->CheckEmailExist($data->email)) {
-
-        $error_message = array(
-            "status" => "error",
-            "code" => 0,
-            "message" => 'An Account User with this email already exist! please try another or login',
-            "time" => date('Y-m-d')
-        );
-        http_response_code(400);
-        echo json_encode($error_message);
-        return;
-    }
-
     if (!preg_match("/^[a-zA-Z ]*$/", $data->firstname)) {
         $error_message = array(
             "status" => "error",
@@ -108,7 +93,20 @@ if (!isEmpty($data->firstname)
         echo json_encode($error_message);
         return;
     } else {
-        $ha_users->email = $data->email;
+        // check if Email Exist in the database
+        if ($ha_users->CheckEmailExist($data->email)) {
+            $error_message = array(
+                "status" => "error",
+                "code" => 0,
+                "message" => 'An Account User with this email already exist! please try another or login',
+                "time" => date('Y-m-d')
+            );
+            http_response_code(400);
+            echo json_encode($error_message);
+            return;
+        } else {
+            $ha_users->email = $data->email;
+        }
     }
 
     if (!preg_match("/^[0-9]{11}+$/", $data->mobile)) {
@@ -122,7 +120,19 @@ if (!isEmpty($data->firstname)
         echo json_encode($error_message);
         return;
     } else {
-        $ha_users->mobile = htmlspecialchars(strip_tags($data->mobile));
+        if ($ha_users->CheckMobileExist($data->mobile)) {
+            $error_message = array(
+                "status" => "error",
+                "code" => 0,
+                "message" => 'An Account User with this Mobile Number already exist! please try another or login',
+                "time" => date('Y-m-d')
+            );
+            http_response_code(400);
+            echo json_encode($error_message);
+            return;
+        } else {
+            $ha_users->mobile = htmlspecialchars(strip_tags($data->mobile));
+        }
     }
 
     if (!preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{6,20}$/", $data->password)) {
@@ -144,7 +154,6 @@ if (!isEmpty($data->firstname)
 
     $ha_users->country_code = $data->country_code ?? 234;
     $ha_users->username = generate_username($ha_users->firstname . $ha_users->lastname, 30);
-
     $ha_users->profileImage = "https://via.placeholder.com/640x640.png?text=$ha_users->firstname+$ha_users->lastname";
     $ha_users->address = '';
     $ha_users->email_verified = 1;
@@ -167,25 +176,38 @@ if (!isEmpty($data->firstname)
 
     // create the ha_users
     if ($lastInsertedId != 0) {
+
+        //Create Account Wallet
+        $ha_accounts->user_id = $lastInsertedId;
+        $ha_accounts->account_number = $data->mobile;
+        $ha_accounts->account_status = 'active';
+        $ha_accounts->account_type = 'wallet';
+        $ha_accounts->account_balance = 0.00;
+        $ha_accounts->account_point = 0.00;
+        $ha_accounts->account_blockchain_address = '';
+        $ha_accounts->account_primary = 1;
+        $ha_accounts->updatedAt = date('Y-m-d H:m:s');
+        $lastAccountInsertedId = $ha_accounts->create();
+
         $sign_up_message = array("status" => "success", "code" => 1, "message" => "Account Created Successfully! A verification link has been sent to your email $ha_users->email", "data" => $lastInsertedId);
 
-        if (trim($_ENV["HA_APP_ENV"]) === "DEV") {
+        if (trim($_ENV["HA_APP_ENV"]) === "DEV88") {
             //Send Account Activation Email
             //Create an instance; passing `true` enables exceptions
             $mail = new PHPMailer(true);
 
             try {
                 //Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "in-v3.mailjet.com";                     //Set the SMTP server to send through
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER; //Enable verbose debug output
+                $mail->isSMTP();                       //Send using SMTP
+                $mail->Host = trim($_ENV['HA_SMTP_SERVER']) || "in-v3.mailjet.com";//Set the SMTP server to send through
                 $mail->SMTPAuth = true;                                   //Enable SMTP authentication
                 $mail->Username = trim($_ENV['HA_SMTP_USERNAME']) || "92dd3f94e09c5819cc47ee1f59b90824";                     //SMTP username
                 $mail->Password = trim($_ENV['HA_SMTP_PASSWORD']) || "925dbe0e175350b9c349ebe2c2489241";                               //SMTP password
-                $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+                $mail->SMTPSecure = 'ssl'; //Enable implicit TLS encryption
                 $mail->CharSet = "utf-8";// set charset to utf8
                 $mail->SMTPKeepAlive = true;
-                $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                $mail->Port = 465;   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
                 //Recipients
                 $mail->setFrom('no_reply@houseafrica.io', 'HA SUPPORT-TEAM');
@@ -199,8 +221,6 @@ if (!isEmpty($data->firstname)
                 //Content
                 $activate_link = 'http://houseafrica.com/#/authentication/verification/' . $data->email . '/' . $token;
                 $message = '<p>Please click the following link to activate your account: <a href="' . $activate_link . '">' . $activate_link . '</a></p>';
-
-
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->Subject = 'Account Activation Required';
                 $mail->Body = $message;
