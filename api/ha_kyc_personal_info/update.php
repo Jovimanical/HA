@@ -138,6 +138,8 @@ if (
         $ha_kyc_personal_info->customer_stay_duration = '1';
     }
 
+    $ha_kyc_personal_info->pencomPin = $data->pencomPin;
+    $ha_kyc_personal_info->bvn = $data->bvn;
     $ha_kyc_personal_info->user_id = $profileData->id;
     $ha_kyc_personal_info->follow_up = $data->follow_up;
     $ha_kyc_personal_info->comment = $data->comment;

@@ -185,6 +185,28 @@
     RewriteRule ^api/v1/kyc-personal-info/update/?$ api/ha_kyc_personal_info/update.php
     RewriteRule ^api/v1/kyc-personal-info/remove/?$ api/ha_kyc_personal_info/delete.php
 
+     #Ha_Customer_Assets Endpoint rules
+    RewriteRule ^api/v1/kyc-customer-assets/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_customer_assets/read.php?pageno=$1&pagesize=$2 [QSA]
+    RewriteRule ^api/v1/kyc-customer-assets/show/([0-9a-zA-Z_-]*)$ api/ha_customer_assets/read_one.php?id=$1 [NC,L]
+    RewriteRule ^api/v1/kyc-customer-assets/add/?$ api/ha_customer_assets/create.php
+    RewriteRule ^api/v1/kyc-customer-assets/update/?$ api/ha_customer_assets/update.php
+    RewriteRule ^api/v1/kyc-customer-assets/remove/?$ api/ha_customer_assets/delete.php
+
+    #Ha_Customer_Liabilities Endpoint rules
+    RewriteRule ^api/v1/kyc-customer-liabilities/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_customer_liabilities/read.php?pageno=$1&pagesize=$2 [QSA]
+    RewriteRule ^api/v1/kyc-customer-liabilities/show/([0-9a-zA-Z_-]*)$ api/ha_customer_liabilities/read_one.php?id=$1 [NC,L]
+    RewriteRule ^api/v1/kyc-customer-liabilities/add/?$ api/ha_customer_liabilities/create.php
+    RewriteRule ^api/v1/kyc-customer-liabilities/update/?$ api/ha_customer_liabilities/update.php
+    RewriteRule ^api/v1/kyc-customer-liabilities/remove/?$ api/ha_customer_liabilities/delete.php
+
+    #Ha_Customer_Other_Income Endpoint rules
+    RewriteRule ^api/v1/kyc-customer-other-income/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_customer_other_income/read.php?pageno=$1&pagesize=$2 [QSA]
+    RewriteRule ^api/v1/kyc-customer-other-income/show/([0-9a-zA-Z_-]*)$ api/ha_customer_other_income/read_one.php?id=$1 [NC,L]
+    RewriteRule ^api/v1/kyc-customer-other-income/add/?$ api/ha_customer_other_income/create.php
+    RewriteRule ^api/v1/kyc-customer-other-income/update/?$ api/ha_customer_other_income/update.php
+    RewriteRule ^api/v1/kyc-customer-other-income/remove/?$ api/ha_customer_other_income/delete.php
+
+
     #Ha_Languages Endpoint rules
     RewriteRule ^api/v1/languages/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_languages/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/languages/show/([0-9a-zA-Z_-]*)$ api/ha_languages/read_one.php?id=$1
@@ -294,6 +316,8 @@
     #Ha_Transactions Endpoint rules
     RewriteRule ^api/v1/transactions/user-transactions/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_transactions/read.php?pageno=$1&pagesize=$2 [QSA]
     #RewriteRule ^api/v1/transactions/system-transactions/list/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_transactions/read.php?pageno=$1&pagesize=$2 [QSA]
+    RewriteRule ^api/v1/transactions/verify-paystack-transaction/([0-9a-zA-Z_-]*)$ api/ha_transactions/validate-paystack-transactions.php?reference=$1
+    RewriteRule ^api/v1/transactions/verify-flutterwave-transaction/([0-9a-zA-Z_-]*)$ api/ha_transactions/validate-flutterwave-transactions.php?reference=$1
     RewriteRule ^api/v1/transactions/show/([0-9a-zA-Z_-]*)$ api/ha_transactions/read_one.php?id=$1
     RewriteRule ^api/v1/transactions/add/?$ api/ha_transactions/create.php
     RewriteRule ^api/v1/transactions/update/?$ api/ha_transactions/update.php

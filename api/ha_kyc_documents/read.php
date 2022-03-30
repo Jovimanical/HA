@@ -57,7 +57,7 @@ try {
         $ha_kyc_documents_arr = array();
         $ha_kyc_documents_arr["pageno"] = $ha_kyc_documents->pageNo;
         $ha_kyc_documents_arr["pagesize"] = $ha_kyc_documents->no_of_records_per_page;
-        $ha_kyc_documents_arr["total_count"] = $ha_kyc_documents->total_record_count();
+        $ha_kyc_documents_arr["total_count"] = $ha_kyc_documents->total_user_record_count();
         $ha_kyc_documents_arr["records"] = array();
 
         // retrieve our table contents

@@ -54,7 +54,7 @@ try {
         $ha_kyc_employment_status_arr = array();
         $ha_kyc_employment_status_arr["pageno"] = $ha_kyc_employment_status->pageNo;
         $ha_kyc_employment_status_arr["pagesize"] = $ha_kyc_employment_status->no_of_records_per_page;
-        $ha_kyc_employment_status_arr["total_count"] = $ha_kyc_employment_status->total_record_count();
+        $ha_kyc_employment_status_arr["total_count"] = $ha_kyc_employment_status->total_user_record_count();
         $ha_kyc_employment_status_arr["records"] = array();
 
         // retrieve our table contents

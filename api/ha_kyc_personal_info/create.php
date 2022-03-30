@@ -31,10 +31,14 @@ require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_kyc_personal_info.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+    'api/config/helper.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+    'api/config/database.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+    'api/objects/ha_kyc_personal_info.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+    'api/token/validatetoken.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -42,24 +46,18 @@ $db = $database->getConnection();
 $ha_kyc_personal_info = new Ha_Kyc_Personal_Info($db);
 
 // get posted data
-$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
+$data = (json_decode(file_get_contents("php://input"), true) === null) ? (object)
+    $_REQUEST : json_decode(file_get_contents("php://input"));
 
 
 // make sure data is not empty
-if (!isEmpty($data->customer_firstname)
-    && !isEmpty($data->customer_lastname)
-    && !isEmpty($data->customer_dob)
-    && !isEmpty($data->customer_gender)
-    && !isEmpty($data->customer_phone_no)
-    && !isEmpty($data->customer_email)
-    && !isEmpty($data->customer_residence_type)
-    && !isEmpty($data->customer_house_number)
-    && !isEmpty($data->customer_house_address)
-    && !isEmpty($data->customer_state)
-    && !isEmpty($data->customer_city)
-    && !isEmpty($data->customer_lga)
-    && !isEmpty($data->customer_country)
-    && !isEmpty($data->customer_stay_duration)) {
+if (!isEmpty($data->customer_firstname) && !isEmpty($data->customer_lastname) &&
+    !isEmpty($data->customer_dob) && !isEmpty($data->customer_gender) && !isEmpty($data->
+    customer_phone_no) && !isEmpty($data->customer_email) && !isEmpty($data->
+    customer_residence_type) && !isEmpty($data->customer_house_number) && !isEmpty($data->
+    customer_house_address) && !isEmpty($data->customer_state) && !isEmpty($data->
+    customer_city) && !isEmpty($data->customer_lga) && !isEmpty($data->
+    customer_country) && !isEmpty($data->customer_stay_duration)) {
 
     // set ha_kyc_personal_info property values
 
@@ -74,7 +72,8 @@ if (!isEmpty($data->customer_firstname)
         $ha_kyc_personal_info->customer_lastname = '';
     }
     if (!isEmpty($data->customer_dob)) {
-        $ha_kyc_personal_info->customer_dob = date('Y-m-d', strtotime($data->customer_dob));
+        $ha_kyc_personal_info->customer_dob = date('Y-m-d', strtotime($data->
+            customer_dob));
     } else {
         $ha_kyc_personal_info->customer_dob = date('Y-m-d');
     }
@@ -134,7 +133,8 @@ if (!isEmpty($data->customer_firstname)
         $ha_kyc_personal_info->customer_stay_duration = '1';
     }
 
-
+    $ha_kyc_personal_info->pencomPin = $data->pencomPin;
+    $ha_kyc_personal_info->bvn = $data->bvn;
     $ha_kyc_personal_info->user_id = $profileData->id;
     $ha_kyc_personal_info->follow_up = 0;
     $ha_kyc_personal_info->comment = '';
@@ -149,7 +149,11 @@ if (!isEmpty($data->customer_firstname)
         http_response_code(201);
 
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $lastInsertedId));
+        echo json_encode(array(
+            "status" => "success",
+            "code" => 1,
+            "message" => "Created Successfully",
+            "data" => $lastInsertedId));
     } // if unable to create the ha_kyc_personal_info, tell the user
     else {
 
@@ -157,7 +161,11 @@ if (!isEmpty($data->customer_firstname)
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_kyc_personal_info", "data" => ""));
+        echo json_encode(array(
+            "status" => "error",
+            "code" => 0,
+            "message" => "Unable to create ha_kyc_personal_info",
+            "data" => ""));
     }
 } // tell the user data is incomplete
 else {
@@ -166,6 +174,10 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_kyc_personal_info. Data is incomplete.", "data" => ""));
+    echo json_encode(array(
+        "status" => "error",
+        "code" => 0,
+        "message" => "Unable to create ha_kyc_personal_info. Data is incomplete.",
+        "data" => ""));
 }
 ?>

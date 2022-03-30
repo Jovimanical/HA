@@ -55,7 +55,7 @@ try {
         $ha_accounts_arr = array();
         $ha_accounts_arr["pageno"] = $ha_accounts->pageNo;
         $ha_accounts_arr["pagesize"] = $ha_accounts->no_of_records_per_page;
-        $ha_accounts_arr["total_count"] = $ha_accounts->total_record_count();
+        $ha_accounts_arr["total_count"] = $ha_accounts->total_user_record_count();
         $ha_accounts_arr["records"] = array();
 
         // retrieve our table contents

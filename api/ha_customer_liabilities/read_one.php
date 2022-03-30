@@ -3,7 +3,7 @@
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Content-Type: application/json; charset=UTF-8");
-    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Methods: GET, OPTIONS');
     header("Access-Control-Expose-Headers: Content-Length, X-JSON");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -29,49 +29,45 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_transactions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_customer_liabilities.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
+// get database connection
 $database = new Database();
 $db = $database->getConnection();
 
-// prepare ha_transactions object
-$ha_transactions = new Ha_Transactions($db);
+// prepare ha_customer_liabilities object
+$ha_customer_liabilities = new Ha_Customer_Liabilities($db);
 
 // set ID property of record to read
-$ha_transactions->id = isset($_GET['id']) ? $_GET['id'] : die();
+$ha_customer_liabilities->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-// read the details of ha_transactions to be edited
-$ha_transactions->readOne();
+// read the details of ha_customer_liabilities to be edited
+$ha_customer_liabilities->readOne();
 
-if ($ha_transactions->id != null) {
+if ($ha_customer_liabilities->id != null) {
     // create array
-    $ha_transactions_arr = array(
-
-        "id" => $ha_transactions->id,
-        "sender_id" => $ha_transactions->sender_id,
-        "receiver_id" => $ha_transactions->receiver_id,
-        "amount" => $ha_transactions->amount,
-        "charge" => $ha_transactions->charge,
-        "post_balance" => $ha_transactions->post_balance,
-        "transaction_type" => $ha_transactions->transaction_type,
-        "sender_Account" => $ha_transactions->sender_Account,
-        "receiver_Account" => $ha_transactions->receiver_Account,
-        "trx" => $ha_transactions->trx,
-        "details" => html_entity_decode($ha_transactions->details),
-        "created_at" => $ha_transactions->created_at,
-        "updated_at" => $ha_transactions->updated_at
+    $ha_customer_liabilities_arr = array(
+        "id" => $ha_customer_liabilities->id,
+        "user_id" => $ha_customer_liabilities->user_id,
+        "accountNumber" => $ha_customer_liabilities->accountNumber,
+        "balance" => $ha_customer_liabilities->balance,
+        "description" => $ha_customer_liabilities->description,
+        "monthlyPayment" => $ha_customer_liabilities->monthlyPayment,
+        "liability_status" => $ha_customer_liabilities->liability_status,
+        "createdAt" => $ha_customer_liabilities->createdAt,
+        "updatedAt" => $ha_customer_liabilities->updatedAt
     );
 
     // set response code - 200 OK
     http_response_code(200);
 
     // make it json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_transactions found", "data" => $ha_transactions_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_liabilities found", "document" => $ha_customer_liabilities_arr));
 } else {
     // set response code - 404 Not found
     http_response_code(404);
 
-    // tell the user ha_transactions does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_transactions does not exist.", "data" => ""));
+    // tell the user ha_customer_liabilities does not exist
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_customer_liabilities does not exist.", "document" => ""));
 }
 ?>

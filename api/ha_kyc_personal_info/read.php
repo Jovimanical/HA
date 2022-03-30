@@ -62,7 +62,7 @@ try {
         $ha_kyc_personal_info_arr = array();
         $ha_kyc_personal_info_arr["pageno"] = $ha_kyc_personal_info->pageNo;
         $ha_kyc_personal_info_arr["pagesize"] = $ha_kyc_personal_info->no_of_records_per_page;
-        $ha_kyc_personal_info_arr["total_count"] = $ha_kyc_personal_info->total_record_count();
+        $ha_kyc_personal_info_arr["total_count"] = $ha_kyc_personal_info->total_user_record_count();
         $ha_kyc_personal_info_arr["records"] = array();
 
         // retrieve our table contents

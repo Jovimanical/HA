@@ -46,6 +46,21 @@ class Ha_Carts
         }
     }
 
+    function total_user_record_count()
+    {
+        $query = "SELECT COUNT(1) as total from " . $this->table_name . " t  WHERE t.user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->user_id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            return $row['total'];
+        } else {
+            return 0;
+        }
+    }
+
     function search_record_count($columnArray, $orAnd)
     {
 

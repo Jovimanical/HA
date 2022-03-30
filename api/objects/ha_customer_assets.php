@@ -1,24 +1,20 @@
 <?php
 
-class Ha_Accounts
+class Ha_Customer_Assets
 {
 
     // database connection and table name
     private $conn;
-    private $table_name = "ha_accounts";
+    private $table_name = "ha_customer_assets";
     public $pageNo = 1;
     public $no_of_records_per_page = 30;
     // object properties
 
     public $id;
     public $user_id;
-    public $account_number;
-    public $account_status;
-    public $account_type;
-    public $account_balance;
-    public $account_point;
-    public $account_blockchain_address;
-    public $account_primary;
+    public $assetType;
+    public $description;
+    public $value;
     public $createdAt;
     public $updatedAt;
 
@@ -57,6 +53,7 @@ class Ha_Accounts
             return 0;
         }
     }
+
 
     function search_record_count($columnArray, $orAnd)
     {
@@ -99,7 +96,7 @@ class Ha_Accounts
         }
     }
 
-    // read ha_accounts
+    // read ha_customer_assets
     function read()
     {
         if (isset($_GET["pageNo"])) {
@@ -107,11 +104,10 @@ class Ha_Accounts
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t WHERE t.user_id = ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
-
         $stmt->bindParam(1, $this->user_id);
         // execute query
         $stmt->execute();
@@ -128,7 +124,7 @@ class Ha_Accounts
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
 
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.user_id LIKE ?  OR t.account_number LIKE ?  OR t.account_status LIKE ?  OR t.account_type LIKE ?  OR t.account_balance LIKE ?  OR t.account_point LIKE ?  OR t.account_blockchain_address LIKE ?  OR t.account_primary LIKE ?  OR t.createdAt LIKE ?  OR t.updatedAt LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.user_id LIKE ?  OR t.assetType LIKE ?  OR t.description LIKE ?  OR t.value LIKE ?  OR t.createdAt LIKE ?  OR t.updatedAt LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -142,10 +138,6 @@ class Ha_Accounts
         $stmt->bindParam(5, $searchKey);
         $stmt->bindParam(6, $searchKey);
         $stmt->bindParam(7, $searchKey);
-        $stmt->bindParam(8, $searchKey);
-        $stmt->bindParam(9, $searchKey);
-        $stmt->bindParam(10, $searchKey);
-        $stmt->bindParam(11, $searchKey);
 
         // execute query
         $stmt->execute();
@@ -215,13 +207,9 @@ class Ha_Accounts
 
             $this->id = $row['id'];
             $this->user_id = $row['user_id'];
-            $this->account_number = $row['account_number'];
-            $this->account_status = $row['account_status'];
-            $this->account_type = $row['account_type'];
-            $this->account_balance = $row['account_balance'];
-            $this->account_point = $row['account_point'];
-            $this->account_blockchain_address = $row['account_blockchain_address'];
-            $this->account_primary = $row['account_primary'];
+            $this->assetType = $row['assetType'];
+            $this->description = $row['description'];
+            $this->value = $row['value'];
             $this->createdAt = $row['createdAt'];
             $this->updatedAt = $row['updatedAt'];
         } else {
@@ -230,36 +218,30 @@ class Ha_Accounts
     }
 
 
-    // create ha_accounts
+    // create ha_customer_assets
     function create()
     {
 
         // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_primary=:account_primary,updatedAt=:updatedAt";
+        $query = "INSERT INTO " . $this->table_name . " SET user_id=:user_id,assetType=:assetType,description=:description,value=:value,updatedAt=:updatedAt";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
+
         // sanitize
+
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->account_number = htmlspecialchars(strip_tags($this->account_number));
-        $this->account_status = htmlspecialchars(strip_tags($this->account_status));
-        $this->account_type = htmlspecialchars(strip_tags($this->account_type));
-        $this->account_balance = htmlspecialchars(strip_tags($this->account_balance));
-        $this->account_point = htmlspecialchars(strip_tags($this->account_point));
-        $this->account_blockchain_address = htmlspecialchars(strip_tags($this->account_blockchain_address));
-        $this->account_primary = htmlspecialchars(strip_tags($this->account_primary));
+        $this->assetType = htmlspecialchars(strip_tags($this->assetType));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->value = htmlspecialchars(strip_tags($this->value));
         $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
         // bind values
 
         $stmt->bindParam(":user_id", $this->user_id);
-        $stmt->bindParam(":account_number", $this->account_number);
-        $stmt->bindParam(":account_status", $this->account_status);
-        $stmt->bindParam(":account_type", $this->account_type);
-        $stmt->bindParam(":account_balance", $this->account_balance);
-        $stmt->bindParam(":account_point", $this->account_point);
-        $stmt->bindParam(":account_blockchain_address", $this->account_blockchain_address);
-        $stmt->bindParam(":account_primary", $this->account_primary);
+        $stmt->bindParam(":assetType", $this->assetType);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":value", $this->value);
         $stmt->bindParam(":updatedAt", $this->updatedAt);
 
         // execute query
@@ -272,12 +254,12 @@ class Ha_Accounts
     }
 
 
-    // update the ha_accounts
+    // update the ha_customer_assets
     function update()
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_primary=:account_primary,updatedAt=:updatedAt WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,assetType=:assetType,description=:description,value=:value,updatedAt=:updatedAt WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -285,26 +267,18 @@ class Ha_Accounts
         // sanitize
 
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->account_number = htmlspecialchars(strip_tags($this->account_number));
-        $this->account_status = htmlspecialchars(strip_tags($this->account_status));
-        $this->account_type = htmlspecialchars(strip_tags($this->account_type));
-        $this->account_balance = htmlspecialchars(strip_tags($this->account_balance));
-        $this->account_point = htmlspecialchars(strip_tags($this->account_point));
-        $this->account_blockchain_address = htmlspecialchars(strip_tags($this->account_blockchain_address));
-        $this->account_primary = htmlspecialchars(strip_tags($this->account_primary));
+        $this->assetType = htmlspecialchars(strip_tags($this->assetType));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->value = htmlspecialchars(strip_tags($this->value));
         $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
         // bind new values
 
         $stmt->bindParam(":user_id", $this->user_id);
-        $stmt->bindParam(":account_number", $this->account_number);
-        $stmt->bindParam(":account_status", $this->account_status);
-        $stmt->bindParam(":account_type", $this->account_type);
-        $stmt->bindParam(":account_balance", $this->account_balance);
-        $stmt->bindParam(":account_point", $this->account_point);
-        $stmt->bindParam(":account_blockchain_address", $this->account_blockchain_address);
-        $stmt->bindParam(":account_primary", $this->account_primary);
+        $stmt->bindParam(":assetType", $this->assetType);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":value", $this->value);
         $stmt->bindParam(":updatedAt", $this->updatedAt);
         $stmt->bindParam(":id", $this->id);
 
@@ -353,7 +327,7 @@ class Ha_Accounts
         }
     }
 
-    // delete the ha_accounts
+    // delete the ha_customer_assets
     function delete()
     {
 

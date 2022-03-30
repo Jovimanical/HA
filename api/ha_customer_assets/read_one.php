@@ -29,49 +29,43 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_transactions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/objects/ha_customer_assets.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/validatetoken.php';
+// get database connection
 $database = new Database();
 $db = $database->getConnection();
 
-// prepare ha_transactions object
-$ha_transactions = new Ha_Transactions($db);
+// prepare ha_customer_assets object
+$ha_customer_assets = new Ha_Customer_Assets($db);
 
 // set ID property of record to read
-$ha_transactions->id = isset($_GET['id']) ? $_GET['id'] : die();
+$ha_customer_assets->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-// read the details of ha_transactions to be edited
-$ha_transactions->readOne();
+// read the details of ha_customer_assets to be edited
+$ha_customer_assets->readOne();
 
-if ($ha_transactions->id != null) {
+if ($ha_customer_assets->id != null) {
     // create array
-    $ha_transactions_arr = array(
-
-        "id" => $ha_transactions->id,
-        "sender_id" => $ha_transactions->sender_id,
-        "receiver_id" => $ha_transactions->receiver_id,
-        "amount" => $ha_transactions->amount,
-        "charge" => $ha_transactions->charge,
-        "post_balance" => $ha_transactions->post_balance,
-        "transaction_type" => $ha_transactions->transaction_type,
-        "sender_Account" => $ha_transactions->sender_Account,
-        "receiver_Account" => $ha_transactions->receiver_Account,
-        "trx" => $ha_transactions->trx,
-        "details" => html_entity_decode($ha_transactions->details),
-        "created_at" => $ha_transactions->created_at,
-        "updated_at" => $ha_transactions->updated_at
+    $ha_customer_assets_arr = array(
+        "id" => $ha_customer_assets->id,
+        "user_id" => $ha_customer_assets->user_id,
+        "assetType" => $ha_customer_assets->assetType,
+        "description" => $ha_customer_assets->description,
+        "value" => $ha_customer_assets->value,
+        "createdAt" => $ha_customer_assets->createdAt,
+        "updatedAt" => $ha_customer_assets->updatedAt
     );
 
     // set response code - 200 OK
     http_response_code(200);
 
     // make it json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_transactions found", "data" => $ha_transactions_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_assets found", "document" => $ha_customer_assets_arr));
 } else {
     // set response code - 404 Not found
     http_response_code(404);
 
-    // tell the user ha_transactions does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_transactions does not exist.", "data" => ""));
+    // tell the user ha_customer_assets does not exist
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_customer_assets does not exist.", "document" => ""));
 }
 ?>
