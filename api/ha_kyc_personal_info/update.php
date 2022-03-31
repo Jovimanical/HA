@@ -3,7 +3,7 @@
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Content-Type: application/json; charset=UTF-8");
-    header('Access-Control-Allow-Methods: POST,GET, OPTIONS');
+    header('Access-Control-Allow-Methods: PUT, OPTIONS');
     header("Access-Control-Expose-Headers: Content-Length, X-JSON");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -12,7 +12,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
         // may also be using PUT, PATCH, HEAD etc
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: PUT, OPTIONS");
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
             header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
             header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
@@ -141,8 +141,6 @@ if (
     $ha_kyc_personal_info->pencomPin = $data->pencomPin;
     $ha_kyc_personal_info->bvn = $data->bvn;
     $ha_kyc_personal_info->user_id = $profileData->id;
-    $ha_kyc_personal_info->follow_up = $data->follow_up;
-    $ha_kyc_personal_info->comment = $data->comment;
     $ha_kyc_personal_info->updated_at = date('Y-m-d H:m:s');
 
 // update the ha_kyc_personal_info

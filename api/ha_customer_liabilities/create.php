@@ -70,6 +70,7 @@ if (!isEmpty($data->liabilityname) && !isEmpty($data->customerLiability)) {
 
         $ha_customer_liabilities->user_id = $profileData->id;
         $ha_customer_liabilities->liability_status = 'ACTIVE';
+        $ha_customer_liabilities->liabilityType = $element->liabilityType;
         $ha_customer_liabilities->updatedAt = date('Y-m-d H:m:s');
         $lastInsertedId = $ha_customer_liabilities->create();
 

@@ -69,6 +69,7 @@ if ($num > 0) {
             "description" => $description,
             "monthlyPayment" => $monthlyPayment,
             "liability_status" => $liability_status,
+            "liabilityType" => $liabilityType,
             "createdAt" => $createdAt,
             "updatedAt" => $updatedAt
         );

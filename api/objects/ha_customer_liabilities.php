@@ -17,6 +17,7 @@ class Ha_Customer_Liabilities
     public $description;
     public $monthlyPayment;
     public $liability_status;
+    public $liabilityType;
     public $createdAt;
     public $updatedAt;
 
@@ -215,6 +216,7 @@ class Ha_Customer_Liabilities
             $this->description = $row['description'];
             $this->monthlyPayment = $row['monthlyPayment'];
             $this->liability_status = $row['liability_status'];
+            $this->liabilityType = $row['liabilityType'];
             $this->createdAt = $row['createdAt'];
             $this->updatedAt = $row['updatedAt'];
         } else {
@@ -241,6 +243,7 @@ class Ha_Customer_Liabilities
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->monthlyPayment = htmlspecialchars(strip_tags($this->monthlyPayment));
         $this->liability_status = htmlspecialchars(strip_tags($this->liability_status));
+        $this->liabilityType = htmlspecialchars(strip_tags($this->liabilityType));
         $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
         // bind values
@@ -251,6 +254,7 @@ class Ha_Customer_Liabilities
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":monthlyPayment", $this->monthlyPayment);
         $stmt->bindParam(":liability_status", $this->liability_status);
+        $stmt->bindParam(":liabilityType", $this->liabilityType);
         $stmt->bindParam(":updatedAt", $this->updatedAt);
 
         // execute query
@@ -268,7 +272,7 @@ class Ha_Customer_Liabilities
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,accountNumber=:accountNumber,balance=:balance,description=:description,monthlyPayment=:monthlyPayment,liability_status=:liability_status,updatedAt=:updatedAt WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,accountNumber=:accountNumber,balance=:balance,description=:description,monthlyPayment=:monthlyPayment,liability_status=:liability_status,liabilityType=:liabilityType,updatedAt=:updatedAt WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -281,6 +285,7 @@ class Ha_Customer_Liabilities
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->monthlyPayment = htmlspecialchars(strip_tags($this->monthlyPayment));
         $this->liability_status = htmlspecialchars(strip_tags($this->liability_status));
+        $this->liabilityType = htmlspecialchars(strip_tags($this->liabilityType));
         $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
@@ -292,6 +297,7 @@ class Ha_Customer_Liabilities
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":monthlyPayment", $this->monthlyPayment);
         $stmt->bindParam(":liability_status", $this->liability_status);
+        $stmt->bindParam(":liabilityType", $this->liabilityType);
         $stmt->bindParam(":updatedAt", $this->updatedAt);
         $stmt->bindParam(":id", $this->id);
 
@@ -345,7 +351,7 @@ class Ha_Customer_Liabilities
     {
 
         // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? ";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? AND user_id = ?";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -355,6 +361,7 @@ class Ha_Customer_Liabilities
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(2, $this->user_id);
         $stmt->execute();
 
         if ($stmt->rowCount()) {

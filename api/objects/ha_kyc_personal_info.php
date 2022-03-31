@@ -393,7 +393,7 @@ class Ha_Kyc_Personal_Info
 
         // update query
         $query = "UPDATE " . $this->table_name .
-            " SET customer_firstname=:customer_firstname,customer_lastname=:customer_lastname,customer_dob=:customer_dob,customer_gender=:customer_gender,customer_phone_no=:customer_phone_no,customer_email=:customer_email,pencomPin=:pencomPin,bvn=:bvn,customer_residence_type=:customer_residence_type,customer_house_number=:customer_house_number,customer_house_address=:customer_house_address,customer_state=:customer_state,customer_city=:customer_city,customer_lga=:customer_lga,customer_country=:customer_country,customer_stay_duration=:customer_stay_duration,user_id=:user_id,follow_up=:follow_up,comment=:comment,updated_at=:updated_at WHERE id = :id";
+            " SET customer_firstname=:customer_firstname,customer_lastname=:customer_lastname,customer_dob=:customer_dob,customer_gender=:customer_gender,customer_phone_no=:customer_phone_no,customer_email=:customer_email,pencomPin=:pencomPin,bvn=:bvn,customer_residence_type=:customer_residence_type,customer_house_number=:customer_house_number,customer_house_address=:customer_house_address,customer_state=:customer_state,customer_city=:customer_city,customer_lga=:customer_lga,customer_country=:customer_country,customer_stay_duration=:customer_stay_duration,user_id=:user_id,updated_at=:updated_at WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -422,8 +422,6 @@ class Ha_Kyc_Personal_Info
         $this->customer_stay_duration = htmlspecialchars(strip_tags($this->
         customer_stay_duration));
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
-        $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
-        $this->comment = htmlspecialchars(strip_tags($this->comment));
         $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
@@ -446,8 +444,6 @@ class Ha_Kyc_Personal_Info
         $stmt->bindParam(":customer_country", $this->customer_country);
         $stmt->bindParam(":customer_stay_duration", $this->customer_stay_duration);
         $stmt->bindParam(":user_id", $this->user_id);
-        $stmt->bindParam(":follow_up", $this->follow_up);
-        $stmt->bindParam(":comment", $this->comment);
         $stmt->bindParam(":updated_at", $this->updated_at);
         $stmt->bindParam(":id", $this->id);
 

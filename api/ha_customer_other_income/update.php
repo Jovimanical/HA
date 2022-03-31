@@ -36,73 +36,94 @@ include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/token/valida
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
- 
+
 // prepare ha_customer_other_income object
 $ha_customer_other_income = new Ha_Customer_Other_Income($db);
- 
+
 // get id of ha_customer_other_income to be edited
 $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 // set ID property of ha_customer_other_income to be edited
-$ha_customer_other_income->id = $data->id;
 
-if(
-!isEmpty($data->user_id)
-&&!isEmpty($data->description)
-&&!isEmpty($data->otherIncomeAmount)
-&&!isEmpty($data->otherIncomePeriod)
-&&!isEmpty($data->otherIncomeType)
-){
-// set ha_customer_other_income property values
 
-if(!isEmpty($data->user_id)) { 
-$ha_customer_other_income->user_id = $data->user_id;
-} else { 
-$ha_customer_other_income->user_id = '';
-}
-if(!isEmpty($data->description)) { 
-$ha_customer_other_income->description = $data->description;
-} else { 
-$ha_customer_other_income->description = '';
-}
-if(!isEmpty($data->otherIncomeAmount)) { 
-$ha_customer_other_income->otherIncomeAmount = $data->otherIncomeAmount;
-} else { 
-$ha_customer_other_income->otherIncomeAmount = '0.00';
-}
-if(!isEmpty($data->otherIncomePeriod)) { 
-$ha_customer_other_income->otherIncomePeriod = $data->otherIncomePeriod;
-} else { 
-$ha_customer_other_income->otherIncomePeriod = 'Annual';
-}
-if(!isEmpty($data->otherIncomeType)) { 
-$ha_customer_other_income->otherIncomeType = $data->otherIncomeType;
-} else { 
-$ha_customer_other_income->otherIncomeType = 'otherincome';
-}
-$ha_customer_other_income->updatedAt = $data->updatedAt;
- 
+if (!isEmpty($data->extraIncomename) && !isEmpty($data->customerAdditional)) {
+    $lastInsertedId = 0;
+    foreach ($data->customerAdditional as $element) {
+        if ($element->id == 0) {
+            if (!isEmpty($element->description)) {
+                $ha_customer_other_income->description = $element->description;
+            } else {
+                $ha_customer_other_income->description = '';
+            }
+            if (!isEmpty($element->otherIncomeAmount)) {
+                $ha_customer_other_income->otherIncomeAmount = $element->otherIncomeAmount;
+            } else {
+                $ha_customer_other_income->otherIncomeAmount = '0.00';
+            }
+            if (!isEmpty($element->otherIncomePeriod)) {
+                $ha_customer_other_income->otherIncomePeriod = $element->otherIncomePeriod;
+            } else {
+                $ha_customer_other_income->otherIncomePeriod = 'Annual';
+            }
+            if (!isEmpty($element->otherIncomeType)) {
+                $ha_customer_other_income->otherIncomeType = $element->otherIncomeType;
+            } else {
+                $ha_customer_other_income->otherIncomeType = 'otherincome';
+            }
+
+            $ha_customer_other_income->user_id = $profileData->id;
+            $ha_customer_other_income->updatedAt = date('Y-m-d H:m:s');
+            $lastInsertedID = $ha_customer_other_income->create();
+            $lastInsertedId = !($lastInsertedID == 0);
+            // create the ha_customer_other_income
+        } else {
+        // set ha_customer_other_income property values
+
+            if (!isEmpty($element->description)) {
+                $ha_customer_other_income->description = $element->description;
+            } else {
+                $ha_customer_other_income->description = 'NOT PROVIDED';
+            }
+            if (!isEmpty($element->otherIncomeAmount)) {
+                $ha_customer_other_income->otherIncomeAmount = $element->otherIncomeAmount;
+            } else {
+                $ha_customer_other_income->otherIncomeAmount = '0.00';
+            }
+            if (!isEmpty($element->otherIncomePeriod)) {
+                $ha_customer_other_income->otherIncomePeriod = $element->otherIncomePeriod;
+            } else {
+                $ha_customer_other_income->otherIncomePeriod = 'Annual';
+            }
+            if (!isEmpty($element->otherIncomeType)) {
+                $ha_customer_other_income->otherIncomeType = $element->otherIncomeType;
+            } else {
+                $ha_customer_other_income->otherIncomeType = 'otherincome';
+            }
+            $ha_customer_other_income->updatedAt = date('Y-m-d H:m:s');
+            $ha_customer_other_income->user_id = $profileData->id;
+            $ha_customer_other_income->id = $element->id;
+            $lastInsertedId = $ha_customer_other_income->update();
+        }
+    }
 // update the ha_customer_other_income
-if($ha_customer_other_income->update()){
-    // set response code - 200 ok
-    http_response_code(200);
-    // tell the user
-	echo json_encode(array("status" => "success", "code" => 1,"message"=> "Updated Successfully","document"=> ""));
-}
-// if unable to update the ha_customer_other_income, tell the user
-else{
-    // set response code - 503 service unavailable
-    http_response_code(503);
-    // tell the user
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "Unable to update ha_customer_other_income","document"=> ""));
-    
-}
-}
-// tell the user data is incomplete
-else{
+    if ($lastInsertedId) {
+        // set response code - 200 ok
+        http_response_code(200);
+        // tell the user
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "document" => ""));
+    } // if unable to update the ha_customer_other_income, tell the user
+    else {
+        // set response code - 503 service unavailable
+        http_response_code(503);
+        // tell the user
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income", "document" => ""));
+
+    }
+} // tell the user data is incomplete
+else {
     // set response code - 400 bad request
     http_response_code(400);
     // tell the user
-	echo json_encode(array("status" => "error", "code" => 0,"message"=> "Unable to update ha_customer_other_income. Data is incomplete.","document"=> ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income. Data is incomplete.", "document" => ""));
 }
 ?>

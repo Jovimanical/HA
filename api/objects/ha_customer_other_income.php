@@ -339,7 +339,7 @@ class Ha_Customer_Other_Income
     {
 
         // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? ";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? AND user_id = ? ";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -349,6 +349,7 @@ class Ha_Customer_Other_Income
 
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(2, $this->user_id);
         $stmt->execute();
 
         if ($stmt->rowCount()) {

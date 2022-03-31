@@ -253,7 +253,7 @@ function generateFileName($param): string
             $filename = 'Staff/Company ID';
             break;
         case 1:
-            $filename = 'Government issues ID';
+            $filename = 'Government Issued ID';
             break;
         case 2:
             $filename = 'Utility Bill';

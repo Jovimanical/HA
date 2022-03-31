@@ -30,7 +30,7 @@ class Ha_Kyc_Documents
 
     function total_record_count()
     {
-        $query = "SELECT COUNT(1) as total FROM " . $this->table_name . "";
+        $query = "select count(1) as total from " . $this->table_name . "";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -106,12 +106,11 @@ class Ha_Kyc_Documents
         }
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t WHERE t.user_id = ? LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(1, $this->user_id ,PDO::PARAM_INT);
         // execute query
         $stmt->execute();
 
@@ -127,7 +126,7 @@ class Ha_Kyc_Documents
         $offset = ($this->pageNo - 1) * $this->no_of_records_per_page;
 
         // select all query
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.user_id LIKE ?  OR t.file_name LIKE ?  OR t.file_url LIKE ?  OR t.file_status LIKE ?  OR t.follow_up LIKE ?  OR t.provider LIKE ?  OR t.created_at LIKE ?  OR t.updated_at LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id LIKE ? OR t.user_id LIKE ?  OR t.file_name LIKE ?  OR t.file_url LIKE ?  OR t.file_status LIKE ?  OR t.follow_up LIKE ?  OR t.file_password LIKE ?  OR t.provider LIKE ?  OR t.created_at LIKE ?  OR t.updated_at LIKE ?  LIMIT " . $offset . " , " . $this->no_of_records_per_page . "";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -143,6 +142,7 @@ class Ha_Kyc_Documents
         $stmt->bindParam(7, $searchKey);
         $stmt->bindParam(8, $searchKey);
         $stmt->bindParam(9, $searchKey);
+        $stmt->bindParam(10, $searchKey);
 
         // execute query
         $stmt->execute();
@@ -193,13 +193,13 @@ class Ha_Kyc_Documents
     {
 
         // query to read single record
-        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.ERROR_NOPRIMARYKEYFOUND = ? LIMIT 0,1";
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id = ? LIMIT 0,1";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // bind id
-        $stmt->bindParam(1, $this->ERROR_NOPRIMARYKEYFOUND);
+        $stmt->bindParam(1, $this->id);
 
         // execute query
         $stmt->execute();
@@ -216,11 +216,12 @@ class Ha_Kyc_Documents
             $this->file_url = $row['file_url'];
             $this->file_status = $row['file_status'];
             $this->follow_up = $row['follow_up'];
+            $this->file_password = $row['file_password'];
             $this->provider = $row['provider'];
             $this->created_at = $row['created_at'];
             $this->updated_at = $row['updated_at'];
         } else {
-            $this->ERROR_NOPRIMARYKEYFOUND = null;
+            $this->id = null;
         }
     }
 
@@ -272,34 +273,34 @@ class Ha_Kyc_Documents
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET id=:id,user_id=:user_id,file_name=:file_name,file_url=:file_url,file_status=:file_status,follow_up=:follow_up,provider=:provider,updated_at=:updated_at WHERE ERROR_NOPRIMARYKEYFOUND = :ERROR_NOPRIMARYKEYFOUND";
+        $query = "UPDATE " . $this->table_name . " SET user_id=:user_id,file_name=:file_name,file_url=:file_url,file_status=:file_status,follow_up=:follow_up,file_password=:file_password,provider=:provider,updated_at=:updated_at WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // sanitize
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
         $this->file_name = htmlspecialchars(strip_tags($this->file_name));
         $this->file_url = htmlspecialchars(strip_tags($this->file_url));
         $this->file_status = htmlspecialchars(strip_tags($this->file_status));
         $this->follow_up = htmlspecialchars(strip_tags($this->follow_up));
+        $this->file_password = htmlspecialchars(strip_tags($this->file_password));
         $this->provider = htmlspecialchars(strip_tags($this->provider));
         $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
-        $this->ERROR_NOPRIMARYKEYFOUND = htmlspecialchars(strip_tags($this->ERROR_NOPRIMARYKEYFOUND));
+        $this->id = htmlspecialchars(strip_tags($this->id));
 
         // bind new values
 
-        $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":user_id", $this->user_id);
         $stmt->bindParam(":file_name", $this->file_name);
         $stmt->bindParam(":file_url", $this->file_url);
         $stmt->bindParam(":file_status", $this->file_status);
         $stmt->bindParam(":follow_up", $this->follow_up);
+        $stmt->bindParam(":file_password", $this->file_password);
         $stmt->bindParam(":provider", $this->provider);
         $stmt->bindParam(":updated_at", $this->updated_at);
-        $stmt->bindParam(":ERROR_NOPRIMARYKEYFOUND", $this->ERROR_NOPRIMARYKEYFOUND);
+        $stmt->bindParam(":id", $this->id);
 
         $stmt->execute();
 
@@ -317,7 +318,7 @@ class Ha_Kyc_Documents
         $colCount = 1;
         foreach ($jsonObj as $key => $value) {
             $columnName = htmlspecialchars(strip_tags($key));
-            if ($columnName != 'ERROR_NOPRIMARYKEYFOUND') {
+            if ($columnName != 'id') {
                 if ($colCount === 1) {
                     $setValue = $columnName . "=:" . $columnName;
                 } else {
@@ -327,16 +328,16 @@ class Ha_Kyc_Documents
             }
         }
         $setValue = rtrim($setValue, ',');
-        $query = $query . " " . $setValue . " WHERE ERROR_NOPRIMARYKEYFOUND = :ERROR_NOPRIMARYKEYFOUND";
+        $query = $query . " " . $setValue . " WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         foreach ($jsonObj as $key => $value) {
             $columnName = htmlspecialchars(strip_tags($key));
-            if ($columnName != 'ERROR_NOPRIMARYKEYFOUND') {
+            if ($columnName != 'id') {
                 $colValue = htmlspecialchars(strip_tags($value));
                 $stmt->bindValue(":" . $columnName, $colValue);
             }
         }
-        $stmt->bindParam(":ERROR_NOPRIMARYKEYFOUND", $this->ERROR_NOPRIMARYKEYFOUND);
+        $stmt->bindParam(":id", $this->id);
         $stmt->execute();
 
         if ($stmt->rowCount()) {
@@ -347,20 +348,21 @@ class Ha_Kyc_Documents
     }
 
     // delete the ha_kyc_documents
-    function delete()
+    function delete(): bool
     {
 
         // delete query
-        $query = "DELETE FROM " . $this->table_name . " WHERE ERROR_NOPRIMARYKEYFOUND = ? ";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? AND user_id = ? ";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->ERROR_NOPRIMARYKEYFOUND = htmlspecialchars(strip_tags($this->ERROR_NOPRIMARYKEYFOUND));
+        $this->id = htmlspecialchars(strip_tags($this->id));
 
         // bind id of record to delete
-        $stmt->bindParam(1, $this->ERROR_NOPRIMARYKEYFOUND);
+        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(2, $this->user_id);
         $stmt->execute();
 
         if ($stmt->rowCount()) {

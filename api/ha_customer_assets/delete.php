@@ -39,12 +39,9 @@ $db = $database->getConnection();
 $ha_customer_assets = new Ha_Customer_Assets($db);
  
 // get ha_customer_assets id
-$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
+$ha_customer_assets->id = isset($_GET['id']) ? $_GET['id'] : die();
+$ha_customer_assets->user_id = $profileData->id;
 
- 
-// set ha_customer_assets id to be deleted
-$ha_customer_assets->id = $data->id;
- 
 // delete the ha_customer_assets
 if($ha_customer_assets->delete()){
  

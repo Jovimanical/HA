@@ -3,7 +3,7 @@
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Content-Type: application/json; charset=UTF-8");
-    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Methods: DELETE, OPTIONS');
     header("Access-Control-Expose-Headers: Content-Length, X-JSON");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -12,7 +12,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
         // may also be using PUT, PATCH, HEAD etc
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: DELETE, OPTIONS");
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
             header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
             header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
@@ -39,15 +39,14 @@ $db = $database->getConnection();
 $ha_customer_liabilities = new Ha_Customer_Liabilities($db);
  
 // get ha_customer_liabilities id
-$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
+$ha_customer_liabilities->id = isset($_GET['id']) ? $_GET['id'] : die();
+$ha_customer_liabilities->user_id = $profileData->id;
  
 // set ha_customer_liabilities id to be deleted
-$ha_customer_liabilities->id = $data->id;
- 
+
 // delete the ha_customer_liabilities
 if($ha_customer_liabilities->delete()){
- 
     // set response code - 200 ok
     http_response_code(200);
  

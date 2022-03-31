@@ -43,31 +43,42 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // set ID property of ha_customer_assets to be edited
-$ha_customer_assets->id = $data->id;
 
-if (
-    !isEmpty($data->user_id)
-) {
+
+if (!isEmpty($data->assetname) && !isEmpty($data->customerAssets)) {
 // set ha_customer_assets property values
+    $lastInsertedId = 0;
 
-    if (!isEmpty($data->user_id)) {
-        $ha_customer_assets->user_id = $data->user_id;
-    } else {
-        $ha_customer_assets->user_id = '';
+    foreach ($data->customerAssets as $element) {
+        // set ha_customer_assets property values
+        if ($element->id == 0) {
+            $ha_customer_assets->user_id = $profileData->id;
+            $ha_customer_assets->assetType = $element->assetType;
+            $ha_customer_assets->description = $element->description;
+            $ha_customer_assets->value = $element->value;
+            $ha_customer_assets->updatedAt = date('Y-m-d H:m:s');
+            $lastInsertedID = $ha_customer_assets->create();
+            $lastInsertedId = !($lastInsertedID == 0);
+
+        } else {
+            $ha_customer_assets->assetType = $element->assetType;
+            $ha_customer_assets->description = $element->description;
+            $ha_customer_assets->value = $element->value;
+            $ha_customer_assets->updatedAt = date('Y-m-d H:m:s');
+            $ha_customer_assets->id = $element->id;
+            $ha_customer_assets->user_id = $profileData->id;
+            $lastInsertedId = $ha_customer_assets->update();
+        }
     }
-    $ha_customer_assets->assetType = $data->assetType;
-    $ha_customer_assets->description = $data->description;
-    $ha_customer_assets->value = $data->value;
-    $ha_customer_assets->updatedAt = $data->updatedAt;
 
 // update the ha_customer_assets
-    if ($ha_customer_assets->update()) {
+    if ($lastInsertedId) {
 
         // set response code - 200 ok
         http_response_code(200);
 
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "document" => ""));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "data" => ""));
     } // if unable to update the ha_customer_assets, tell the user
     else {
 
@@ -75,7 +86,7 @@ if (
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_assets", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_assets", "data" => ""));
 
     }
 } // tell the user data is incomplete
@@ -85,6 +96,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_assets. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_assets. Data is incomplete.", "data" => ""));
 }
 ?>

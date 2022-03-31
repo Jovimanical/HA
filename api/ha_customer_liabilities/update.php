@@ -43,61 +43,83 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // set ID property of ha_customer_liabilities to be edited
-$ha_customer_liabilities->id = $data->id;
 
-if (
-    !isEmpty($data->user_id)
-    && !isEmpty($data->accountNumber)
-    && !isEmpty($data->balance)
-    && !isEmpty($data->description)
-    && !isEmpty($data->monthlyPayment)
-) {
+
+if (!isEmpty($data->liabilityname) && !isEmpty($data->customerLiability)) {
 // set ha_customer_liabilities property values
+    $lastInsertedId = false;
+    foreach ($data->customerLiability as $element) {
+        // set ha_customer_liabilities property values
+        if ($element->id == 0) {
+            if (!isEmpty($element->accountNumber)) {
+                $ha_customer_liabilities->accountNumber = $element->accountNumber;
+            } else {
+                $ha_customer_liabilities->accountNumber = '';
+            }
+            if (!isEmpty($element->balance)) {
+                $ha_customer_liabilities->balance = $element->balance;
+            } else {
+                $ha_customer_liabilities->balance = '0.00';
+            }
+            if (!isEmpty($element->description)) {
+                $ha_customer_liabilities->description = $element->description;
+            } else {
+                $ha_customer_liabilities->description = 'no description supplied';
+            }
+            if (!isEmpty($element->monthlyPayment)) {
+                $ha_customer_liabilities->monthlyPayment = $element->monthlyPayment;
+            } else {
+                $ha_customer_liabilities->monthlyPayment = '0.00';
+            }
 
-    if (!isEmpty($data->user_id)) {
-        $ha_customer_liabilities->user_id = $data->user_id;
-    } else {
-        $ha_customer_liabilities->user_id = '';
-    }
-    if (!isEmpty($data->accountNumber)) {
-        $ha_customer_liabilities->accountNumber = $data->accountNumber;
-    } else {
-        $ha_customer_liabilities->accountNumber = '';
-    }
-    if (!isEmpty($data->balance)) {
-        $ha_customer_liabilities->balance = $data->balance;
-    } else {
-        $ha_customer_liabilities->balance = '0.00';
-    }
-    if (!isEmpty($data->description)) {
-        $ha_customer_liabilities->description = $data->description;
-    } else {
-        $ha_customer_liabilities->description = '';
-    }
-    if (!isEmpty($data->monthlyPayment)) {
-        $ha_customer_liabilities->monthlyPayment = $data->monthlyPayment;
-    } else {
-        $ha_customer_liabilities->monthlyPayment = '0.00';
-    }
-    $ha_customer_liabilities->liability_status = $data->liability_status;
-    $ha_customer_liabilities->updatedAt = $data->updatedAt;
+            $ha_customer_liabilities->user_id = $profileData->id;
+            $ha_customer_liabilities->liability_status = 'ACTIVE';
+            $ha_customer_liabilities->liabilityType = $element->liabilityType;
+            $ha_customer_liabilities->updatedAt = date('Y-m-d H:m:s');
+            $lastInsertedID = $ha_customer_liabilities->create();
+            $lastInsertedId = !($lastInsertedID == 0);
 
+        } else {
+            if (!isEmpty($element->accountNumber)) {
+                $ha_customer_liabilities->accountNumber = $element->accountNumber;
+            } else {
+                $ha_customer_liabilities->accountNumber = 'NOT-PROVIDED';
+            }
+            if (!isEmpty($element->balance)) {
+                $ha_customer_liabilities->balance = $element->balance;
+            } else {
+                $ha_customer_liabilities->balance = '0.00';
+            }
+            if (!isEmpty($element->description)) {
+                $ha_customer_liabilities->description = $element->description;
+            } else {
+                $ha_customer_liabilities->description = 'NOT PROVIDED';
+            }
+            if (!isEmpty($element->monthlyPayment)) {
+                $ha_customer_liabilities->monthlyPayment = $element->monthlyPayment;
+            } else {
+                $ha_customer_liabilities->monthlyPayment = '0.00';
+            }
+            $ha_customer_liabilities->liability_status = $element->liability_status;
+            $ha_customer_liabilities->liabilityType = $element->liabilityType;
+            $ha_customer_liabilities->updatedAt = date('Y-m-d H:m:s');
+            $ha_customer_liabilities->user_id = $profileData->id;
+            $ha_customer_liabilities->id = $element->id;
+            $lastInsertedId = $ha_customer_liabilities->update();
+        }
+    }
 // update the ha_customer_liabilities
-    if ($ha_customer_liabilities->update()) {
-
+    if ($lastInsertedId) {
         // set response code - 200 ok
         http_response_code(200);
-
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "document" => ""));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "data" => ""));
     } // if unable to update the ha_customer_liabilities, tell the user
     else {
-
         // set response code - 503 service unavailable
         http_response_code(503);
-
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_liabilities", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_liabilities", "data" => ""));
 
     }
 } // tell the user data is incomplete
@@ -105,7 +127,6 @@ else {
 
     // set response code - 400 bad request
     http_response_code(400);
-
     // tell the user
     echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_liabilities. Data is incomplete.", "document" => ""));
 }

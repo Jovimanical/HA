@@ -40,11 +40,8 @@ $db = $database->getConnection();
 $ha_customer_other_income = new Ha_Customer_Other_Income($db);
  
 // get ha_customer_other_income id
-$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
-
- 
-// set ha_customer_other_income id to be deleted
-$ha_customer_other_income->id = $data->id;
+$ha_customer_other_income->id = isset($_GET['id']) ? $_GET['id'] : die();
+$ha_customer_other_income->user_id = $profileData->id;
  
 // delete the ha_customer_other_income
 if($ha_customer_other_income->delete()){
