@@ -518,31 +518,16 @@ class Ha_Users
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET firstname=:firstname,lastname=:lastname,email=:email,mobile=:mobile,profileImage=:profileImage,address=:address,updated_at=:updated_at WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET password=:password WHERE id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-
-        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->mobile = htmlspecialchars(strip_tags($this->mobile));
-        $this->profileImage = htmlspecialchars(strip_tags($this->profileImage));
-        $this->address = htmlspecialchars(strip_tags($this->address));
-        $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
+        $this->password = htmlspecialchars(strip_tags($this->password));
         $this->id = htmlspecialchars(strip_tags($this->id));
-
         // bind new values
-
-        $stmt->bindParam(":firstname", $this->firstname);
-        $stmt->bindParam(":lastname", $this->lastname);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":mobile", $this->mobile);
-        $stmt->bindParam(":profileImage", $this->profileImage);
-        $stmt->bindParam(":address", $this->address);
-        $stmt->bindParam(":updated_at", $this->updated_at);
+        $stmt->bindParam(":password", $this->password);
         $stmt->bindParam(":id", $this->id);
 
         $stmt->execute();

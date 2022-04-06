@@ -51,8 +51,7 @@ $db = $database->getConnection();
 $ha_kyc_documents = new Ha_Kyc_Documents($db);
 
 // get posted data
-$data =  (json_decode(file_get_contents("php://input"), true ) === NULL ) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
-
+$data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object)$_REQUEST : json_decode(file_get_contents("php://input"));
 
 
 if (isset($_REQUEST) && $_SERVER['REQUEST_METHOD'] == "POST") {
