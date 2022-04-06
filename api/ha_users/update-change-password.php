@@ -49,6 +49,20 @@ $ha_users->id = $profileData->id;
 if (!isEmpty($data->currentPassword) && !isEmpty($data->newPassword) && !isEmpty($data->confirmNewPassword)) {
 // set ha_users property values
 
+    $ha_users->password = $data->currentPassword;
+    if(!$ha_users->passwordVerification()){
+        $error_message = array(
+            "status" => "error",
+            "code" => 0,
+            "message" => 'Current password is not a correct one, please try again',
+            "time" => date('Y-m-d')
+        );
+        http_response_code(400);
+        echo json_encode($error_message);
+        return;
+
+    }
+
     if (!preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{6,20}$/", $data->currentPassword)) {
         $error_message = array(
             "status" => "error",
@@ -76,20 +90,6 @@ if (!isEmpty($data->currentPassword) && !isEmpty($data->newPassword) && !isEmpty
             echo json_encode($error_message);
             return;
         }
-    }
-
-    $ha_users->password = $data->currentPassword;
-    if(!$ha_users->passwordVerification()){
-        $error_message = array(
-            "status" => "error",
-            "code" => 0,
-            "message" => 'Current password is not a correct one, please try again',
-            "time" => date('Y-m-d')
-        );
-        http_response_code(400);
-        echo json_encode($error_message);
-        return;
-
     }
 
     $ha_users->updated_at = date('Y-m-d H:m:s');
