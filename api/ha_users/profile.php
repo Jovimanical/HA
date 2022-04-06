@@ -40,7 +40,6 @@ $ha_users->readProfileOne();
 if ($ha_users->id != null) {
     // create array
     $ha_users_arr = array(
-
         "id" => $ha_users->id,
         "firstname" => $ha_users->firstname,
         "lastname" => $ha_users->lastname,
@@ -53,7 +52,6 @@ if ($ha_users->id != null) {
         "status" => $ha_users->status,
         "roles" => html_entity_decode($ha_users->roles),
         "created_at" => $ha_users->created_at,
-
     );
 
     // set response code - 200 OK

@@ -230,6 +230,21 @@ class Ha_Users
         }
     }
 
+    function passwordVerification(): bool
+    {
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id = ?  LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num = $stmt->rowCount();
+        if ($num > 0 && password_verify($this->password, $row['password'])) {
+           return true;
+        } else {
+            return false;
+        }
+    }
+
 
     function readOne()
     {
@@ -447,6 +462,86 @@ class Ha_Users
         $stmt->bindParam(":roles", $this->roles);
         $stmt->bindParam(":remember_token", $this->remember_token);
         $stmt->bindParam(":created_at", $this->created_at);
+        $stmt->bindParam(":updated_at", $this->updated_at);
+        $stmt->bindParam(":id", $this->id);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function updateProfile(): bool
+    {
+
+        // update query
+        $query = "UPDATE " . $this->table_name . " SET firstname=:firstname,lastname=:lastname,email=:email,mobile=:mobile,profileImage=:profileImage,address=:address,updated_at=:updated_at WHERE id = :id";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->mobile = htmlspecialchars(strip_tags($this->mobile));
+        $this->profileImage = htmlspecialchars(strip_tags($this->profileImage));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+        $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+
+        $stmt->bindParam(":firstname", $this->firstname);
+        $stmt->bindParam(":lastname", $this->lastname);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":mobile", $this->mobile);
+        $stmt->bindParam(":profileImage", $this->profileImage);
+        $stmt->bindParam(":address", $this->address);
+        $stmt->bindParam(":updated_at", $this->updated_at);
+        $stmt->bindParam(":id", $this->id);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function changeUserPassword(): bool
+    {
+
+        // update query
+        $query = "UPDATE " . $this->table_name . " SET firstname=:firstname,lastname=:lastname,email=:email,mobile=:mobile,profileImage=:profileImage,address=:address,updated_at=:updated_at WHERE id = :id";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->mobile = htmlspecialchars(strip_tags($this->mobile));
+        $this->profileImage = htmlspecialchars(strip_tags($this->profileImage));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+        $this->updated_at = htmlspecialchars(strip_tags($this->updated_at));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+
+        $stmt->bindParam(":firstname", $this->firstname);
+        $stmt->bindParam(":lastname", $this->lastname);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":mobile", $this->mobile);
+        $stmt->bindParam(":profileImage", $this->profileImage);
+        $stmt->bindParam(":address", $this->address);
         $stmt->bindParam(":updated_at", $this->updated_at);
         $stmt->bindParam(":id", $this->id);
 

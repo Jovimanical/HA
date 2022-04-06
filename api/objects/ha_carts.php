@@ -312,13 +312,12 @@ class Ha_Carts
     {
 
         // update query
-        $query = "UPDATE " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PaymentMethod=:PaymentMethod,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus,user_id=:user_id WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET EntityParent=:EntityParent,LinkedEntity=:LinkedEntity,PropertyFloor=:PropertyFloor,PropertyId=:PropertyId,PropertyName=:PropertyName,PropertyAmount=:PropertyAmount,PaymentMethod=:PaymentMethod,PropertyJson=:PropertyJson,PropertyType=:PropertyType,PropertyStatus=:PropertyStatus,ApplicationStatus=:ApplicationStatus WHERE user_id=:user_id AND id = :id";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-
         $this->EntityParent = htmlspecialchars(strip_tags($this->EntityParent));
         $this->LinkedEntity = htmlspecialchars(strip_tags($this->LinkedEntity));
         $this->PropertyFloor = htmlspecialchars(strip_tags($this->PropertyFloor));
@@ -348,7 +347,6 @@ class Ha_Carts
         $stmt->bindParam(":ApplicationStatus", $this->ApplicationStatus);
         $stmt->bindParam(":user_id", $this->user_id);
         $stmt->bindParam(":id", $this->id);
-
         $stmt->execute();
 
         if ($stmt->rowCount()) {

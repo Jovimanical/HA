@@ -25,7 +25,9 @@
     RewriteRule ^api/v1/users/show/([0-9a-zA-Z_-]*)$ api/ha_users/read_one.php?id=$1
     RewriteRule ^api/v1/users/profiles/me/?$ api/ha_users/profile.php
     RewriteRule ^api/v1/users/add/?$ api/ha_users/create.php
-    RewriteRule ^api/v1/users/update/?$ api/ha_users/update.php
+    RewriteRule ^api/v1/users/update-profiles/?$ api/ha_users/update-profile.php
+    RewriteRule ^api/v1/users/profile-image-update/?$ api/ha_users/update.php
+    RewriteRule ^api/v1/users/password-update/?$ api/ha_users/update-change-password.php
     RewriteRule ^api/v1/users/remove/?$ api/ha_users/delete.php
 
     #Ha_Properties MarketPlace Endpoint rules
