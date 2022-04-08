@@ -18,6 +18,7 @@ class Ha_Accounts
     public $account_balance;
     public $account_point;
     public $account_blockchain_address;
+    public $account_private_key;
     public $account_primary;
     public $createdAt;
     public $updatedAt;
@@ -229,13 +230,39 @@ class Ha_Accounts
         }
     }
 
+    function accountNumberExists(): bool
+    {
+
+        // query to read single record
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.account_number = ? LIMIT 0,1";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // bind id
+        $stmt->bindParam(1, $this->account_number);
+
+        // execute query
+        $stmt->execute();
+
+        // get retrieved row
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            // set values to object properties
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     // create ha_accounts
     function create()
     {
 
         // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_primary=:account_primary,updatedAt=:updatedAt";
+        $query = "INSERT INTO " . $this->table_name . " SET user_id=:user_id,account_number=:account_number,account_status=:account_status,account_type=:account_type,account_balance=:account_balance,account_point=:account_point,account_blockchain_address=:account_blockchain_address,account_private_key=:account_private_key,account_primary=:account_primary,updatedAt=:updatedAt";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -247,6 +274,7 @@ class Ha_Accounts
         $this->account_balance = htmlspecialchars(strip_tags($this->account_balance));
         $this->account_point = htmlspecialchars(strip_tags($this->account_point));
         $this->account_blockchain_address = htmlspecialchars(strip_tags($this->account_blockchain_address));
+        $this->account_private_key = htmlspecialchars(strip_tags($this->account_private_key));
         $this->account_primary = htmlspecialchars(strip_tags($this->account_primary));
         $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
@@ -259,6 +287,7 @@ class Ha_Accounts
         $stmt->bindParam(":account_balance", $this->account_balance);
         $stmt->bindParam(":account_point", $this->account_point);
         $stmt->bindParam(":account_blockchain_address", $this->account_blockchain_address);
+        $stmt->bindParam(":account_private_key", $this->account_private_key);
         $stmt->bindParam(":account_primary", $this->account_primary);
         $stmt->bindParam(":updatedAt", $this->updatedAt);
 

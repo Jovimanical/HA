@@ -26,7 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
-
+use Sop\CryptoTypes\Asymmetric\EC\ECPublicKey;
+use Sop\CryptoTypes\Asymmetric\EC\ECPrivateKey;
+use Sop\CryptoEncoding\PEM;
+use kornrunner\Keccak;
 
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/helper.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'api/config/database.php';
@@ -43,34 +46,62 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // make sure data is not empty
-if (!isEmpty($data->user_id)
-    && !isEmpty($data->account_number)
-    && !isEmpty($data->account_status)) {
+if (!isEmpty($data->account_number)) {
 
     // set ha_accounts property values
 
-    if (!isEmpty($data->user_id)) {
-        $ha_accounts->user_id = $data->user_id;
-    } else {
-        $ha_accounts->user_id = '';
-    }
-    if (!isEmpty($data->account_number)) {
-        $ha_accounts->account_number = $data->account_number;
-    } else {
-        $ha_accounts->account_number = '';
-    }
-    if (!isEmpty($data->account_status)) {
-        $ha_accounts->account_status = $data->account_status;
-    } else {
-        $ha_accounts->account_status = 'active';
+    $ha_accounts->account_number =  filter_var($data->account_number, FILTER_SANITIZE_STRING);
+
+    if ($ha_accounts->accountNumberExists()) {
+        $error_message = array(
+            "status" => "error",
+            "code" => 0,
+            "message" => 'Account Number Already in Use by another!',
+            "time" => date('Y-m-d')
+        );
+        http_response_code(400);
+        echo json_encode($error_message);
+        return;
     }
 
-    $ha_accounts->account_type = $data->account_type;
-    $ha_accounts->account_balance = $data->account_balance;
-    $ha_accounts->account_point = $data->account_point;
-    $ha_accounts->account_blockchain_address = $data->account_blockchain_address;
-    $ha_accounts->account_primary = $data->account_primary;
-    $ha_accounts->updatedAt = $data->updatedAt;
+    $wallet_address = 0;
+    $wallet_private_key = 0;
+
+    $config = [
+        'private_key_type' => OPENSSL_KEYTYPE_EC,
+        'curve_name' => 'secp256k1'
+    ];
+
+    $res = openssl_pkey_new($config);
+    if ($res) {
+        openssl_pkey_export($res, $priv_key);
+        $key_detail = openssl_pkey_get_details($res);
+        $pub_key = $key_detail["key"];
+        $priv_pem = PEM::fromString($priv_key);
+        $ec_priv_key = ECPrivateKey::fromPEM($priv_pem);
+        $ec_priv_seq = $ec_priv_key->toASN1();
+        $priv_key_hex = bin2hex($ec_priv_seq->at(1)->asOctetString()->string());
+        $priv_key_len = strlen($priv_key_hex) / 2;
+        $pub_key_hex = bin2hex($ec_priv_seq->at(3)->asTagged()->asExplicit()->asBitString()->string());
+        $pub_key_len = strlen($pub_key_hex) / 2;
+        $pub_key_hex_2 = substr($pub_key_hex, 2);
+        $pub_key_len_2 = strlen($pub_key_hex_2) / 2;
+        $hash = Keccak::hash(hex2bin($pub_key_hex_2), 256);
+
+        $wallet_address = '0x' . substr($hash, -40);
+        $wallet_private_key = '0x' . $priv_key_hex;
+
+    }
+
+    $ha_accounts->account_status = 'active';
+    $ha_accounts->account_type = 'wallet';
+    $ha_accounts->account_balance = 0.00;
+    $ha_accounts->account_point = 0.00;
+    $ha_accounts->account_blockchain_address = $wallet_address !== 0 ? $wallet_address :'';
+    $ha_accounts->account_private_key = $wallet_private_key !== 0 ? $wallet_private_key :'';
+    $ha_accounts->account_primary = 1;
+    $ha_accounts->updatedAt = date('Y-m-d H:m:s');
+    $ha_accounts->user_id =  $profileData->id;
     $lastInsertedId = $ha_accounts->create();
     // create the ha_accounts
     if ($lastInsertedId != 0) {

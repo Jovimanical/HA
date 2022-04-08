@@ -1,24 +1,28 @@
 {
-    "name": "house-africa-api/marketplace",
-    "description": "House Africa MarketPlace API",
-    "require": {
-        "ext-pdo": "^7.2",
-        "ext-json": "*",
-        "aws/aws-sdk-php": "^3.138",
-        "vlucas/phpdotenv": "5",
-        "phpmailer/phpmailer": "^6.5",
-        "firebase/php-jwt": "^6.0",
-        "giggsey/libphonenumber-for-php": "^8.12",
-        "mailjet/mailjet-apiv3-php": "^1.5",
-        "monolog/monolog": "1.27.0",
-        "symfony/mailer": "^5.4",
-        "symfony/mailjet-mailer": "^5.4",
-        "yabacon/paystack-php": "^2.2"
-    },
-    "authors": [
-        {
-            "name": "S.A.V.I.O.U.R",
-            "email": "S.A.V.I.O.U.R@SIMILLUSTRA.COM"
-        }
-    ]
+  "name": "house-africa-api/marketplace",
+  "description": "House Africa MarketPlace API",
+  "require": {
+    "ext-pdo": "^7.2",
+    "ext-json": "*",
+    "aws/aws-sdk-php": "^3.138",
+    "vlucas/phpdotenv": "5",
+    "phpmailer/phpmailer": "^6.5",
+    "firebase/php-jwt": "^6.0",
+    "giggsey/libphonenumber-for-php": "^8.12",
+    "mailjet/mailjet-apiv3-php": "^1.5",
+    "monolog/monolog": "1.27.0",
+    "sop/asn1": "^3.3",
+    "sop/crypto-encoding": "^0.2.0",
+    "sop/crypto-types": "^0.2.1",
+    "kornrunner/keccak": "^1.0",
+    "symfony/dotenv": "^4.0",
+    "sc0vu/web3.php": "dev-master",
+    "yabacon/paystack-php": "^2.2"
+  },
+  "authors": [
+    {
+      "name": "S.A.V.I.O.U.R",
+      "email": "S.A.V.I.O.U.R@SIMILLUSTRA.COM"
+    }
+  ]
 }

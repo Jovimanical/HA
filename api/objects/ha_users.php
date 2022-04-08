@@ -230,6 +230,64 @@ class Ha_Users
         }
     }
 
+    function emailExits(): bool
+    {
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.email = ?  LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->email, PDO::PARAM_STR);
+        $stmt->execute();
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function isValidVerificationToken(): bool
+    {
+        $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.verification_code = ? AND t.email = ?  LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->verification_code, PDO::PARAM_STR);
+        $stmt->bindParam(2, $this->email, PDO::PARAM_STR);
+        $stmt->execute();
+        $num = $stmt->rowCount();
+        if ($num > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function resendUserVerificationToken()
+    {
+
+        // update query
+        $query = "UPDATE " . $this->table_name . " SET verification_code=:verification_code,verification_code_send_at=:verification_code_send_at WHERE email = :email";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->verification_code = htmlspecialchars(strip_tags($this->verification_code));
+        $this->verification_code_send_at = htmlspecialchars(strip_tags($this->verification_code_send_at));
+        // bind new values
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":verification_code", $this->verification_code);
+        $stmt->bindParam(":verification_code_send_at", $this->verification_code_send_at);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
     function passwordVerification(): bool
     {
         $query = "SELECT  t.* FROM " . $this->table_name . " t  WHERE t.id = ?  LIMIT 0,1";
@@ -239,7 +297,7 @@ class Ha_Users
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $num = $stmt->rowCount();
         if ($num > 0 && password_verify($this->password, $row['password'])) {
-           return true;
+            return true;
         } else {
             return false;
         }
@@ -474,6 +532,32 @@ class Ha_Users
         }
     }
 
+    function activateUser(): bool
+    {
+        // update query
+        $query = "UPDATE " . $this->table_name . " SET email_verified=:email_verified WHERE email = :email";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->email_verified = htmlspecialchars(strip_tags($this->email_verified));
+
+        // bind new values
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":email_verified", $this->email_verified);
+
+
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function updateProfile(): bool
     {
 
@@ -529,6 +613,31 @@ class Ha_Users
         // bind new values
         $stmt->bindParam(":password", $this->password);
         $stmt->bindParam(":id", $this->id);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function resetUserPassword(): bool
+    {
+
+        // update query
+        $query = "UPDATE " . $this->table_name . " SET password=:password WHERE email = :email";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->password = htmlspecialchars(strip_tags($this->password));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        // bind new values
+        $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":email", $this->email);
 
         $stmt->execute();
 

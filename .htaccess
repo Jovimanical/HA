@@ -19,7 +19,8 @@
 
 	#Ha_Users Endpoint rules
 	RewriteRule ^api/v1/users/register/?$ api/ha_users/create.php
-	#RewriteRule ^api/v1/users/verification/?$ api/ha_users/verify.php
+	RewriteRule ^api/v1/users/verifications/email-verification/?$ api/ha_users/email-verification.php
+	RewriteRule ^api/v1/users/verifications/resend-email-verification/?$ api/ha_users/resend-email-verify.php
     RewriteRule ^api/v1/users/list-all/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/users/search/([A-Za-z0-9]+)/([A-Za-z0-9]+)/?$ api/ha_users/read.php?pageno=$1&pagesize=$2 [QSA]
     RewriteRule ^api/v1/users/show/([0-9a-zA-Z_-]*)$ api/ha_users/read_one.php?id=$1
@@ -29,6 +30,11 @@
     RewriteRule ^api/v1/users/profile-image-update/?$ api/ha_users/update.php
     RewriteRule ^api/v1/users/password-update/?$ api/ha_users/update-change-password.php
     RewriteRule ^api/v1/users/remove/?$ api/ha_users/delete.php
+
+    #HA_PasswirdResets
+    RewriteRule ^api/v1/auth/forgot-password/request/?$ api/ha_password_resets/create.php
+    RewriteRule ^api/v1/auth/forgot-password/verify/?$ api/ha_password_resets/verify-reset-code.php
+    RewriteRule ^api/v1/auth/forgot-password/change-password/?$ api/ha_password_resets/reset-user-password.php
 
     #Ha_Properties MarketPlace Endpoint rules
     RewriteRule ^api/v1/marketplace/properties/list/([0-9a-zA-Z_-]*)/([0-9a-zA-Z_-]*)/?$ api/ha_properties/read.php?pageno=$1&pagesize=$2 [QSA]

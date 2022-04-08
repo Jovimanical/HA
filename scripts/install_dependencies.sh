@@ -18,9 +18,9 @@ if ! [ -x "$(command -v apache2)" ]; then
   # Adjust Firewall
   sudo ufw allow in "Apache Full"
 
-  sudo apt -y install wget unzip
+  sudo apt -y install wget unzip openssl
   # Install PHP
-  sudo apt install -y php7.4 libapache2-mod-php7.4 php7.4-mysql php7.4-gd php7.4-xml php7.4-soap php7.4-mbstring php7.4-mysql php7.4-redis php7.4-curl php7.4-cli php7.4-zip php7.4-yaml
+  sudo apt install -y php7.4 libapache2-mod-php7.4 php7.4-gmp php7.4-mysql php7.4-gd php7.4-xml php7.4-soap php7.4-mbstring php7.4-mysql php7.4-redis php7.4-curl php7.4-cli php7.4-zip php7.4-yaml php7.4-common php7.4-bcmath php7.4-json
 
   echo "Server installed PHP"
   sudo a2enmod rewrite
@@ -54,6 +54,9 @@ else
   # previous deployments. The servers auto scale so the directory may or may not
   # exist.
   echo "System Checking Directories Exits"
+  sudo apt-get update -y
+  sudo apt-get install -y php7.4-gmp openssl
+
   if [ -d /var/www/html ]; then
     sudo rm -rf /var/www/html/*
     echo "System Directory Cleared"
