@@ -128,6 +128,6 @@ else {
     // set response code - 400 bad request
     http_response_code(400);
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_liabilities. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_liabilities. Data is incomplete.", "data" => ""));
 }
 ?>

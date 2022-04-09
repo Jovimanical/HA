@@ -62,12 +62,12 @@ if ($ha_customer_other_income->id != null) {
     http_response_code(200);
 
     // make it json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_other_income found", "document" => $ha_customer_other_income_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_other_income found", "data" => $ha_customer_other_income_arr));
 } else {
     // set response code - 404 Not found
     http_response_code(404);
 
     // tell the user ha_customer_other_income does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_customer_other_income does not exist.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_customer_other_income does not exist.", "data" => ""));
 }
 ?>

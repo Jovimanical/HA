@@ -60,19 +60,19 @@ if (!isEmpty($data->assetname) && !isEmpty($data->customerAssets)) {
         // set response code - 201 created
         http_response_code(201);
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "document" => $lastInsertedId));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $lastInsertedId));
     } // if unable to create the ha_customer_assets, tell the user
     else {
         // set response code - 503 service unavailable
         http_response_code(503);
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_assets", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_assets", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
     // set response code - 400 bad request
     http_response_code(400);
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_assets. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_assets. Data is incomplete.", "data" => ""));
 }
 ?>

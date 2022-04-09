@@ -85,7 +85,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_estate_listing data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_estate_listing found", "document" => $ha_estate_listing_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_estate_listing found", "data" => $ha_estate_listing_arr));
 
 } else {
     // no ha_estate_listing found will be here
@@ -94,7 +94,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_estate_listing found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_estate_listing found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_estate_listing found.", "data" => ""));
 
 }
  

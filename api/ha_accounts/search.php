@@ -82,7 +82,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_accounts data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_accounts found", "document" => $ha_accounts_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_accounts found", "data" => $ha_accounts_arr));
 
 } else {
     // no ha_accounts found will be here
@@ -91,7 +91,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_accounts found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_accounts found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_accounts found.", "data" => ""));
 
 }
  

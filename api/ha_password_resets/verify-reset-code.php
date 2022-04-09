@@ -72,7 +72,7 @@ as valid only 24 hours (1 days after request).", "forgotPasswordStep" => 4, "dat
         // tell the user ha_password_resets does not exist
         echo json_encode(array("status" => "error", "code" => 0, "forgotPasswordStep" => 4, "message" => "The link is invalid/expired. Either you did not copy the correct link
 from the email, or you have already used the key in which case it is 
-deactivated.", "document" => ""));
+deactivated.", "data" => ""));
     }
 
 } else {
@@ -80,6 +80,6 @@ deactivated.", "document" => ""));
     http_response_code(501);
 
     // tell the user ha_password_resets does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "forgotPasswordStep" => 4, "message" => "Invalid input parameters does not exist.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "forgotPasswordStep" => 4, "message" => "Invalid input parameters does not exist.", "data" => ""));
 }
 ?>

@@ -110,7 +110,7 @@ if (
         http_response_code(200);
 
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "document" => ""));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "data" => ""));
     } // if unable to update the meeting_schedules, tell the user
     else {
 
@@ -118,7 +118,7 @@ if (
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update meeting_schedules", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update meeting_schedules", "data" => ""));
 
     }
 } // tell the user data is incomplete
@@ -128,6 +128,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update meeting_schedules. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update meeting_schedules. Data is incomplete.", "data" => ""));
 }
 ?>

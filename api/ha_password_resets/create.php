@@ -158,7 +158,7 @@ your account and change your security password as someone may have guessed it.</
 
         } catch (Exception $e) {
             http_response_code(503);
-            echo json_encode(array("status" => "error", "code" => 0, "message" => "Error in sending email. Mailer Error: {$mail->ErrorInfo}", "document" => ""));
+            echo json_encode(array("status" => "error", "code" => 0, "message" => "Error in sending email. Mailer Error: {$mail->ErrorInfo}", "data" => ""));
 
         }
     } // if unable to create the ha_password_resets, tell the user
@@ -166,7 +166,7 @@ your account and change your security password as someone may have guessed it.</
         // set response code - 503 service unavailable
         http_response_code(503);
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_password_resets", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_password_resets", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
@@ -175,6 +175,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_password_resets. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_password_resets. Data is incomplete.", "data" => ""));
 }
 ?>

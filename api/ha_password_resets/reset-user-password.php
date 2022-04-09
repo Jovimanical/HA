@@ -97,7 +97,7 @@ if (!isEmpty($data->newPassword) && !isEmpty($data->confirmNewPassword) && !isEm
         http_response_code(404);
 
         // tell the user ha_password_resets does not exist
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_password_resets does not exist.", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "ha_password_resets does not exist.", "data" => ""));
     }
 
 } else {
@@ -105,6 +105,6 @@ if (!isEmpty($data->newPassword) && !isEmpty($data->confirmNewPassword) && !isEm
     http_response_code(501);
 
     // tell the user ha_password_resets does not exist
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Invalid input parameters does not exist.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Invalid input parameters does not exist.", "data" => ""));
 }
 ?>

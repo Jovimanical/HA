@@ -110,13 +110,13 @@ if (!isEmpty($data->extraIncomename) && !isEmpty($data->customerAdditional)) {
         // set response code - 200 ok
         http_response_code(200);
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "document" => ""));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "data" => ""));
     } // if unable to update the ha_customer_other_income, tell the user
     else {
         // set response code - 503 service unavailable
         http_response_code(503);
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income", "data" => ""));
 
     }
 } // tell the user data is incomplete
@@ -124,6 +124,6 @@ else {
     // set response code - 400 bad request
     http_response_code(400);
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_customer_other_income. Data is incomplete.", "data" => ""));
 }
 ?>

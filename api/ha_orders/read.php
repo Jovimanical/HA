@@ -88,7 +88,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_orders data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_orders found", "document" => $ha_orders_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_orders found", "data" => $ha_orders_arr));
 
 } else {
     // no ha_orders found will be here
@@ -97,7 +97,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_orders found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_orders found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_orders found.", "data" => ""));
 
 }
  

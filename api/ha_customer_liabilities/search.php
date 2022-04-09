@@ -79,7 +79,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_customer_liabilities data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_liabilities found", "document" => $ha_customer_liabilities_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_customer_liabilities found", "data" => $ha_customer_liabilities_arr));
 
 } else {
     // no ha_customer_liabilities found will be here
@@ -88,7 +88,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_customer_liabilities found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_customer_liabilities found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_customer_liabilities found.", "data" => ""));
 
 }
  

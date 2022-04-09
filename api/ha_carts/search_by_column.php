@@ -65,7 +65,7 @@ if ($num > 0) {
     http_response_code(200);
 
     // show ha_carts data in json format
-    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_carts found", "document" => $ha_carts_arr));
+    echo json_encode(array("status" => "success", "code" => 1, "message" => "ha_carts found", "data" => $ha_carts_arr));
 
 } else {
     // no ha_carts found will be here
@@ -74,7 +74,7 @@ if ($num > 0) {
     http_response_code(404);
 
     // tell the user no ha_carts found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_carts found.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "No ha_carts found.", "data" => ""));
 
 }
  

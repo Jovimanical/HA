@@ -81,7 +81,7 @@ if (!isEmpty($data->liabilityname) && !isEmpty($data->customerLiability)) {
         // set response code - 201 created
         http_response_code(201);
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "document" => $lastInsertedId));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $lastInsertedId));
     } // if unable to create the ha_customer_liabilities, tell the user
     else {
 
@@ -89,7 +89,7 @@ if (!isEmpty($data->liabilityname) && !isEmpty($data->customerLiability)) {
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_liabilities", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_liabilities", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
@@ -98,6 +98,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_liabilities. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_customer_liabilities. Data is incomplete.", "data" => ""));
 }
 ?>

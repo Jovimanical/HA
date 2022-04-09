@@ -88,7 +88,7 @@ if (!isEmpty($data->sender_id)
         http_response_code(201);
 
         // tell the user
-        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "document" => $lastInsertedId));
+        echo json_encode(array("status" => "success", "code" => 1, "message" => "Created Successfully", "data" => $lastInsertedId));
     } // if unable to create the ha_transactions, tell the user
     else {
 
@@ -96,7 +96,7 @@ if (!isEmpty($data->sender_id)
         http_response_code(503);
 
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_transactions", "document" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_transactions", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
@@ -105,6 +105,6 @@ else {
     http_response_code(400);
 
     // tell the user
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_transactions. Data is incomplete.", "document" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to create ha_transactions. Data is incomplete.", "data" => ""));
 }
 ?>
