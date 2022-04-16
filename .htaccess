@@ -31,6 +31,7 @@
     RewriteRule ^api/v1/users/password-update/?$ api/ha_users/update-change-password.php
     RewriteRule ^api/v1/users/remove/?$ api/ha_users/delete.php
 
+
     #HA_PasswirdResets
     RewriteRule ^api/v1/auth/forgot-password/request/?$ api/ha_password_resets/create.php
     RewriteRule ^api/v1/auth/forgot-password/verify/?$ api/ha_password_resets/verify-reset-code.php
