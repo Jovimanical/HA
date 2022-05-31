@@ -67,12 +67,13 @@ if($num>0){
         $ha_wishlists_item=array(
             
 "id" => $id,
-"EntityParent" => $EntityParent,
-"LinkedEntity" => $LinkedEntity,
+"PropertyEstate" => $PropertyEstate,
+"PropertyBlock" => $PropertyBlock,
 "PropertyFloor" => $PropertyFloor,
 "PropertyId" => $PropertyId,
 "PropertyName" => html_entity_decode($PropertyName),
 "PropertyAmount" => $PropertyAmount,
+"MapSnapshot" => $MapSnapshot,
 "PropertyJson" => $PropertyJson,
 "PropertyType" => $PropertyType,
 "PropertyStatus" => $PropertyStatus,

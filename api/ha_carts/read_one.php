@@ -48,8 +48,8 @@ if ($ha_carts->id != null) {
     $ha_carts_arr = array(
 
         "id" => $ha_carts->id,
-        "EntityParent" => $ha_carts->EntityParent,
-        "LinkedEntity" => $ha_carts->LinkedEntity,
+        "PropertyEstate" => $ha_carts->PropertyEstate,
+        "PropertyBlock" => $ha_carts->PropertyBlock,
         "PropertyFloor" => $ha_carts->PropertyFloor,
         "PropertyId" => $ha_carts->PropertyId,
         "PropertyName" => html_entity_decode($ha_carts->PropertyName),

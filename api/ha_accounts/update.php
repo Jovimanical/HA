@@ -68,27 +68,25 @@ if (
     } else {
         $ha_accounts->account_status = 'active';
     }
+
+    $ha_accounts->user_id = $profileData->id;
     $ha_accounts->account_type = $data->account_type;
-    $ha_accounts->account_balance = $data->account_balance;
-    $ha_accounts->account_point = $data->account_point;
+    $ha_accounts->account_balance = (float) $data->account_balance;
+    $ha_accounts->account_point = (int) $data->account_point;
     $ha_accounts->account_blockchain_address = $data->account_blockchain_address;
     $ha_accounts->account_primary = $data->account_primary;
-    $ha_accounts->updatedAt = $data->updatedAt;
+    $ha_accounts->updatedAt = date('Y-m-d H:m:s');
 
 // update the ha_accounts
     if ($ha_accounts->update()) {
-
         // set response code - 200 ok
         http_response_code(200);
-
         // tell the user
         echo json_encode(array("status" => "success", "code" => 1, "message" => "Updated Successfully", "data" => ""));
     } // if unable to update the ha_accounts, tell the user
     else {
-
         // set response code - 503 service unavailable
         http_response_code(503);
-
         // tell the user
         echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_accounts", "data" => ""));
 

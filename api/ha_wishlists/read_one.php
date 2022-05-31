@@ -53,8 +53,8 @@ if($ha_wishlists->id!=null){
     $ha_wishlists_arr = array(
         
 "id" => $ha_wishlists->id,
-"EntityParent" => $ha_wishlists->EntityParent,
-"LinkedEntity" => $ha_wishlists->LinkedEntity,
+"PropertyEstate" => $ha_wishlists->PropertyEstate,
+"PropertyBlock" => $ha_wishlists->PropertyBlock,
 "PropertyFloor" => $ha_wishlists->PropertyFloor,
 "PropertyId" => $ha_wishlists->PropertyId,
 "PropertyName" => html_entity_decode($ha_wishlists->PropertyName),

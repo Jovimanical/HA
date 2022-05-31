@@ -41,8 +41,8 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // make sure data is not empty
-if (!isEmpty($data->EntityParent)
-    && !isEmpty($data->LinkedEntity)
+if (!isEmpty($data->PropertyEstate)
+    && !isEmpty($data->PropertyBlock)
     && !isEmpty($data->PropertyFloor)
     && !isEmpty($data->PropertyId)
     && !isEmpty($data->PropertyName)
@@ -53,15 +53,15 @@ if (!isEmpty($data->EntityParent)
 
     // set ha_carts property values
 
-    if (!isEmpty($data->EntityParent)) {
-        $ha_carts->EntityParent = $data->EntityParent;
+    if (!isEmpty($data->PropertyEstate)) {
+        $ha_carts->PropertyEstate = $data->PropertyEstate;
     } else {
-        $ha_carts->EntityParent = '';
+        $ha_carts->PropertyEstate = '';
     }
-    if (!isEmpty($data->LinkedEntity)) {
-        $ha_carts->LinkedEntity = $data->LinkedEntity;
+    if (!isEmpty($data->PropertyBlock)) {
+        $ha_carts->PropertyBlock = $data->PropertyBlock;
     } else {
-        $ha_carts->LinkedEntity = '';
+        $ha_carts->PropertyBlock = '';
     }
     if (!isEmpty($data->PropertyFloor)) {
         $ha_carts->PropertyFloor = $data->PropertyFloor;
@@ -90,10 +90,17 @@ if (!isEmpty($data->EntityParent)
     } else {
         $ha_carts->PropertyType = '3';
     }
+
     if (!isEmpty($data->PropertyStatus)) {
         $ha_carts->PropertyStatus = $data->PropertyStatus;
     } else {
         $ha_carts->PropertyStatus = 'available';
+    }
+
+    if (!isEmpty($data->MapSnapshot)) {
+        $ha_carts->MapSnapshot = $data->MapSnapshot;
+    } else {
+        $ha_carts->MapSnapshot = 'https://via.placeholder.com/1020x1020.png?text=HouseAfrica+Estates+No+Image';
     }
 
     $ha_carts->ApplicationStatus = 'DRAFT';

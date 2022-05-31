@@ -13,7 +13,6 @@
 //];
 //
 //$res = openssl_pkey_new($config);
-
 //
 //if ($res) {
 //    openssl_pkey_export($res, $priv_key);
@@ -38,5 +37,3 @@
 //
 //echo "\r\n   SAVE BUT DO NOT SHARE THIS (Private Key): " . $wallet_private_key;
 //echo "\r\n   Address: " . $wallet_address . " \n";
-
-echo 'Welcome to HOuse AfricA';

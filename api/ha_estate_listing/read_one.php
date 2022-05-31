@@ -48,8 +48,8 @@ if ($ha_estate_listing->id != null) {
     $ha_estate_listing_arr = array(
 
         "id" => $ha_estate_listing->id,
-        "EntityParent" => $ha_estate_listing->EntityParent,
-        "LinkedEntity" => $ha_estate_listing->LinkedEntity,
+        "PropertyEstate" => $ha_estate_listing->PropertyEstate,
+        "PropertyBlock" => $ha_estate_listing->PropertyBlock,
         "PropertyFloor" => $ha_estate_listing->PropertyFloor,
         "PropertyId" => $ha_estate_listing->PropertyId,
         "PropertyName" => html_entity_decode($ha_estate_listing->PropertyName),

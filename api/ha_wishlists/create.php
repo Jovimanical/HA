@@ -41,8 +41,8 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // make sure data is not empty
-if (!isEmpty($data->EntityParent)
-    && !isEmpty($data->LinkedEntity)
+if (!isEmpty($data->PropertyEstate)
+    && !isEmpty($data->PropertyBlock)
     && !isEmpty($data->PropertyFloor)
     && !isEmpty($data->PropertyId)
     && !isEmpty($data->PropertyName)
@@ -52,15 +52,15 @@ if (!isEmpty($data->EntityParent)
 
     // set ha_wishlists property values
 
-    if (!isEmpty($data->EntityParent)) {
-        $ha_wishlists->EntityParent = $data->EntityParent;
+    if (!isEmpty($data->PropertyEstate)) {
+        $ha_wishlists->PropertyEstate = $data->PropertyEstate;
     } else {
-        $ha_wishlists->EntityParent = '';
+        $ha_wishlists->PropertyEstate = '';
     }
-    if (!isEmpty($data->LinkedEntity)) {
-        $ha_wishlists->LinkedEntity = $data->LinkedEntity;
+    if (!isEmpty($data->PropertyBlock)) {
+        $ha_wishlists->PropertyBlock = $data->PropertyBlock;
     } else {
-        $ha_wishlists->LinkedEntity = '';
+        $ha_wishlists->PropertyBlock = '';
     }
     if (!isEmpty($data->PropertyFloor)) {
         $ha_wishlists->PropertyFloor = $data->PropertyFloor;
@@ -92,6 +92,12 @@ if (!isEmpty($data->EntityParent)
         $ha_wishlists->PropertyStatus = $data->PropertyStatus;
     } else {
         $ha_wishlists->PropertyStatus = '1';
+    }
+
+    if (!isEmpty($data->MapSnapshot)) {
+        $ha_wishlists->MapSnapshot = $data->MapSnapshot;
+    } else {
+        $ha_wishlists->MapSnapshot = 'https://via.placeholder.com/1020x1020.png?text=HouseAfrica+Estates+No+Image';
     }
 
 

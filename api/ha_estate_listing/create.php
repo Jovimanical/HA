@@ -41,8 +41,8 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 
 
 // make sure data is not empty
-if (!isEmpty($data->EntityParent)
-    && !isEmpty($data->LinkedEntity)
+if (!isEmpty($data->PropertyEstate)
+    && !isEmpty($data->PropertyBlock)
     && !isEmpty($data->PropertyFloor)
     && !isEmpty($data->PropertyId)
     && !isEmpty($data->PropertyName)
@@ -52,15 +52,15 @@ if (!isEmpty($data->EntityParent)
 
     // set ha_estate_listing property values
 
-    if (!isEmpty($data->EntityParent)) {
-        $ha_estate_listing->EntityParent = $data->EntityParent;
+    if (!isEmpty($data->PropertyEstate)) {
+        $ha_estate_listing->PropertyEstate = $data->PropertyEstate;
     } else {
-        $ha_estate_listing->EntityParent = '';
+        $ha_estate_listing->PropertyEstate = '';
     }
-    if (!isEmpty($data->LinkedEntity)) {
-        $ha_estate_listing->LinkedEntity = $data->LinkedEntity;
+    if (!isEmpty($data->PropertyBlock)) {
+        $ha_estate_listing->PropertyBlock = $data->PropertyBlock;
     } else {
-        $ha_estate_listing->LinkedEntity = '';
+        $ha_estate_listing->PropertyBlock = '';
     }
     if (!isEmpty($data->PropertyFloor)) {
         $ha_estate_listing->PropertyFloor = $data->PropertyFloor;
@@ -98,6 +98,12 @@ if (!isEmpty($data->EntityParent)
         $ha_estate_listing->ApplicationStatus = $data->ApplicationStatus;
     } else {
         $ha_estate_listing->ApplicationStatus = 'PROCESSING';
+    }
+
+    if (!isEmpty($data->MapSnapshot)) {
+        $ha_estate_listing->MapSnapshot = $data->MapSnapshot;
+    } else {
+        $ha_estate_listing->MapSnapshot = 'https://via.placeholder.com/1020x1020.png?text=HouseAfrica+Estates+No+Image';
     }
 
 

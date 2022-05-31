@@ -64,8 +64,8 @@ if ($num > 0) {
 
         $ha_estate_listing_item = array(
             "id" => $id,
-            "EntityParent" => $EntityParent,
-            "LinkedEntity" => $LinkedEntity,
+            "PropertyEstate" => $PropertyEstate,
+            "PropertyBlock" => $PropertyBlock,
             "PropertyFloor" => $PropertyFloor,
             "PropertyId" => $PropertyId,
             "PropertyName" => html_entity_decode($PropertyName),

@@ -66,17 +66,18 @@ try {
 
             $ha_carts_item = array(
                 "id" => $id,
-                "EntityParent" => $EntityParent,
-                "LinkedEntity" => $LinkedEntity,
+                "PropertyEstate" => $PropertyEstate,
+                "PropertyBlock" => $PropertyBlock,
                 "PropertyFloor" => $PropertyFloor,
                 "PropertyId" => $PropertyId,
                 "PropertyName" => html_entity_decode($PropertyName),
                 "PropertyAmount" => $PropertyAmount,
+                "MapSnapshot" => $MapSnapshot,
                 "PaymentMethod" => $PaymentMethod,
                 "PropertyJson" => $PropertyJson,
                 "PropertyType" => $PropertyType,
                 "PropertyStatus" => $PropertyStatus,
-                "ApplicationStatus"=>$ApplicationStatus,
+                "ApplicationStatus" => $ApplicationStatus,
                 "user_id" => $user_id,
                 "createdAt" => $createdAt
             );
@@ -103,7 +104,7 @@ try {
 } catch (Exception $exception) {
     http_response_code(404);
     // tell the user no ha_carts found
-    echo json_encode(array("status" => "error", "code" => 0, "message" => "Error Caught in transactions. ".$exception->getMessage(), "data" => ""));
+    echo json_encode(array("status" => "error", "code" => 0, "message" => "Error Caught in transactions. " . $exception->getMessage(), "data" => ""));
 
 }
 

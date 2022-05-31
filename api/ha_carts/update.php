@@ -45,8 +45,8 @@ $data = (json_decode(file_get_contents("php://input"), true) === NULL) ? (object
 $ha_carts->id = (int)$data->id;
 
 if (
-    !isEmpty($data->EntityParent)
-    && !isEmpty($data->LinkedEntity)
+    !isEmpty($data->PropertyEstate)
+    && !isEmpty($data->PropertyBlock)
     && !isEmpty($data->PropertyFloor)
     && !isEmpty($data->PropertyId)
     && !isEmpty($data->PropertyName)
@@ -57,55 +57,20 @@ if (
 ) {
 // set ha_carts property values
 
-    if (!isEmpty($data->EntityParent)) {
-        $ha_carts->EntityParent = $data->EntityParent;
-    } else {
-        $ha_carts->EntityParent = '';
-    }
-    if (!isEmpty($data->LinkedEntity)) {
-        $ha_carts->LinkedEntity = $data->LinkedEntity;
-    } else {
-        $ha_carts->LinkedEntity = '';
-    }
-    if (!isEmpty($data->PropertyFloor)) {
-        $ha_carts->PropertyFloor = $data->PropertyFloor;
-    } else {
-        $ha_carts->PropertyFloor = '';
-    }
-    if (!isEmpty($data->PropertyId)) {
-        $ha_carts->PropertyId = $data->PropertyId;
-    } else {
-        $ha_carts->PropertyId = '';
-    }
-    if (!isEmpty($data->PropertyName)) {
-        $ha_carts->PropertyName = $data->PropertyName;
-    } else {
-        $ha_carts->PropertyName = '';
-    }
-    if (!isEmpty($data->PropertyAmount)) {
-        $ha_carts->PropertyAmount = $data->PropertyAmount;
-    } else {
-        $ha_carts->PropertyAmount = '0.00';
-    }
+
+    $ha_carts->PropertyEstate = $data->PropertyEstate;
+    $ha_carts->PropertyBlock = $data->PropertyBlock;
+    $ha_carts->PropertyFloor = $data->PropertyFloor;
+    $ha_carts->PropertyId = $data->PropertyId;
+    $ha_carts->PropertyName = $data->PropertyName;
+    $ha_carts->PropertyAmount = $data->PropertyAmount ?? '0.00';
     $ha_carts->PaymentMethod = $data->PaymentMethod;
     $ha_carts->PropertyJson = $data->PropertyJson;
-    if (!isEmpty($data->PropertyType)) {
-        $ha_carts->PropertyType = $data->PropertyType;
-    } else {
-        $ha_carts->PropertyType = '3';
-    }
-    if (!isEmpty($data->PropertyStatus)) {
-        $ha_carts->PropertyStatus = $data->PropertyStatus;
-    } else {
-        $ha_carts->PropertyStatus = '1';
-    }
+    $ha_carts->PropertyType = $data->PropertyType ?? '3';
+    $ha_carts->PropertyStatus = $data->PropertyStatus ?? '1';
+    $ha_carts->ApplicationStatus = $data->ApplicationStatus ?? 'DRAFT';
 
-    if (!isEmpty($data->ApplicationStatus)) {
-        $ha_carts->ApplicationStatus = $data->ApplicationStatus;
-    } else {
-        $ha_carts->ApplicationStatus = 'DRAFT';
-    }
-
+    $ha_carts->MapSnapshot = $data->MapSnapshot ?? 'https://via.placeholder.com/1020x1020.png?text=HouseAfrica+Estates+No+Image';
     $ha_carts->user_id = $profileData->id;
 
 
@@ -120,7 +85,7 @@ if (
         // set response code - 503 service unavailable
         http_response_code(503);
         // tell the user
-        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update ha_carts", "data" => ""));
+        echo json_encode(array("status" => "error", "code" => 0, "message" => "Unable to update User Application Status", "data" => ""));
     }
 } // tell the user data is incomplete
 else {
